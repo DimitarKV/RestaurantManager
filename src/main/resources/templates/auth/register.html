@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="fragments/fragments::head"></head>
+<body>
+<nav th:replace="fragments/fragments::navbar"></nav>
+<div class="container">
+
+    <form
+            class="main-form mx-auto col-md-6 d-flex flex-column justify-content-center bg-dark mt-5"
+            th:object="${bindingModel}"
+            th:action="@{/users/register}"
+            th:method="post"
+            id="registerForm">
+        <h2 class="text-center text-light">Register</h2>
+        <div class="form-group mb-3">
+            <div class="form-floating mb-3">
+                <input th:field="*{username}"
+                       th:errorclass="is-invalid"
+                       type="text"
+                       class="form-control"
+                       id="username"
+                       placeholder="Enter username">
+                <label for="username">Username</label>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback form-text text-danger">
+                    Username must be between 4 and 20 characters!
+                </div>
+                <div id="usernameTaken" th:if="${usernameAlreadyExists}" class="form-text text-danger">
+                    Username is already taken!
+                </div>
+                <div id="usernameTakenChecking" style="display: none" th:if="${usernameAlreadyExists}"
+                     class="form-text text-info">
+                    Checking if username available
+                </div>
+            </div>
+
+
+        </div>
+        <div class="form-group mb-3">
+
+            <div class="form-floating mb-3">
+                <input
+                        th:field="*{password}"
+                        th:errorclass="is-invalid"
+                        type="password"
+                        class="form-control"
+                        id="password"
+                        placeholder="Password">
+                <label for="password">Password</label>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback form-text text-danger">
+                    Password must be between 4 and 20 characters!
+                </div>
+            </div>
+        </div>
+        <div class="form-group mb-3">
+            <div class="form-floating mb-3">
+                <input
+                        th:field="*{repeatPassword}"
+                        th:errorclass="is-invalid"
+                        type="password"
+                        class="form-control"
+                        id="repeatPassword"
+                        placeholder="Repeat password">
+                <label for="repeatPassword">Repeat password</label>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback form-text text-danger">
+                    Repeated password must be between 4 and 20 characters!
+                </div>
+            </div>
+        </div>
+
+        <div id="passwordsMatchError" th:style="${passwordsMatch ? 'display: none' : 'display: block'}"
+             class="alert alert-danger" role="alert">Passwords must match!
+        </div>
+
+        <div class="form-group mb-3 text-center">
+            <input type="submit" class="btn btn-primary shadow-lg"/>
+        </div>
+    </form>
+</div>
+<script src="/js/registerValidation.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+body {
+    background-image: url('/images/background.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-color: #823305;
+}
+
+form.main-form {
+    padding:10px 30px;
+    border-radius: 20px;
+}

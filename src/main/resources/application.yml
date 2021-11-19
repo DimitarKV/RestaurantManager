@@ -1,0 +1,46 @@
+
+spring:
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: "jdbc:mysql://localhost:3306/restaurant?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC"
+    username: root
+    password: root
+  servlet:
+    multipart:
+      max-file-size: 15MB
+      max-request-size: 5MB
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+  #  sql:
+  #    init:
+  #      mode: always
+  jpa:
+    # Choose either MySQL 8 or MySQL 5 below
+    # For MySQL 8
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    #For MySQL 5
+    #database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: create-drop
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+    #defer-datasource-initialization: true
+  #Cloudinary Properties
+cloudinary:
+  api-key: 339616528418163
+  api-secret: ${CLOUDINARY_API_SECRET}
+  cloud-name: dwqf9zolg
+#server:
+#  ssl:
+#    key-store: classpath:springboot.p12
+#    key-store-password: ${KEYSTORE_PASSWORD}
+#    key-store-type: pkcs12
+#    key-alias: springboot
+#    key-password: ${KEYSTORE_PASSWORD}
+#    enabled: true
+#  port: 8080
+
