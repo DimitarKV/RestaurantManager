@@ -1,9 +1,9 @@
 package com.dim.RestaurantManager.web;
 
 import com.dim.RestaurantManager.model.binding.RegisterBindingModel;
-import com.dim.RestaurantManager.model.entity.User;
 import com.dim.RestaurantManager.model.service.RegisterServiceModel;
 import com.dim.RestaurantManager.service.UserService;
+import com.dim.RestaurantManager.web.rest.responses.UsernameAvailabilityResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;

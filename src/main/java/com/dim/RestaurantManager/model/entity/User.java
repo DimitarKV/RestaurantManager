@@ -1,23 +1,29 @@
 package com.dim.RestaurantManager.model.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToMany;
+import com.dim.RestaurantManager.model.entity.base.BaseEntity;
+
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @javax.persistence.Table(name = "users")
-public class User extends BaseEntity{
+public class User extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String username;
     @Column(nullable = false)
     private String password;
-    @ManyToMany(mappedBy = "users")
-    private List<Bill> bill;
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles;
     private Integer age;
+    @ManyToOne
+    private Bill bill;
+    @ManyToMany
+    @JoinTable(
+            name = "users_archived_bills",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "bill_id")
+    )
+    private List<ArchivedBill> archivedBills;
 
 
     public String getUsername() {
@@ -38,12 +44,21 @@ public class User extends BaseEntity{
         return this;
     }
 
-    public List<Bill> getBill() {
+    public Bill getBill() {
         return bill;
     }
 
-    public User setBill(List<Bill> bill) {
+    public User setBill(Bill bill) {
         this.bill = bill;
+        return this;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public User setAge(Integer age) {
+        this.age = age;
         return this;
     }
 
@@ -53,6 +68,15 @@ public class User extends BaseEntity{
 
     public User setRoles(List<Role> roles) {
         this.roles = roles;
+        return this;
+    }
+
+    public List<ArchivedBill> getArchivedBills() {
+        return archivedBills;
+    }
+
+    public User setArchivedBills(List<ArchivedBill> archivedBills) {
+        this.archivedBills = archivedBills;
         return this;
     }
 }

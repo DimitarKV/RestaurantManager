@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="fragments/fragments::head"></head>
+<body>
+<nav th:replace="fragments/fragments::navbar"></nav>
+<div th:object="${menu}" class="container text-center">
+    <h2>Menu</h2>
+
+    <div th:each="category : *{categories}">
+        <h3 th:text="${category.key}"></h3>
+        <div class="row px-3">
+            <div class="col-lg-3 mt-3" th:each="item : ${category.value}" th:object="${item}">
+                <form th:action="@{/menu/order}" th:method="post">
+                    <div class="card">
+                        <img th:src="*{imageUrl}"/>
+                        <div class="card-body text-center">
+                            <h4 th:text="*{name + ' - ' + #numbers.formatDecimal(price, 1, 2, 'COMMA') + 'лв.'}"></h4>
+                            <p th:text="*{description}"></p>
+                            <input name="itemId" style="display: none" type="text" th:value="*{id}">
+                            <input class="btn btn-primary" type="submit" value="Order">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

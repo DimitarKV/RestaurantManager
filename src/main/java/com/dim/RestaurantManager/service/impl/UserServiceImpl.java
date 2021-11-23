@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -64,6 +65,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean usernameExists(String username) {
         return this.userRepository.findByUsername(username).isPresent();
+    }
+
+    @Override
+    public Integer findTableNumberByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User with username: " + username + " not found!")).getBill().getTable().getNumber();
+    }
+
+    @Override
+    public void updatePrincipal() {
+        Authentication authentication =
+                new UsernamePasswordAuthenticationToken(
+                        userDetailsService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName()),
+                        SecurityContextHolder.getContext().getAuthentication().getCredentials(),
+                        SecurityContextHolder.getContext().getAuthentication().getAuthorities()
+                );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     private void initRoles(){

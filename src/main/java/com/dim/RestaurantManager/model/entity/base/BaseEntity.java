@@ -1,4 +1,4 @@
-package com.dim.RestaurantManager.model.entity;
+package com.dim.RestaurantManager.model.entity.base;
 
 import javax.persistence.*;
 

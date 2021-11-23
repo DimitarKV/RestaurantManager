@@ -1,23 +1,27 @@
 package com.dim.RestaurantManager.model.entity;
 
 import com.dim.RestaurantManager.model.entity.base.BaseEntity;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@javax.persistence.Table(name = "bills")
-public class Bill extends BaseEntity {
-    @OneToMany(mappedBy = "bill")
+@Table
+public class ArchivedBill extends BaseEntity {
+    @ManyToMany(mappedBy = "archivedBills")
     private List<User> users;
     @OneToMany(mappedBy = "bill")
     private List<Order> orders;
     private Double totalPrice;
-    @OneToOne
+    @ManyToOne(optional = false)
     private FoodTable table;
+    @Column(nullable = false)
+    private LocalDateTime archivedOn;
 
-    public Bill() {
+    public ArchivedBill() {
         users = new ArrayList<>();
         orders = new ArrayList<>();
         totalPrice = 0.0;
@@ -27,7 +31,7 @@ public class Bill extends BaseEntity {
         return users;
     }
 
-    public Bill setUsers(List<User> users) {
+    public ArchivedBill setUsers(List<User> users) {
         this.users = users;
         return this;
     }
@@ -36,7 +40,7 @@ public class Bill extends BaseEntity {
         return orders;
     }
 
-    public Bill setOrders(List<Order> orders) {
+    public ArchivedBill setOrders(List<Order> orders) {
         this.orders = orders;
         return this;
     }
@@ -45,7 +49,7 @@ public class Bill extends BaseEntity {
         return totalPrice;
     }
 
-    public Bill setTotalPrice(Double totalPrice) {
+    public ArchivedBill setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
         return this;
     }
@@ -54,8 +58,17 @@ public class Bill extends BaseEntity {
         return table;
     }
 
-    public Bill setTable(FoodTable table) {
+    public ArchivedBill setTable(FoodTable table) {
         this.table = table;
+        return this;
+    }
+
+    public LocalDateTime getArchivedOn() {
+        return archivedOn;
+    }
+
+    public ArchivedBill setArchivedOn(LocalDateTime archivedOn) {
+        this.archivedOn = archivedOn;
         return this;
     }
 }

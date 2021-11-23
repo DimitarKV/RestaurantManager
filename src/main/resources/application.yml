@@ -1,4 +1,3 @@
-
 spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
@@ -43,4 +42,7 @@ cloudinary:
 #    key-password: ${KEYSTORE_PASSWORD}
 #    enabled: true
 #  port: 8080
-
+server:
+  servlet:
+    session:
+      persistent: false

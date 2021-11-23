@@ -1,4 +1,4 @@
-package com.dim.RestaurantManager.web;
+package com.dim.RestaurantManager.web.rest.responses;
 
 public class UsernameAvailabilityResponse {
     private boolean available;
