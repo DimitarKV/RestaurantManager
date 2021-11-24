@@ -19,20 +19,20 @@
                        type="text"
                        class="form-control"
                        id="username"
-                       placeholder="Enter username">
-                <label for="username">Username</label>
+                       placeholder="Въведете потребителско име">
+                <label for="username">Въведете потребителско име</label>
                 <div class="valid-feedback">
-                    Looks good!
+                    Изглежда добре!
                 </div>
                 <div class="invalid-feedback form-text text-danger">
-                    Username must be between 4 and 20 characters!
+                    Потребителското име трябва да бъде между 4 и 20 символа!
                 </div>
                 <div id="usernameTaken" th:if="${usernameAlreadyExists}" class="form-text text-danger">
-                    Username is already taken!
+                    Потребителското име е заето!
                 </div>
                 <div id="usernameTakenChecking" style="display: none" th:if="${usernameAlreadyExists}"
                      class="form-text text-info">
-                    Checking if username available
+                    Проверяваме дали потребителското име е свебодно!
                 </div>
             </div>
 
@@ -47,13 +47,13 @@
                         type="password"
                         class="form-control"
                         id="password"
-                        placeholder="Password">
-                <label for="password">Password</label>
+                        placeholder="Парола">
+                <label for="password">Парола</label>
                 <div class="valid-feedback">
-                    Looks good!
+                    Изглежда добре!
                 </div>
                 <div class="invalid-feedback form-text text-danger">
-                    Password must be between 4 and 20 characters!
+                    Паролата име трябва да бъде между 4 и 20 символа!
                 </div>
             </div>
         </div>
@@ -65,19 +65,19 @@
                         type="password"
                         class="form-control"
                         id="repeatPassword"
-                        placeholder="Repeat password">
-                <label for="repeatPassword">Repeat password</label>
+                        placeholder="Повторете паролата">
+                <label for="repeatPassword">Повторете паролата</label>
                 <div class="valid-feedback">
-                    Looks good!
+                    Изглежда добре!
                 </div>
                 <div class="invalid-feedback form-text text-danger">
-                    Repeated password must be between 4 and 20 characters!
+                    Паролата име трябва да бъде между 4 и 20 символа!
                 </div>
             </div>
         </div>
 
         <div id="passwordsMatchError" th:style="${passwordsMatch ? 'display: none' : 'display: block'}"
-             class="alert alert-danger" role="alert">Passwords must match!
+             class="alert alert-danger" role="alert">Паролите не съвпадат!
         </div>
 
         <div class="form-group mb-3 text-center">
