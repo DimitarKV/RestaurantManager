@@ -9,30 +9,30 @@
         <div class="col-sm-2"></div>
         <div class="col-lg-3" th:object="${occupyBindingModel}">
             <form class="bg-dark main-form mt-5" th:action="@{/table/occupy}" th:method="post">
-                <h5 class="text-light">Occupy a table</h5>
+                <h5 class="text-light">Вземете маса</h5>
                 <div class="form-group mb-3">
                     <select class="form-control" th:errorclass="is-invalid" th:field="*{number}">
-                        <option value="0">Please chose a table</option>
+                        <option value="0">Моля изберете маса!</option>
                         <option th:each="table : ${freeTables}" th:value="${table.number}"
                                 th:text="${'№ ' + table.number + ' - ' + table.description}"></option>
                     </select>
-                    <small class="text-danger invalid-feedback">Table already occupied!</small>
+                    <small class="text-danger invalid-feedback">Масата вече е заета!</small>
                 </div>
-                <button type="submit" class="btn btn-primary">Occupy</button>
+                <button type="submit" class="btn btn-primary">Заеми!</button>
             </form>
         </div>
         <div class="col-sm-2"></div>
         <div class="col-lg-3" th:object="${joinBindingModel}">
             <form class="bg-dark main-form mt-5" th:action="@{/table/join}" th:method="post">
-                <h5 class="text-light">Join a table</h5>
+                <h5 class="text-light">Присъединете се към приятел</h5>
                 <div class="form-group mb-3">
                     <select class="form-control" th:field="*{number}">
-                        <option value="0">Please chose a table</option>
+                        <option value="0">Моля изберете маса!</option>
                         <option th:each="table : ${occupiedTables}" th:value="${table.number}"
                                 th:text="${'№ ' + table.number + ' ' + table.description}"></option>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary">Join</button>
+                <button type="submit" class="btn btn-primary">Присъедини се</button>
             </form>
         </div>
         <div class="col-sm-2"></div>

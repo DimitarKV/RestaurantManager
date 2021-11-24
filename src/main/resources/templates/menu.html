@@ -4,8 +4,10 @@
 <body>
 <nav th:replace="fragments/fragments::navbar"></nav>
 <div th:object="${menu}" class="container text-center">
-    <h2>Menu</h2>
-
+    <h2>Меню</h2>
+    <a th:href="@{/table/register}">
+        <h1 class="text-danger" th:if="${#authentication.principal.tableView == null}">Внимание! Трябва да изберете маса, за да можете да поръчвате!</h1>
+    </a>
     <div th:each="category : *{categories}">
         <h3 th:text="${category.key}"></h3>
         <div class="row px-3">
@@ -15,9 +17,14 @@
                         <img th:src="*{imageUrl}"/>
                         <div class="card-body text-center">
                             <h4 th:text="*{name + ' - ' + #numbers.formatDecimal(price, 1, 2, 'COMMA') + 'лв.'}"></h4>
-                            <p th:text="*{description}"></p>
+                            <a class="btn btn-primary" data-bs-toggle="collapse" th:href="*{'#collapse' + id}" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                Описание
+                            </a>
                             <input name="itemId" style="display: none" type="text" th:value="*{id}">
-                            <input class="btn btn-primary" type="submit" value="Order">
+                            <input th:if="${#authentication.principal.tableView != null}" class="btn btn-primary" type="submit" value="Order">
+                            <div class="collapse" th:id="*{'collapse' + id}">
+                            <div th:text="*{description}" class="card card-body"></div>
+                        </div>
                         </div>
                     </div>
                 </form>

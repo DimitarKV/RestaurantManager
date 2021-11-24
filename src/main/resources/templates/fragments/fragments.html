@@ -24,29 +24,31 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mr-auto col-6 justify-content-start">
-                <li class="nav-item" sec:authorize="isAuthenticated()" th:if="${#authentication.principal.tableView == null}">
-                    <a class="nav-link" th:href="@{/table/register}">Register table</a>
+                <li class="nav-item" sec:authorize="isAuthenticated()"
+                    th:if="${#authentication.principal.tableView == null}">
+                    <a class="nav-link" th:href="@{/table/register}">Маса</a>
                 </li>
-                <li sec:authorize="isAuthenticated()" th:if="${#authentication.principal.tableView != null}" class="nav-item">
+                <li sec:authorize="isAuthenticated()" th:if="${#authentication.principal.tableView != null}"
+                    class="nav-item">
                     <a class="nav-link" th:href="@{/orders}"
                        th:text="${'Маса №' + #authentication.principal.tableView.number  + ' ' + #authentication.principal.tableView.description}"></a>
                 </li>
                 <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <a class="nav-link" th:href="@{/menu}">Menu</a>
+                    <a class="nav-link" th:href="@{/menu}">Меню</a>
                 </li>
 
             </ul>
             <ul class="navbar-nav mr-auto col-6 justify-content-end">
                 <li sec:authorize="isAuthenticated()" class="nav-item">
                     <form th:action="@{/users/logout}" th:method="post">
-                        <input class="nav-link btn" type="submit" value="Logout">
+                        <input class="nav-link btn" type="submit" value="Изход">
                     </form>
                 </li>
                 <li class="nav-item float-end" sec:authorize="!isAuthenticated()">
-                    <a class="nav-link" th:href="@{/users/login}">Login</a>
+                    <a class="nav-link" th:href="@{/users/login}">Влез</a>
                 </li>
                 <li class="nav-item float-end" sec:authorize="!isAuthenticated()">
-                    <a class="nav-link" th:href="@{/users/register}">Register</a>
+                    <a class="nav-link" th:href="@{/users/register}">Регистрация</a>
                 </li>
             </ul>
         </div>
