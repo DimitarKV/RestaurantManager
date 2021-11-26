@@ -7,7 +7,15 @@ body {
     background-color: #823305;
 }
 
-form.main-form {
+form.main-form, .rounded-back {
     padding:10px 30px;
     border-radius: 20px;
+}
+
+.nounderline{
+    text-decoration: none !important;
+}
+
+.card {
+    min-height: 50vh;
 }

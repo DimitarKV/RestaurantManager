@@ -39,6 +39,9 @@
 
             </ul>
             <ul class="navbar-nav mr-auto col-6 justify-content-end">
+                <li class="nav-item float-end" sec:authorize="isAuthenticated() && hasRole('BOSS')">
+                    <a class="nav-link" th:href="@{/users/admin}">Администратор</a>
+                </li>
                 <li sec:authorize="isAuthenticated()" class="nav-item">
                     <form th:action="@{/users/logout}" th:method="post">
                         <input class="nav-link btn" type="submit" value="Изход">

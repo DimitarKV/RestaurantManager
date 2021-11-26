@@ -1,12 +1,16 @@
 package com.dim.RestaurantManager.service.impl;
 
+import com.dim.RestaurantManager.model.entity.Order;
 import com.dim.RestaurantManager.model.entity.Role;
 import com.dim.RestaurantManager.model.entity.User;
 import com.dim.RestaurantManager.model.entity.enums.RoleEnum;
 import com.dim.RestaurantManager.model.service.RegisterServiceModel;
+import com.dim.RestaurantManager.model.view.ItemView;
+import com.dim.RestaurantManager.model.view.OrderView;
 import com.dim.RestaurantManager.repository.RoleRepository;
 import com.dim.RestaurantManager.repository.UserRepository;
 import com.dim.RestaurantManager.service.UserService;
+import com.dim.RestaurantManager.service.exceptions.EntityNotFoundException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -83,6 +88,35 @@ public class UserServiceImpl implements UserService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
+    @Override
+    public List<OrderView> getOrders(RestaurantUser restaurantUser) {
+        User user = userRepository
+                .findByUsername(restaurantUser.getUsername())
+                .orElseThrow(() ->
+                        new EntityNotFoundException(
+                                "User with username " + restaurantUser.getUsername() + " not found!"));
+        if(user.getBill() == null)
+            return null;
+        List<OrderView> retVal = mapToListOrderView(user.getBill().getOrders());
+        return retVal;
+    }
+
+    private List<OrderView> mapToListOrderView(List<Order> orders) {
+        return orders.stream().map(this::mapToOrderView).collect(Collectors.toList());
+    }
+
+    private OrderView mapToOrderView(Order order){
+        return  new OrderView()
+                .setItemView(new ItemView()
+                        .setId(order.getItem().getId())
+                        .setName(order.getItem().getName())
+                        .setDescription(order.getItem().getDescription())
+                        .setImageUrl(order.getItem().getImageUrl())
+                        .setPrice(order.getItem().getPrice())
+                )
+                .setOrderStatus(order.getStatus().getName());
+    }
+
     private void initRoles(){
         List<Role> roles =
                 List.of(
@@ -102,6 +136,12 @@ public class UserServiceImpl implements UserService {
                 .setPassword(this.passwordEncoder.encode("mitko"))
                 .setRoles(List.of(this.roleRepository.findByRole(RoleEnum.BOSS)));
         user = this.userRepository.saveAndFlush(user);
+
+        User boss = new User()
+                .setUsername("boss")
+                .setPassword(this.passwordEncoder.encode("boss"))
+                .setRoles(List.of(this.roleRepository.findByRole(RoleEnum.BOSS)));
+        boss = this.userRepository.saveAndFlush(boss);
 
         User ginka = new User()
                 .setUsername("ginka")

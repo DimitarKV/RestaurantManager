@@ -9,12 +9,14 @@
             class="main-form mx-auto col-md-6 d-flex flex-column justify-content-center bg-dark mt-5"
             th:action="@{/users/login}"
             th:method="post"
+            th:object="${bindingModel}"
             id="loginForm">
         <h2 class="text-center text-light">Влез</h2>
         <div class="form-group mb-3">
             <div class="form-floating mb-3">
                 <input
                         name="username"
+                        th:field="*{username}"
                         type="text"
                         class="form-control"
                         id="username"
@@ -34,6 +36,8 @@
             </div>
 
         </div>
+
+        <div th:if="${error}" class="alert alert-danger" role="alert">Невалидно потребителско име или парола!</div>
 
         <div class="form-group mb-3 text-center">
             <input type="submit" value="Влез" class="btn btn-primary"/>

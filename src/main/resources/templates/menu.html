@@ -4,12 +4,28 @@
 <body>
 <nav th:replace="fragments/fragments::navbar"></nav>
 <div th:object="${menu}" class="container text-center">
-    <h2>Меню</h2>
-    <a th:href="@{/table/register}">
-        <h1 class="text-danger" th:if="${#authentication.principal.tableView == null}">Внимание! Трябва да изберете маса, за да можете да поръчвате!</h1>
-    </a>
+
+    <div class="row mt-3" th:if="${#authentication.principal.tableView == null}">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <a class="btn btn-dark rounded-back" th:href="@{/table/register}">
+                <h1 class="text-danger">Внимание! Трябва да изберете маса, за да можете да поръчвате!</h1>
+            </a>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+
+
     <div th:each="category : *{categories}">
-        <h3 th:text="${category.key}"></h3>
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4 bg-dark rounded-back mt-5">
+                <h3 class="text-light" th:text="${category.key}"></h3>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+
+
         <div class="row px-3">
             <div class="col-lg-3 mt-3" th:each="item : ${category.value}" th:object="${item}">
                 <form th:action="@{/menu/order}" th:method="post">
@@ -17,14 +33,16 @@
                         <img th:src="*{imageUrl}"/>
                         <div class="card-body text-center">
                             <h4 th:text="*{name + ' - ' + #numbers.formatDecimal(price, 1, 2, 'COMMA') + 'лв.'}"></h4>
-                            <a class="btn btn-primary" data-bs-toggle="collapse" th:href="*{'#collapse' + id}" role="button" aria-expanded="false" aria-controls="collapseExample">
+                            <a class="btn btn-primary" data-bs-toggle="collapse" th:href="*{'#collapse' + id}"
+                               role="button" aria-expanded="false" aria-controls="collapseExample">
                                 Описание
                             </a>
                             <input name="itemId" style="display: none" type="text" th:value="*{id}">
-                            <input th:if="${#authentication.principal.tableView != null}" class="btn btn-primary" type="submit" value="Order">
+                            <input th:if="${#authentication.principal.tableView != null}" class="btn btn-primary"
+                                   type="submit" value="Order">
                             <div class="collapse" th:id="*{'collapse' + id}">
-                            <div th:text="*{description}" class="card card-body"></div>
-                        </div>
+                                <div th:text="*{description}"></div>
+                            </div>
                         </div>
                     </div>
                 </form>

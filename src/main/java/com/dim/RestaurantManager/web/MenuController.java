@@ -5,6 +5,7 @@ import com.dim.RestaurantManager.service.MenuService;
 import com.dim.RestaurantManager.service.OrderService;
 import com.dim.RestaurantManager.service.exceptions.EntityNotFoundException;
 import com.dim.RestaurantManager.service.impl.RestaurantUser;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
