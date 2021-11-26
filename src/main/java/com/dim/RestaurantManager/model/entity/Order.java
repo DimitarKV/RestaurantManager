@@ -3,9 +3,11 @@ package com.dim.RestaurantManager.model.entity;
 
 import com.dim.RestaurantManager.model.entity.base.BaseEntity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "orders")
@@ -16,6 +18,8 @@ public class Order extends BaseEntity {
     private Bill bill;
     @ManyToOne(optional = false)
     private OrderStatus status;
+    @Column(nullable = false)
+    private LocalDateTime placed;
 
     public Item getItem() {
         return item;
@@ -41,6 +45,15 @@ public class Order extends BaseEntity {
 
     public Order setStatus(OrderStatus status) {
         this.status = status;
+        return this;
+    }
+
+    public LocalDateTime getPlaced() {
+        return placed;
+    }
+
+    public Order setPlaced(LocalDateTime placed) {
+        this.placed = placed;
         return this;
     }
 }

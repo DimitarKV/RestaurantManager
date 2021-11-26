@@ -18,7 +18,11 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void init() {
         if(categoryRepository.count() == 0){
-            categoryRepository.saveAllAndFlush(List.of(new Category().setName("Бургери"), new Category().setName("Салати")));
+            categoryRepository.saveAllAndFlush(List.of(
+                    new Category().setName("Бургери"),
+                    new Category().setName("Салати"),
+                    new Category().setName("Напитки")
+            ));
         }
     }
 }

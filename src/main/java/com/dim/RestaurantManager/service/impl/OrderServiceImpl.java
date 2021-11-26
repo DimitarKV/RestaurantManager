@@ -12,6 +12,8 @@ import com.dim.RestaurantManager.service.OrderService;
 import com.dim.RestaurantManager.service.exceptions.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class OrderServiceImpl implements OrderService {
     private final UserRepository userRepository;
@@ -38,7 +40,8 @@ public class OrderServiceImpl implements OrderService {
                                 orderStatusRepository
                                         .findByName(OrderStatusEnum.PENDING)
                                         .orElseThrow(() -> new EntityNotFoundException("Order status not found!"))
-                        );
+                        )
+                        .setPlaced(LocalDateTime.now());
         orderRepository.saveAndFlush(order);
 
     }
