@@ -1,15 +1,28 @@
 package com.dim.RestaurantManager.config;
 
+import com.dim.RestaurantManager.service.UserService;
+import com.dim.RestaurantManager.service.impl.RestaurantUser;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 public class MethodSecurityExpressionRoot extends SecurityExpressionRoot
         implements MethodSecurityExpressionOperations {
     private Object filterObject, returnObject;
+    private UserService userService;
 
-    public boolean isWorking(){
+    //TODO
+    public boolean isAdmin(){
         return false;
+    }
+
+    private RestaurantUser currentUser(){
+        Authentication authentication = getAuthentication();
+        if(authentication.getPrincipal() instanceof UserDetails)
+            return ((RestaurantUser)authentication.getPrincipal());
+        return null;
     }
 
     /**
@@ -43,6 +56,11 @@ public class MethodSecurityExpressionRoot extends SecurityExpressionRoot
 
     @Override
     public Object getThis() {
+        return this;
+    }
+
+    public MethodSecurityExpressionRoot setUserService(UserService userService) {
+        this.userService = userService;
         return this;
     }
 }

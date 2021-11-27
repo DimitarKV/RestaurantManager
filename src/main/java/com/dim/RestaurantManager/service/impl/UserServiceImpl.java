@@ -42,7 +42,8 @@ public class UserServiceImpl implements UserService {
     public boolean registerAndLoginUser(RegisterServiceModel serviceModel) {
         User user = new User()
                 .setUsername(serviceModel.getUsername())
-                .setPassword(this.passwordEncoder.encode(serviceModel.getPassword()));
+                .setPassword(this.passwordEncoder.encode(serviceModel.getPassword()))
+                .setRoles(List.of(this.roleRepository.findByRole(RoleEnum.CUSTOMER)));
         user = this.userRepository.saveAndFlush(user);
         //TODO: find a better way of verifying that the username is actually unique
         if (user != null) {
