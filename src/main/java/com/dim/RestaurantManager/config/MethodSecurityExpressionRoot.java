@@ -1,12 +1,13 @@
 package com.dim.RestaurantManager.config;
 
+import com.dim.RestaurantManager.model.entity.enums.RoleEnum;
 import com.dim.RestaurantManager.service.UserService;
 import com.dim.RestaurantManager.service.impl.RestaurantUser;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+
 
 public class MethodSecurityExpressionRoot extends SecurityExpressionRoot
         implements MethodSecurityExpressionOperations {
@@ -15,6 +16,10 @@ public class MethodSecurityExpressionRoot extends SecurityExpressionRoot
 
     //TODO
     public boolean isAdmin(){
+        RestaurantUser user = currentUser();
+        if(user != null){
+            return userService.isAdmin(user.getUsername());
+        }
         return false;
     }
 

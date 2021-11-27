@@ -6,6 +6,7 @@ import com.dim.RestaurantManager.model.service.RegisterServiceModel;
 import com.dim.RestaurantManager.model.view.OrderView;
 import com.dim.RestaurantManager.model.view.UserView;
 import com.dim.RestaurantManager.service.impl.RestaurantUser;
+import com.dim.RestaurantManager.web.PatchUserBindingModel;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.security.Principal;
@@ -27,5 +28,9 @@ public interface UserService {
 
     List<OrderView> getOrders(RestaurantUser restaurantUser);
 
-    List<UserView> getAllUsers();
+    List<PatchUserBindingModel> getAllUsers();
+
+    void patchUser(PatchUserBindingModel bindingModel);
+
+    boolean isAdmin(String username);
 }

@@ -49,8 +49,22 @@
                         th:id="${'list-' + user.id}"
                         role="tabpanel"
                         th:aria-labelledby="${'list-' + user.id + '-list'}">
-                    <p th:each="role : ${user.roles}" th:text="${role}"></p>
-                    <p th:text="${user.age}"></p>
+                    <form
+                            th:action="@{/users/patch-roles}"
+                            th:method="patch">
+                        <input type="text" name="id" th:value="${user.id}" hidden>
+                        <div th:each="role : ${roles}" class="form-check form-switch">
+                            <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    th:id="${user.id + '' + role}"
+                                    th:checked="${#lists.contains(user.roles, role)}">
+                            <label class="form-check-label" th:for="${user.id + '' + role}" th:text="${role}"></label>
+                        </div>
+
+                        <input type="submit" class="btn btn-primary" value="Запази">
+                    </form>
+
                 </div>
             </div>
         </div>

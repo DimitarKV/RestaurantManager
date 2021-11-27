@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.User;
 import java.util.Collection;
 
 public class RestaurantUser extends User {
-    private FoodTableView tableView;
+    private final FoodTableView tableView;
 
     public RestaurantUser(String username, String password, FoodTableView tableView, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);

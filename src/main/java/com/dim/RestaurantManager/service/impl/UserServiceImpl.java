@@ -12,6 +12,7 @@ import com.dim.RestaurantManager.repository.RoleRepository;
 import com.dim.RestaurantManager.repository.UserRepository;
 import com.dim.RestaurantManager.service.UserService;
 import com.dim.RestaurantManager.service.exceptions.EntityNotFoundException;
+import com.dim.RestaurantManager.web.PatchUserBindingModel;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -43,7 +44,7 @@ public class UserServiceImpl implements UserService {
         User user = new User()
                 .setUsername(serviceModel.getUsername())
                 .setPassword(this.passwordEncoder.encode(serviceModel.getPassword()))
-                .setRoles(List.of(this.roleRepository.findByRole(RoleEnum.CUSTOMER)));
+                .setRoles(List.of(mapRoleEnumToRole(RoleEnum.CUSTOMER)));
         user = this.userRepository.saveAndFlush(user);
         //TODO: find a better way of verifying that the username is actually unique
         if (user != null) {
@@ -100,17 +101,39 @@ public class UserServiceImpl implements UserService {
                                 "User with username " + restaurantUser.getUsername() + " not found!"));
         if (user.getBill() == null)
             return null;
-        List<OrderView> retVal = mapToListOrderView(user.getBill().getOrders());
-        return retVal;
+        return mapToListOrderView(user.getBill().getOrders());
     }
 
     @Override
-    public List<UserView> getAllUsers() {
-        return userRepository.findAll().stream().map(this::mapToUserView).collect(Collectors.toList());
+    public List<PatchUserBindingModel> getAllUsers() {
+        return userRepository.findAll().stream().map(this::mapToPatchUserBindingModel).collect(Collectors.toList());
     }
 
-    private UserView mapToUserView(User user) {
-        return new UserView()
+    @Override
+    public void patchUser(PatchUserBindingModel bindingModel) {
+        User user = this.userRepository
+                .findById(bindingModel.getId())
+                .orElseThrow(() -> new EntityNotFoundException("User with id: " + bindingModel.getId() + " not found!"))
+                .setRoles(bindingModel.getRoles().stream().map(this::mapRoleEnumToRole).collect(Collectors.toList()));
+        userRepository.saveAndFlush(user);
+    }
+
+    @Override
+    public boolean isAdmin(String username) {
+        return userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("User with username: " + username + " not found"))
+                .getRoles().stream().anyMatch(r -> r.getRole() == RoleEnum.BOSS);
+    }
+
+    private Role mapRoleEnumToRole(RoleEnum roleEnum) {
+        return this.roleRepository
+                .findByRole(roleEnum)
+                .orElseThrow(() -> new EntityNotFoundException("Role with name: " + roleEnum + " not found!"));
+    }
+
+    private PatchUserBindingModel mapToPatchUserBindingModel(User user) {
+        return new PatchUserBindingModel()
                 .setId(user.getId())
                 .setUsername(user.getUsername())
                 .setFirstName(user.getFirstName())
@@ -152,75 +175,75 @@ public class UserServiceImpl implements UserService {
         User mitko = new User()
                 .setUsername("mitko")
                 .setPassword("d9e02a4d657082ade25a04d9cab6bd99acd9984d98ac70402dccddd373476aec182f714ba9856dd7")
-                .setRoles(List.of(this.roleRepository.findByRole(RoleEnum.BOSS)));
+                .setRoles(List.of(mapRoleEnumToRole(RoleEnum.BOSS)));
         User mitko1 = new User()
-                .setUsername("mitko1")
+                .setUsername("mita43to")
                 .setPassword("d9e02a4d657082ade25a04d9cab6bd99acd9984d98ac70402dccddd373476aec182f714ba9856dd7")
-                .setRoles(List.of(this.roleRepository.findByRole(RoleEnum.BOSS)));
+                .setRoles(List.of(mapRoleEnumToRole(RoleEnum.CUSTOMER)));
         User mitko2 = new User()
-                .setUsername("mitko2")
+                .setUsername("chef")
                 .setPassword("d9e02a4d657082ade25a04d9cab6bd99acd9984d98ac70402dccddd373476aec182f714ba9856dd7")
-                .setRoles(List.of(this.roleRepository.findByRole(RoleEnum.BOSS)));
+                .setRoles(List.of(mapRoleEnumToRole(RoleEnum.BOSS), mapRoleEnumToRole(RoleEnum.COOK)));
         User mitko3 = new User()
                 .setUsername("mitko3")
                 .setPassword("d9e02a4d657082ade25a04d9cab6bd99acd9984d98ac70402dccddd373476aec182f714ba9856dd7")
-                .setRoles(List.of(this.roleRepository.findByRole(RoleEnum.BOSS)));
+                .setRoles(List.of(mapRoleEnumToRole(RoleEnum.BOSS)));
         User mitko4 = new User()
                 .setUsername("mitko4")
                 .setPassword("d9e02a4d657082ade25a04d9cab6bd99acd9984d98ac70402dccddd373476aec182f714ba9856dd7")
-                .setRoles(List.of(this.roleRepository.findByRole(RoleEnum.BOSS)));
+                .setRoles(List.of(mapRoleEnumToRole(RoleEnum.BOSS)));
         User mitko5 = new User()
                 .setUsername("mitko5")
                 .setPassword("d9e02a4d657082ade25a04d9cab6bd99acd9984d98ac70402dccddd373476aec182f714ba9856dd7")
-                .setRoles(List.of(this.roleRepository.findByRole(RoleEnum.BOSS)));
+                .setRoles(List.of(mapRoleEnumToRole(RoleEnum.BOSS)));
         User mitko6 = new User()
                 .setUsername("mitko6")
                 .setPassword("d9e02a4d657082ade25a04d9cab6bd99acd9984d98ac70402dccddd373476aec182f714ba9856dd7")
-                .setRoles(List.of(this.roleRepository.findByRole(RoleEnum.BOSS)));
+                .setRoles(List.of(mapRoleEnumToRole(RoleEnum.BOSS)));
         User mitko7 = new User()
                 .setUsername("mitko7")
                 .setPassword("d9e02a4d657082ade25a04d9cab6bd99acd9984d98ac70402dccddd373476aec182f714ba9856dd7")
-                .setRoles(List.of(this.roleRepository.findByRole(RoleEnum.BOSS)));
+                .setRoles(List.of(mapRoleEnumToRole(RoleEnum.BOSS)));
         User mitko8 = new User()
                 .setUsername("mitko8")
                 .setPassword("d9e02a4d657082ade25a04d9cab6bd99acd9984d98ac70402dccddd373476aec182f714ba9856dd7")
-                .setRoles(List.of(this.roleRepository.findByRole(RoleEnum.BOSS)));
+                .setRoles(List.of(mapRoleEnumToRole(RoleEnum.BOSS)));
         User mitko9 = new User()
                 .setUsername("mitko9")
                 .setPassword("d9e02a4d657082ade25a04d9cab6bd99acd9984d98ac70402dccddd373476aec182f714ba9856dd7")
-                .setRoles(List.of(this.roleRepository.findByRole(RoleEnum.BOSS)));
+                .setRoles(List.of(mapRoleEnumToRole(RoleEnum.BOSS)));
         User mitko10 = new User()
                 .setUsername("mitko10")
                 .setPassword("d9e02a4d657082ade25a04d9cab6bd99acd9984d98ac70402dccddd373476aec182f714ba9856dd7")
-                .setRoles(List.of(this.roleRepository.findByRole(RoleEnum.BOSS)));
+                .setRoles(List.of(mapRoleEnumToRole(RoleEnum.BOSS)));
         User mitko11 = new User()
                 .setUsername("mitko11")
                 .setPassword("d9e02a4d657082ade25a04d9cab6bd99acd9984d98ac70402dccddd373476aec182f714ba9856dd7")
-                .setRoles(List.of(this.roleRepository.findByRole(RoleEnum.BOSS)));
+                .setRoles(List.of(mapRoleEnumToRole(RoleEnum.BOSS)));
         User mitko12 = new User()
                 .setUsername("mitko12")
                 .setPassword("d9e02a4d657082ade25a04d9cab6bd99acd9984d98ac70402dccddd373476aec182f714ba9856dd7")
-                .setRoles(List.of(this.roleRepository.findByRole(RoleEnum.BOSS)));
+                .setRoles(List.of(mapRoleEnumToRole(RoleEnum.BOSS)));
         User mitko13 = new User()
                 .setUsername("mitko13")
                 .setPassword("d9e02a4d657082ade25a04d9cab6bd99acd9984d98ac70402dccddd373476aec182f714ba9856dd7")
-                .setRoles(List.of(this.roleRepository.findByRole(RoleEnum.BOSS)));
+                .setRoles(List.of(mapRoleEnumToRole(RoleEnum.BOSS)));
         User mitko14 = new User()
                 .setUsername("mitko14")
                 .setPassword("d9e02a4d657082ade25a04d9cab6bd99acd9984d98ac70402dccddd373476aec182f714ba9856dd7")
-                .setRoles(List.of(this.roleRepository.findByRole(RoleEnum.BOSS)));
+                .setRoles(List.of(mapRoleEnumToRole(RoleEnum.BOSS)));
         User mitko15 = new User()
                 .setUsername("mitko15")
                 .setPassword("d9e02a4d657082ade25a04d9cab6bd99acd9984d98ac70402dccddd373476aec182f714ba9856dd7")
-                .setRoles(List.of(this.roleRepository.findByRole(RoleEnum.BOSS)));
+                .setRoles(List.of(mapRoleEnumToRole(RoleEnum.BOSS)));
         User boss = new User()
                 .setUsername("boss")
                 .setPassword("a17668370eae32cf970297933fc0a6096d989e32e3e11726aa34479bc43ff63b3a28f7ea9da8ba80")
-                .setRoles(List.of(this.roleRepository.findByRole(RoleEnum.BOSS)));
+                .setRoles(List.of(mapRoleEnumToRole(RoleEnum.BOSS)));
         User ginka = new User()
                 .setUsername("ginka")
                 .setPassword("c3e8fa05cef1dc0b73548acf3d473c7b52150bbe13ce80adb9d42bace30204ab9a37dafb7287e5a5")
-                .setRoles(List.of(this.roleRepository.findByRole(RoleEnum.HYGIENIST)));
+                .setRoles(List.of(mapRoleEnumToRole(RoleEnum.HYGIENIST)));
 
         userRepository.saveAllAndFlush(List.of(
                 mitko, mitko1, mitko2, mitko3, mitko4, mitko5,
