@@ -5,6 +5,7 @@ body {
     background-attachment: fixed;
     background-size: cover;
     background-color: #823305;
+    overflow: overlay;
 }
 
 form.main-form, .rounded-back {
@@ -18,4 +19,29 @@ form.main-form, .rounded-back {
 
 .card {
     min-height: 50vh;
+}
+
+.list-group {
+    max-height: 70vh;
+    margin-bottom: 0;
+    overflow: scroll;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+::-webkit-scrollbar {
+    position: absolute;
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }

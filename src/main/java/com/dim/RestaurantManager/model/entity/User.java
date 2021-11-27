@@ -8,6 +8,8 @@ import java.util.List;
 @Entity
 @javax.persistence.Table(name = "users")
 public class User extends BaseEntity {
+    private String firstName;
+    private String lastName;
     @Column(nullable = false, unique = true)
     private String username;
     @Column(nullable = false)
@@ -25,6 +27,23 @@ public class User extends BaseEntity {
     )
     private List<ArchivedBill> archivedBills;
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public User setFirstName(String firstName) {
+        this.firstName = firstName;
+        return this;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public User setLastName(String lastName) {
+        this.lastName = lastName;
+        return this;
+    }
 
     public String getUsername() {
         return username;

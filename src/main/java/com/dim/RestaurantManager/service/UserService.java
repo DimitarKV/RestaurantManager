@@ -4,6 +4,7 @@ import com.dim.RestaurantManager.model.binding.OccupyTableBindingModel;
 import com.dim.RestaurantManager.model.entity.User;
 import com.dim.RestaurantManager.model.service.RegisterServiceModel;
 import com.dim.RestaurantManager.model.view.OrderView;
+import com.dim.RestaurantManager.model.view.UserView;
 import com.dim.RestaurantManager.service.impl.RestaurantUser;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -25,4 +26,6 @@ public interface UserService {
     void updatePrincipal();
 
     List<OrderView> getOrders(RestaurantUser restaurantUser);
+
+    List<UserView> getAllUsers();
 }
