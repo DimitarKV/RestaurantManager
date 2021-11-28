@@ -2,17 +2,16 @@
 <html lang="en">
 <head th:replace="fragments/fragments::head"></head>
 <body>
-<script type="module" src="/js/registerValidation.js"></script>
+<script type="module" src="/js/editProfileValidation.js"></script>
 <nav th:replace="fragments/fragments::navbar"></nav>
 <div class="container">
-
     <form
             class="main-form mx-auto col-md-6 d-flex flex-column justify-content-center bg-dark mt-5"
             th:object="${bindingModel}"
-            th:action="@{/users/register}"
-            th:method="post"
-            id="registerForm">
-        <h2 class="text-center text-light">Register</h2>
+            th:action="@{/users/profile}"
+            th:method="patch"
+            id="editForm">
+        <h2 class="text-center text-light">Подновяване на профила</h2>
         <div class="form-group mb-3">
             <div class="form-floating mb-3">
                 <input th:field="*{username}"
@@ -39,6 +38,61 @@
 
 
         </div>
+
+        <div class="form-group mb-3">
+            <div class="form-floating mb-3">
+                <input th:field="*{firstName}"
+                       th:errorclass="is-invalid"
+                       type="text"
+                       class="form-control"
+                       id="firstName"
+                       placeholder="Въведете първо име">
+                <label for="firstName">Въведете първо име</label>
+                <div class="valid-feedback">
+                    Изглежда добре!
+                </div>
+                <div class="invalid-feedback form-text text-danger">
+                    Първото име трябва да бъде между 4 и 20 символа!
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group mb-3">
+            <div class="form-floating mb-3">
+                <input th:field="*{lastName}"
+                       th:errorclass="is-invalid"
+                       type="text"
+                       class="form-control"
+                       id="lastName"
+                       placeholder="Въведете последно име">
+                <label for="lastName">Въведете последно име</label>
+                <div class="valid-feedback">
+                    Изглежда добре!
+                </div>
+                <div class="invalid-feedback form-text text-danger">
+                    Последното име трябва да бъде между 4 и 20 символа!
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group mb-3">
+            <div class="form-floating mb-3">
+                <input th:field="*{age}"
+                       th:errorclass="is-invalid"
+                       type="text"
+                       class="form-control"
+                       id="age"
+                       placeholder="Въведете потребителско име">
+                <label for="age">Въведете възраст</label>
+                <div class="valid-feedback">
+                    Изглежда добре!
+                </div>
+                <div class="invalid-feedback form-text text-danger">
+                    Възрастта трябва да бъде по-голяма от 0!
+                </div>
+            </div>
+        </div>
+
         <div class="form-group mb-3">
 
             <div class="form-floating mb-3">

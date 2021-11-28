@@ -39,6 +39,9 @@
 
             </ul>
             <ul class="navbar-nav mr-auto col-6 justify-content-end">
+                <li class="nav-item float-end" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/users/profile}">Профил</a>
+                </li>
                 <li class="nav-item float-end" sec:authorize="isAuthenticated() && hasRole('BOSS')">
                     <a class="nav-link" th:href="@{/users/admin}">Администратор</a>
                 </li>
