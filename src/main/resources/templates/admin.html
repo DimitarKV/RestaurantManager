@@ -4,27 +4,6 @@
 <body>
 <script src="/js/rolesDialog.js" type="module"></script>
 <nav th:replace="fragments/fragments::navbar"></nav>
-<div id="roleModal" class="modal fade" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Modal title</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Modal body text goes here.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#roleModal">
-    Launch demo modal
-</button>
 
 <div class="container">
     <div class="row mt-3">
@@ -50,16 +29,61 @@
                         role="tabpanel"
                         th:aria-labelledby="${'list-' + user.id + '-list'}">
                     <form
+                            class="main-form mx-auto col-md-6 d-flex flex-column justify-content-center bg-dark mt-5"
                             th:action="@{/users/patch-roles}"
                             th:method="patch">
                         <input type="text" name="id" th:value="${user.id}" hidden>
+
+                        <div class="form-floating mb-3">
+                            <input th:id="${user.id + 'firstName'}"
+                                   type="text"
+                                   class="form-control text-dark"
+                                   aria-label="First Name"
+                                   th:value="${user.firstName}"
+                                   disabled>
+                            <label th:for="${user.id + 'firstName'}" class="form-label text-dark">First Name</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input th:id="${user.id + 'lastName'}"
+                                   type="text"
+                                   class="form-control text-dark"
+                                   aria-label="Last Name"
+                                   th:value="${user.lastName}"
+                                   disabled>
+                            <label th:for="${user.id + 'lastName'}" class="form-label text-dark">Last Name</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input th:id="${user.id + 'username'}"
+                                   type="text"
+                                   class="form-control text-dark"
+                                   aria-label="Username"
+                                   th:value="${user.username}"
+                                   disabled>
+                            <label th:for="${user.id + 'username'}" class="form-label text-dark">Username</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input th:id="${user.id + 'age'}"
+                                   type="text"
+                                   class="form-control text-dark"
+                                   aria-label="Age"
+                                   th:value="${user.age}"
+                                   disabled>
+                            <label th:for="${user.id + 'age'}" class="form-label text-dark">Age</label>
+                        </div>
+
                         <div th:each="role : ${roles}" class="form-check form-switch">
                             <input
                                     class="form-check-input"
                                     type="checkbox"
                                     th:id="${user.id + '' + role}"
+                                    name="role"
+                                    th:value="${role}"
                                     th:checked="${#lists.contains(user.roles, role)}">
-                            <label class="form-check-label" th:for="${user.id + '' + role}" th:text="${role}"></label>
+                            <label class="form-check-label" th:for="${user.id + '' + role}"
+                                   th:text="${role}"></label>
                         </div>
 
                         <input type="submit" class="btn btn-primary" value="Запази">

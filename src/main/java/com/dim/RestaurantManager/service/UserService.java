@@ -28,7 +28,7 @@ public interface UserService {
 
     List<OrderView> getOrders(RestaurantUser restaurantUser);
 
-    List<PatchUserBindingModel> getAllUsers();
+    List<UserView> getAllUsers();
 
     void patchUser(PatchUserBindingModel bindingModel);
 

@@ -2,6 +2,7 @@ package com.dim.RestaurantManager.web;
 
 import com.dim.RestaurantManager.model.entity.enums.RoleEnum;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PatchUserBindingModel {
@@ -9,7 +10,7 @@ public class PatchUserBindingModel {
     private String firstName;
     private String lastName;
     private String username;
-    private List<RoleEnum> roles;
+    private List<RoleEnum> roles = new ArrayList<>();
     private Integer age;
 
     public Long getId() {

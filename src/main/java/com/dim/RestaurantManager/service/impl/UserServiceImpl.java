@@ -22,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -105,8 +106,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<PatchUserBindingModel> getAllUsers() {
-        return userRepository.findAll().stream().map(this::mapToPatchUserBindingModel).collect(Collectors.toList());
+    public List<UserView> getAllUsers() {
+        return userRepository
+                .findAll()
+                .stream()
+                .map(this::mapToUserView)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -114,8 +119,13 @@ public class UserServiceImpl implements UserService {
         User user = this.userRepository
                 .findById(bindingModel.getId())
                 .orElseThrow(() -> new EntityNotFoundException("User with id: " + bindingModel.getId() + " not found!"))
-                .setRoles(bindingModel.getRoles().stream().map(this::mapRoleEnumToRole).collect(Collectors.toList()));
+                .setRoles(bindingModel
+                        .getRoles()
+                        .stream()
+                        .map(this::mapRoleEnumToRole)
+                        .collect(Collectors.toList()));
         userRepository.saveAndFlush(user);
+        updatePrincipal();
     }
 
     @Override
@@ -132,14 +142,15 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new EntityNotFoundException("Role with name: " + roleEnum + " not found!"));
     }
 
-    private PatchUserBindingModel mapToPatchUserBindingModel(User user) {
-        return new PatchUserBindingModel()
+    private UserView mapToUserView(User user) {
+        return new UserView()
                 .setId(user.getId())
                 .setUsername(user.getUsername())
                 .setFirstName(user.getFirstName())
                 .setLastName(user.getLastName())
                 .setAge(user.getAge())
                 .setRoles(user.getRoles().stream().map(Role::getRole).collect(Collectors.toList()));
+
     }
 
     private List<OrderView> mapToListOrderView(List<Order> orders) {
