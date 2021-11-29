@@ -38,11 +38,11 @@ public class AdminController {
 
     @PreAuthorize("isAdmin()")
     @PatchMapping("/users/patch-roles")
-    public String patchUser(PatchUserBindingModel bindingModel,
+    public String patchUser(ModifyUserRolesBindingModel bindingModel,
                             @RequestParam(name = "role", required = false) List<RoleEnum> roles) {
         if(roles != null)
             bindingModel.setRoles(roles);
-        userService.patchUser(bindingModel);
+        userService.modifyUserRoles(bindingModel);
         return "redirect:/users/admin";
     }
 }

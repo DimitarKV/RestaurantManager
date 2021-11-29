@@ -1,16 +1,13 @@
 package com.dim.RestaurantManager.service;
 
-import com.dim.RestaurantManager.model.binding.OccupyTableBindingModel;
 import com.dim.RestaurantManager.model.binding.UpdateProfileBindingModel;
 import com.dim.RestaurantManager.model.entity.User;
 import com.dim.RestaurantManager.model.service.RegisterServiceModel;
 import com.dim.RestaurantManager.model.view.OrderView;
 import com.dim.RestaurantManager.model.view.UserView;
 import com.dim.RestaurantManager.service.impl.RestaurantUser;
-import com.dim.RestaurantManager.web.PatchUserBindingModel;
-import org.springframework.security.core.userdetails.UserDetails;
+import com.dim.RestaurantManager.web.ModifyUserRolesBindingModel;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +28,7 @@ public interface UserService {
 
     List<UserView> getAllUsers();
 
-    void patchUser(PatchUserBindingModel bindingModel);
+    void modifyUserRoles(ModifyUserRolesBindingModel bindingModel);
 
     boolean isAdmin(String username);
 

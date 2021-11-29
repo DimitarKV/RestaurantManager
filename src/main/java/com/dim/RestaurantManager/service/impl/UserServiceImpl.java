@@ -1,12 +1,10 @@
 package com.dim.RestaurantManager.service.impl;
 
 import com.dim.RestaurantManager.model.binding.UpdateProfileBindingModel;
-import com.dim.RestaurantManager.model.entity.Order;
 import com.dim.RestaurantManager.model.entity.Role;
 import com.dim.RestaurantManager.model.entity.User;
 import com.dim.RestaurantManager.model.entity.enums.RoleEnum;
 import com.dim.RestaurantManager.model.service.RegisterServiceModel;
-import com.dim.RestaurantManager.model.view.ItemView;
 import com.dim.RestaurantManager.model.view.OrderView;
 import com.dim.RestaurantManager.model.view.UserView;
 import com.dim.RestaurantManager.repository.RoleRepository;
@@ -14,7 +12,7 @@ import com.dim.RestaurantManager.repository.UserRepository;
 import com.dim.RestaurantManager.service.UserService;
 import com.dim.RestaurantManager.service.exceptions.EntityNotFoundException;
 import com.dim.RestaurantManager.utils.components.ClassMapper;
-import com.dim.RestaurantManager.web.PatchUserBindingModel;
+import com.dim.RestaurantManager.web.ModifyUserRolesBindingModel;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -122,7 +120,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void patchUser(PatchUserBindingModel bindingModel) {
+    public void modifyUserRoles(ModifyUserRolesBindingModel bindingModel) {
         User user = this.userRepository
                 .findById(bindingModel.getId())
                 .orElseThrow(() -> new EntityNotFoundException("User with id: " + bindingModel.getId() + " not found!"))

@@ -1,11 +1,23 @@
 package com.dim.RestaurantManager.model.binding;
 
+import com.dim.RestaurantManager.model.validator.BlankOrLength;
+import com.dim.RestaurantManager.model.validator.Occupied;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.Min;
+
 public class UpdateProfileBindingModel {
+    @Length(min = 4, max = 20)
     private String username;
+    @BlankOrLength(min = 4, max = 20)
     private String password;
+    @BlankOrLength(min = 4, max = 20)
     private String repeatPassword;
+    @BlankOrLength(min = 4, max = 20)
     private String firstName;
+    @BlankOrLength(min = 4, max = 20)
     private String lastName;
+    @Min(0)
     private Integer age;
 
     public String getUsername() {
