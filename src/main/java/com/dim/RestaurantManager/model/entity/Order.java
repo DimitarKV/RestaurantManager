@@ -20,6 +20,8 @@ public class Order extends BaseEntity {
     private OrderStatus status;
     @Column(nullable = false)
     private LocalDateTime placed;
+    @ManyToOne
+    private User executor;
 
     public Item getItem() {
         return item;
@@ -54,6 +56,15 @@ public class Order extends BaseEntity {
 
     public Order setPlaced(LocalDateTime placed) {
         this.placed = placed;
+        return this;
+    }
+
+    public User getExecutor() {
+        return executor;
+    }
+
+    public Order setExecutor(User executor) {
+        this.executor = executor;
         return this;
     }
 }

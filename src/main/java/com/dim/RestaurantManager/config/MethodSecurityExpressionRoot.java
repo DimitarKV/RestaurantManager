@@ -8,7 +8,6 @@ import org.springframework.security.access.expression.method.MethodSecurityExpre
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 
-
 public class MethodSecurityExpressionRoot extends SecurityExpressionRoot
         implements MethodSecurityExpressionOperations {
     private Object filterObject, returnObject;
@@ -27,6 +26,14 @@ public class MethodSecurityExpressionRoot extends SecurityExpressionRoot
         if(user == null)
             return false;
         return user.getUsername().equals(username);
+    }
+
+    public boolean isPersonnel(){
+        RestaurantUser user = currentUser();
+        if(user != null){
+            return user.getAuthorities().stream().anyMatch(r -> !r.getAuthority().equals(RoleEnum.CUSTOMER.name()));
+        }
+        return false;
     }
 
     private RestaurantUser currentUser(){

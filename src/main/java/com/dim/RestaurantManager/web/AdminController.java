@@ -1,5 +1,6 @@
 package com.dim.RestaurantManager.web;
 
+import com.dim.RestaurantManager.model.binding.ModifyUserRolesBindingModel;
 import com.dim.RestaurantManager.model.entity.enums.RoleEnum;
 import com.dim.RestaurantManager.model.view.UserView;
 import com.dim.RestaurantManager.service.UserService;

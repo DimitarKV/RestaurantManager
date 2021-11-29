@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -13,10 +14,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
+    private final SessionRegistry sessionRegistry;
 
-    public ApplicationSecurityConfiguration(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+    public ApplicationSecurityConfiguration(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder, SessionRegistry sessionRegistry) {
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
+        this.sessionRegistry = sessionRegistry;
     }
 
     @Override
@@ -27,10 +30,18 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+
                 .authorizeRequests()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .antMatchers("/", "/users/register", "/users/login", "/users/register/check/{\\d+}").permitAll()
                 .antMatchers("/**").authenticated()
+
+                .and()
+                .sessionManagement()
+                .maximumSessions(9)
+                .sessionRegistry(sessionRegistry)
+                .expiredUrl("/users/login")
+                .and()
 
                 .and()
                 .formLogin()

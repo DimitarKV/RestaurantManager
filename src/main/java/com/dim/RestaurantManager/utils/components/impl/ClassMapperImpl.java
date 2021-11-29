@@ -6,6 +6,7 @@ import com.dim.RestaurantManager.model.entity.Role;
 import com.dim.RestaurantManager.model.entity.User;
 import com.dim.RestaurantManager.model.entity.enums.RoleEnum;
 import com.dim.RestaurantManager.model.service.UpdateProfileServiceModel;
+import com.dim.RestaurantManager.model.view.CookOrderView;
 import com.dim.RestaurantManager.model.view.ItemView;
 import com.dim.RestaurantManager.model.view.OrderView;
 import com.dim.RestaurantManager.model.view.UserView;
@@ -79,5 +80,16 @@ public class ClassMapperImpl implements ClassMapper {
                 .setFirstName(bindingModel.getFirstName())
                 .setLastName(bindingModel.getLastName())
                 .setAge(bindingModel.getAge());
+    }
+
+    @Override
+    public List<CookOrderView> toCookOrderView(List<Order> pendingOrders) {
+        return pendingOrders.stream().map(o ->
+                new CookOrderView()
+                        .setId(o.getId())
+                        .setName(o.getItem().getName())
+                        .setDescription(o.getItem().getDescription())
+                        .setImageUrl(o.getItem().getImageUrl()))
+                .collect(Collectors.toList());
     }
 }

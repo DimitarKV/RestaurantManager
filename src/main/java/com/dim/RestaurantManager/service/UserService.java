@@ -4,10 +4,11 @@ import com.dim.RestaurantManager.model.binding.UpdateProfileBindingModel;
 import com.dim.RestaurantManager.model.entity.User;
 import com.dim.RestaurantManager.model.service.RegisterServiceModel;
 import com.dim.RestaurantManager.model.service.UpdateProfileServiceModel;
+import com.dim.RestaurantManager.model.view.CookOrderView;
 import com.dim.RestaurantManager.model.view.OrderView;
 import com.dim.RestaurantManager.model.view.UserView;
 import com.dim.RestaurantManager.service.impl.RestaurantUser;
-import com.dim.RestaurantManager.web.ModifyUserRolesBindingModel;
+import com.dim.RestaurantManager.model.binding.ModifyUserRolesBindingModel;
 
 import java.util.List;
 import java.util.Optional;

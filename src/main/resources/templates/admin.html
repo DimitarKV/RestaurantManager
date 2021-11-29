@@ -7,7 +7,7 @@
 
 <div class="container">
     <div class="row mt-3">
-        <div class="col-md-4">
+        <div class="col-md-4 mt-3">
             <div class="list-group bg-dark rounded-back" id="list-tab" role="tablist">
                 <a
                         th:each="user : ${users}"
@@ -20,7 +20,7 @@
                         th:text="${user.username}">Home</a>
             </div>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-8 mt-3">
             <div class="tab-content" id="nav-tabContent">
                 <div
                         th:each="user : ${users}"
@@ -28,8 +28,9 @@
                         th:id="${'list-' + user.id}"
                         role="tabpanel"
                         th:aria-labelledby="${'list-' + user.id + '-list'}">
+                    <h2 class="text-center text-light">Потребител</h2>
                     <form
-                            class="main-form mx-auto col-md-6 d-flex flex-column justify-content-center bg-dark mt-5"
+                            class="main-form mx-auto col-md-6 d-flex flex-column justify-content-center bg-dark mt-2"
                             th:action="@{/users/patch-roles}"
                             th:method="patch">
                         <input type="text" name="id" th:value="${user.id}" hidden>

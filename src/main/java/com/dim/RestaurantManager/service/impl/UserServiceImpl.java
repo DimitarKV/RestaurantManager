@@ -6,6 +6,7 @@ import com.dim.RestaurantManager.model.entity.User;
 import com.dim.RestaurantManager.model.entity.enums.RoleEnum;
 import com.dim.RestaurantManager.model.service.RegisterServiceModel;
 import com.dim.RestaurantManager.model.service.UpdateProfileServiceModel;
+import com.dim.RestaurantManager.model.view.CookOrderView;
 import com.dim.RestaurantManager.model.view.OrderView;
 import com.dim.RestaurantManager.model.view.UserView;
 import com.dim.RestaurantManager.repository.RoleRepository;
@@ -13,10 +14,12 @@ import com.dim.RestaurantManager.repository.UserRepository;
 import com.dim.RestaurantManager.service.UserService;
 import com.dim.RestaurantManager.service.exceptions.EntityNotFoundException;
 import com.dim.RestaurantManager.utils.components.ClassMapper;
-import com.dim.RestaurantManager.web.ModifyUserRolesBindingModel;
+import com.dim.RestaurantManager.model.binding.ModifyUserRolesBindingModel;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,17 +36,19 @@ public class UserServiceImpl implements UserService {
     private final UserDetailsServiceImpl userDetailsService;
     private final RoleRepository roleRepository;
     private final ClassMapper classMapper;
+    private final SessionRegistry sessionRegistry;
 
     public UserServiceImpl(UserRepository userRepository,
                            PasswordEncoder passwordEncoder,
                            UserDetailsServiceImpl userDetailsService,
                            RoleRepository roleRepository,
-                           ClassMapper classMapper) {
+                           ClassMapper classMapper, SessionRegistry sessionRegistry) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userDetailsService = userDetailsService;
         this.roleRepository = roleRepository;
         this.classMapper = classMapper;
+        this.sessionRegistry = sessionRegistry;
     }
 
     @Override
@@ -90,12 +95,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updatePrincipal() {
-        Authentication authentication =
-                new UsernamePasswordAuthenticationToken(
-                        userDetailsService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName()),
-                        SecurityContextHolder.getContext().getAuthentication().getCredentials(),
-                        SecurityContextHolder.getContext().getAuthentication().getAuthorities()
-                );
+        UserDetails user = userDetailsService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                user,
+                user.getPassword(),
+                user.getAuthorities()
+        );
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
@@ -130,8 +135,9 @@ public class UserServiceImpl implements UserService {
                         .stream()
                         .map(classMapper::toRole)
                         .collect(Collectors.toList()));
-        userRepository.saveAndFlush(user);
-        updatePrincipal();
+        user = userRepository.saveAndFlush(user);
+        if(user.getUsername().equals(SecurityContextHolder.getContext().getAuthentication().getName()))
+            updatePrincipal();
     }
 
     @Override
@@ -160,11 +166,11 @@ public class UserServiceImpl implements UserService {
             user.setFirstName(updateProfileServiceModel.getFirstName());
             user.setLastName(updateProfileServiceModel.getLastName());
             user.setAge(updateProfileServiceModel.getAge());
-            if(updateProfileServiceModel.getPassword() != null)
+            if(updateProfileServiceModel.getPassword() != null){
                 user.setPassword(passwordEncoder.encode(updateProfileServiceModel.getPassword()));
-
+                updatePrincipal();
+            }
             userRepository.saveAndFlush(user);
-            updatePrincipal();
         }
     }
 

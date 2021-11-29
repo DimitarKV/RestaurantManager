@@ -1,4 +1,4 @@
-package com.dim.RestaurantManager.web;
+package com.dim.RestaurantManager.model.binding;
 
 import com.dim.RestaurantManager.model.entity.enums.RoleEnum;
 
