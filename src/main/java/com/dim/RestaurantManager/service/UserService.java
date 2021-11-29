@@ -3,6 +3,7 @@ package com.dim.RestaurantManager.service;
 import com.dim.RestaurantManager.model.binding.UpdateProfileBindingModel;
 import com.dim.RestaurantManager.model.entity.User;
 import com.dim.RestaurantManager.model.service.RegisterServiceModel;
+import com.dim.RestaurantManager.model.service.UpdateProfileServiceModel;
 import com.dim.RestaurantManager.model.view.OrderView;
 import com.dim.RestaurantManager.model.view.UserView;
 import com.dim.RestaurantManager.service.impl.RestaurantUser;
@@ -33,4 +34,6 @@ public interface UserService {
     boolean isAdmin(String username);
 
     UpdateProfileBindingModel getUserProfile(RestaurantUser user);
+
+    void updateUserProfile(String username, UpdateProfileServiceModel updateProfileServiceModel);
 }

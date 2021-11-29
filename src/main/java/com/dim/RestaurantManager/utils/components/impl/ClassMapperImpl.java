@@ -5,6 +5,7 @@ import com.dim.RestaurantManager.model.entity.Order;
 import com.dim.RestaurantManager.model.entity.Role;
 import com.dim.RestaurantManager.model.entity.User;
 import com.dim.RestaurantManager.model.entity.enums.RoleEnum;
+import com.dim.RestaurantManager.model.service.UpdateProfileServiceModel;
 import com.dim.RestaurantManager.model.view.ItemView;
 import com.dim.RestaurantManager.model.view.OrderView;
 import com.dim.RestaurantManager.model.view.UserView;
@@ -25,7 +26,7 @@ public class ClassMapperImpl implements ClassMapper {
     }
 
     @Override
-    public UpdateProfileBindingModel mapToUpdateProfileBindingModel(User user) {
+    public UpdateProfileBindingModel toUpdateProfileBindingModel(User user) {
         return new UpdateProfileBindingModel()
                 .setUsername(user.getUsername())
                 .setFirstName(user.getFirstName())
@@ -34,14 +35,14 @@ public class ClassMapperImpl implements ClassMapper {
     }
 
     @Override
-    public Role mapRoleEnumToRole(RoleEnum roleEnum) {
+    public Role toRole(RoleEnum roleEnum) {
         return this.roleRepository
                 .findByRole(roleEnum)
                 .orElseThrow(() -> new EntityNotFoundException("Role with name: " + roleEnum + " not found!"));
     }
 
     @Override
-    public UserView mapToUserView(User user) {
+    public UserView toUserView(User user) {
         return new UserView()
                 .setId(user.getId())
                 .setUsername(user.getUsername())
@@ -53,12 +54,12 @@ public class ClassMapperImpl implements ClassMapper {
     }
 
     @Override
-    public List<OrderView> mapToListOrderView(List<Order> orders) {
-        return orders.stream().map(this::mapToOrderView).collect(Collectors.toList());
+    public List<OrderView> toListOrderView(List<Order> orders) {
+        return orders.stream().map(this::toOrderView).collect(Collectors.toList());
     }
 
     @Override
-    public OrderView mapToOrderView(Order order) {
+    public OrderView toOrderView(Order order) {
         return new OrderView()
                 .setItemView(new ItemView()
                         .setId(order.getItem().getId())
@@ -68,5 +69,15 @@ public class ClassMapperImpl implements ClassMapper {
                         .setPrice(order.getItem().getPrice())
                 )
                 .setOrderStatus(order.getStatus().getName());
+    }
+
+    @Override
+    public UpdateProfileServiceModel toUpdateProfileServiceModel(UpdateProfileBindingModel bindingModel) {
+        return new UpdateProfileServiceModel()
+                .setUsername(bindingModel.getUsername())
+                .setPassword(bindingModel.getPassword())
+                .setFirstName(bindingModel.getFirstName())
+                .setLastName(bindingModel.getLastName())
+                .setAge(bindingModel.getAge());
     }
 }

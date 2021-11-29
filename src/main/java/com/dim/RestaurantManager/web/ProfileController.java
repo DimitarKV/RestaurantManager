@@ -1,8 +1,11 @@
 package com.dim.RestaurantManager.web;
 
 import com.dim.RestaurantManager.model.binding.UpdateProfileBindingModel;
+import com.dim.RestaurantManager.model.service.UpdateProfileServiceModel;
 import com.dim.RestaurantManager.service.UserService;
 import com.dim.RestaurantManager.service.impl.RestaurantUser;
+import com.dim.RestaurantManager.utils.components.ClassMapper;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -17,9 +20,11 @@ import javax.validation.Valid;
 @Controller
 public class ProfileController {
     private final UserService userService;
+    private final ClassMapper classMapper;
 
-    public ProfileController(UserService userService) {
+    public ProfileController(UserService userService, ClassMapper classMapper) {
         this.userService = userService;
+        this.classMapper = classMapper;
     }
 
     @ModelAttribute("bindingModel")
@@ -43,8 +48,10 @@ public class ProfileController {
         return "profile";
     }
 
+
     @PatchMapping("/users/profile")
-    public String updateProfile(@Valid UpdateProfileBindingModel bindingModel,
+    public String updateProfile(@AuthenticationPrincipal RestaurantUser user,
+                                @Valid UpdateProfileBindingModel bindingModel,
                                 BindingResult bindingResult,
                                 RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors() ||
@@ -72,7 +79,9 @@ public class ProfileController {
             return "redirect:/users/profile";
         }
 
-        System.out.println();
+        UpdateProfileServiceModel updateProfileServiceModel = classMapper.toUpdateProfileServiceModel(bindingModel);
+
+        userService.updateUserProfile(user.getUsername(), updateProfileServiceModel);
 
         return "redirect:/users/profile";
     }

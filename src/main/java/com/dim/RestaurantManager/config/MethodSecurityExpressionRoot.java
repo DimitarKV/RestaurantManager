@@ -14,13 +14,19 @@ public class MethodSecurityExpressionRoot extends SecurityExpressionRoot
     private Object filterObject, returnObject;
     private UserService userService;
 
-    //TODO
     public boolean isAdmin(){
         RestaurantUser user = currentUser();
         if(user != null){
             return userService.isAdmin(user.getUsername());
         }
         return false;
+    }
+
+    public boolean isOwner(String username){
+        RestaurantUser user = currentUser();
+        if(user == null)
+            return false;
+        return user.getUsername().equals(username);
     }
 
     private RestaurantUser currentUser(){

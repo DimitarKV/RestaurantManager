@@ -18,7 +18,7 @@ public class BlankOrLengthValidator implements ConstraintValidator<BlankOrLength
             return true;
         if(value.equals(""))
             return true;
-        if(value.length() > min && value.length() < max)
+        if(value.length() >= min && value.length() <= max)
             return true;
         return false;
     }
