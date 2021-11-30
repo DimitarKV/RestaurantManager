@@ -4,6 +4,8 @@ import com.dim.RestaurantManager.service.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
+
 @Component
 public class Init implements CommandLineRunner {
     private final UserService userService;

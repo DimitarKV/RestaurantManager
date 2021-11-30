@@ -1,9 +1,6 @@
 package com.dim.RestaurantManager.service.impl;
 
-import com.dim.RestaurantManager.model.entity.Bill;
-import com.dim.RestaurantManager.model.entity.Item;
-import com.dim.RestaurantManager.model.entity.Order;
-import com.dim.RestaurantManager.model.entity.User;
+import com.dim.RestaurantManager.model.entity.*;
 import com.dim.RestaurantManager.model.entity.enums.OrderStatusEnum;
 import com.dim.RestaurantManager.model.view.CookOrderView;
 import com.dim.RestaurantManager.repository.*;
@@ -23,14 +20,16 @@ public class OrderServiceImpl implements OrderService {
     private final OrderStatusRepository orderStatusRepository;
     private final ClassMapper classMapper;
     private final BillRepository billRepository;
+    private final TableRepository tableRepository;
 
-    public OrderServiceImpl(UserRepository userRepository, ItemRepository itemRepository, OrderRepository orderRepository, OrderStatusRepository orderStatusRepository, ClassMapper classMapper, BillRepository billRepository) {
+    public OrderServiceImpl(UserRepository userRepository, ItemRepository itemRepository, OrderRepository orderRepository, OrderStatusRepository orderStatusRepository, ClassMapper classMapper, BillRepository billRepository, TableRepository tableRepository) {
         this.userRepository = userRepository;
         this.itemRepository = itemRepository;
         this.orderRepository = orderRepository;
         this.orderStatusRepository = orderStatusRepository;
         this.classMapper = classMapper;
         this.billRepository = billRepository;
+        this.tableRepository = tableRepository;
     }
 
     @Override
@@ -61,15 +60,25 @@ public class OrderServiceImpl implements OrderService {
     public void init() {
         if(orderRepository.count() == 0){
             User user = userRepository.findByUsername("mitko").orElseThrow(() -> new EntityNotFoundException("User not found!"));
+
+            FoodTable table = tableRepository.findByNumber(1).get();
+
             Bill bill = new Bill()
-                    .setUsers(List.of(user));
+                    .setUsers(List.of(user))
+                    .setTable(table);
             bill = billRepository.saveAndFlush(bill);
+
+            table.setBill(bill);
+            tableRepository.saveAndFlush(table);
+
             user.setBill(bill);
+            user = userRepository.saveAndFlush(user);
+
             Item item1 = itemRepository.findById(1L).orElseThrow(() -> new EntityNotFoundException("Item not found!"));
             Order order1 =
                     new Order()
                             .setItem(item1)
-                            .setBill(user.getBill())
+                            .setBill(bill)
                             .setStatus(
                                     orderStatusRepository
                                             .findByName(OrderStatusEnum.PENDING)
@@ -81,7 +90,7 @@ public class OrderServiceImpl implements OrderService {
             Order order2 =
                     new Order()
                             .setItem(item2)
-                            .setBill(user.getBill())
+                            .setBill(bill)
                             .setStatus(
                                     orderStatusRepository
                                             .findByName(OrderStatusEnum.PENDING)
@@ -93,7 +102,7 @@ public class OrderServiceImpl implements OrderService {
             Order order3 =
                     new Order()
                             .setItem(item3)
-                            .setBill(user.getBill())
+                            .setBill(bill)
                             .setStatus(
                                     orderStatusRepository
                                             .findByName(OrderStatusEnum.PENDING)
@@ -102,6 +111,13 @@ public class OrderServiceImpl implements OrderService {
                             .setNotes("Без кисели краставички!")
                             .setPlaced(LocalDateTime.now());
             orderRepository.saveAllAndFlush(List.of(order1, order2, order3));
+
+            bill.setOrders(List.of(
+                    orderRepository.findById(1L).get(),
+                    orderRepository.findById(2L).get(),
+                    orderRepository.findById(3L).get()
+            ));
+            billRepository.saveAndFlush(bill);
         }
     }
 }

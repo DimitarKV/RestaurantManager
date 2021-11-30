@@ -1,14 +1,17 @@
 package com.dim.RestaurantManager.service.impl;
 
 import com.dim.RestaurantManager.model.binding.UpdateProfileBindingModel;
+import com.dim.RestaurantManager.model.entity.Order;
 import com.dim.RestaurantManager.model.entity.Role;
 import com.dim.RestaurantManager.model.entity.User;
+import com.dim.RestaurantManager.model.entity.enums.OrderStatusEnum;
 import com.dim.RestaurantManager.model.entity.enums.RoleEnum;
 import com.dim.RestaurantManager.model.service.RegisterServiceModel;
 import com.dim.RestaurantManager.model.service.UpdateProfileServiceModel;
-import com.dim.RestaurantManager.model.view.CookOrderView;
 import com.dim.RestaurantManager.model.view.OrderView;
 import com.dim.RestaurantManager.model.view.UserView;
+import com.dim.RestaurantManager.repository.OrderRepository;
+import com.dim.RestaurantManager.repository.OrderStatusRepository;
 import com.dim.RestaurantManager.repository.RoleRepository;
 import com.dim.RestaurantManager.repository.UserRepository;
 import com.dim.RestaurantManager.service.UserService;
@@ -18,7 +21,6 @@ import com.dim.RestaurantManager.model.binding.ModifyUserRolesBindingModel;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -37,18 +39,22 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final ClassMapper classMapper;
     private final SessionRegistry sessionRegistry;
+    private final OrderRepository orderRepository;
+    private final OrderStatusRepository orderStatusRepository;
 
     public UserServiceImpl(UserRepository userRepository,
                            PasswordEncoder passwordEncoder,
                            UserDetailsServiceImpl userDetailsService,
                            RoleRepository roleRepository,
-                           ClassMapper classMapper, SessionRegistry sessionRegistry) {
+                           ClassMapper classMapper, SessionRegistry sessionRegistry, OrderRepository orderRepository, OrderStatusRepository orderStatusRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userDetailsService = userDetailsService;
         this.roleRepository = roleRepository;
         this.classMapper = classMapper;
         this.sessionRegistry = sessionRegistry;
+        this.orderRepository = orderRepository;
+        this.orderStatusRepository = orderStatusRepository;
     }
 
     @Override
@@ -172,6 +178,20 @@ public class UserServiceImpl implements UserService {
             }
             userRepository.saveAndFlush(user);
         }
+    }
+
+    @Override
+    public void acceptOrder(RestaurantUser restaurantUser, Long orderId) {
+        User user = userRepository
+                .findByUsername(restaurantUser.getUsername())
+                .orElseThrow(() -> new EntityNotFoundException("User with username: " + restaurantUser.getUsername() + " not found!"));
+        Order order = orderRepository
+                .findById(orderId)
+                .orElseThrow(() -> new EntityNotFoundException("Order with id: " + orderId + " not found!"));
+        order.setExecutor(user);
+        order.setStatus(orderStatusRepository.findByName(OrderStatusEnum.COOKING).get());
+        orderRepository.saveAndFlush(order);
+        userRepository.saveAndFlush(user);
     }
 
     private void initRoles() {

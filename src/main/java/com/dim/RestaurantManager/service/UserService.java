@@ -37,4 +37,6 @@ public interface UserService {
     UpdateProfileBindingModel getUserProfile(RestaurantUser user);
 
     void updateUserProfile(String username, UpdateProfileServiceModel updateProfileServiceModel);
+
+    void acceptOrder(RestaurantUser user, Long orderId);
 }
