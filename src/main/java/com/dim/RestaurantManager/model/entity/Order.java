@@ -22,6 +22,7 @@ public class Order extends BaseEntity {
     private LocalDateTime placed;
     @ManyToOne
     private User executor;
+    private String notes;
 
     public Item getItem() {
         return item;
@@ -65,6 +66,15 @@ public class Order extends BaseEntity {
 
     public Order setExecutor(User executor) {
         this.executor = executor;
+        return this;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public Order setNotes(String notes) {
+        this.notes = notes;
         return this;
     }
 }

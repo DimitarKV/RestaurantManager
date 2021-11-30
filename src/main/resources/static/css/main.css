@@ -17,8 +17,13 @@ form.main-form, .rounded-back {
     text-decoration: none !important;
 }
 
-.card {
-    min-height: 50vh;
+.item-name {
+    line-height: 1.2em;
+    height: 2.4em;
+}
+
+.menu-card {
+    min-height: 65vh;
 }
 
 .list-group {

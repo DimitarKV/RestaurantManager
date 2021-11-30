@@ -7,7 +7,9 @@ import com.dim.RestaurantManager.service.impl.RestaurantUser;
 import java.util.List;
 
 public interface OrderService {
-    void order(Long itemId, RestaurantUser restaurantUser) throws EntityNotFoundException;
+    Long order(Long itemId, String notes, RestaurantUser restaurantUser) throws EntityNotFoundException;
 
     List<CookOrderView> getPendingOrders();
+
+    void init();
 }

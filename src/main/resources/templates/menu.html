@@ -2,7 +2,35 @@
 <html lang="en">
 <head th:replace="fragments/fragments::head"></head>
 <body>
+
+<div class="modal fade show" id="myModal" tabindex="-1"
+     aria-labelledby="productName" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form th:action="@{/menu/order}" th:method="post">
+                <div class="modal-header">
+                    <input name="itemId" type="text" id="itemId" hidden>
+                    <h5 class="modal-title" id="productName"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">Добавете забележка към поръчката?</label>
+                        <textarea name="notes" class="form-control" id="notes" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Откажи</button>
+                    <input id="placeOrderButton" type="submit" class="btn btn-primary" value="Поръчай">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="/js/userOrderConsole.js" type="module"></script>
 <nav th:replace="fragments/fragments::navbar"></nav>
+
 <div th:object="${menu}" class="container text-center">
 
     <div class="row mt-3" th:if="${#authentication.principal.tableView == null}">
@@ -28,24 +56,25 @@
 
         <div class="row px-3">
             <div class="col-lg-3 mt-3" th:each="item : ${category.value}" th:object="${item}">
-                <form th:action="@{/menu/order}" th:method="post">
-                    <div class="card">
-                        <img th:src="*{imageUrl}"/>
-                        <div class="card-body text-center">
-                            <h4 th:text="*{name + ' - ' + #numbers.formatDecimal(price, 1, 2, 'COMMA') + 'лв.'}"></h4>
-                            <a class="btn btn-primary" data-bs-toggle="collapse" th:href="*{'#collapse' + id}"
-                               role="button" aria-expanded="false" aria-controls="collapseExample">
-                                Описание
-                            </a>
-                            <input name="itemId" style="display: none" type="text" th:value="*{id}">
-                            <input th:if="${#authentication.principal.tableView != null}" class="btn btn-primary"
-                                   type="submit" value="Order">
-                            <div class="collapse" th:id="*{'collapse' + id}">
-                                <div th:text="*{description}"></div>
-                            </div>
+                <div class="card rounded-back bg-dark pt-4">
+                    <img th:src="*{imageUrl}"/>
+                    <div class="card-body text-center text-light">
+                        <h5 class="item-name" th:text="*{name}"></h5>
+                        <a class="btn btn-primary" data-bs-toggle="collapse" th:href="*{'#collapse' + id}"
+                           role="button" aria-expanded="false" aria-controls="collapseExample">
+                            Описание
+                        </a>
+                        <div class="collapse" th:id="*{'collapse' + id}">
+                            <div th:text="*{description}"></div>
                         </div>
+
+                        <h5 th:text="*{#numbers.formatDecimal(price, 1, 2, 'COMMA') + 'лв.'}"></h5>
+                        <form class="order-form" th:if="${#authentication.principal.tableView != null}">
+                            <input name="itemId" type="text" th:value="*{id}" hidden>
+                            <input class="btn btn-primary" type="submit" value="Поръчай">
+                        </form>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>

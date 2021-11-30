@@ -12,14 +12,16 @@ public class Init implements CommandLineRunner {
     private final CategoryService categoryService;
     private final TableService tableService;
     private final OrderStatusService orderStatusService;
+    private final OrderService orderService;
 
-    public Init(UserService userService, MenuService menuService, ItemService itemService, CategoryService categoryService, TableService tableService, OrderStatusService orderStatusService) {
+    public Init(UserService userService, MenuService menuService, ItemService itemService, CategoryService categoryService, TableService tableService, OrderStatusService orderStatusService, OrderService orderService) {
         this.userService = userService;
         this.menuService = menuService;
         this.itemService = itemService;
         this.categoryService = categoryService;
         this.tableService = tableService;
         this.orderStatusService = orderStatusService;
+        this.orderService = orderService;
     }
 
     @Override
@@ -30,5 +32,6 @@ public class Init implements CommandLineRunner {
         this.menuService.init();
         this.tableService.init();
         this.orderStatusService.init();
+        this.orderService.init();
     }
 }

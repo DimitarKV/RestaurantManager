@@ -4,26 +4,29 @@
 <body>
 <nav th:replace="fragments/fragments::navbar"></nav>
 
-<div class="row px-3">
-    <div th:each="order : ${orders}" th:object="${order}" class="col-md-3 mt-3">
-        <div class="card">
-            <img th:src="*{itemView.imageUrl}"/>
-            <div class="card-body text-center">
-                <h4 th:text="*{itemView.name + ' - ' + #numbers.formatDecimal(itemView.price, 1, 2, 'COMMA') + 'лв.'}"></h4>
-                <a class="btn btn-primary" data-bs-toggle="collapse" th:href="*{'#collapse' + itemView.id}"
-                   role="button"
-                   aria-expanded="false" aria-controls="collapseExample">
-                    Описание
-                </a>
-                <a th:class="*{'btn ' + T(com.dim.RestaurantManager.utils.OrdersStatusConverter).toBootstrapClass(orderStatus)}"
-                   th:text="*{T(com.dim.RestaurantManager.utils.OrdersStatusConverter).toString(orderStatus)}"></a>
-                <div class="collapse" th:id="*{'collapse' + itemView.id}">
-                    <div th:text="*{itemView.description}"></div>
+<div class="container">
+    <div class="row px-3">
+        <div th:each="order : ${orders}" th:object="${order}" class="col-lg-3 mt-3">
+            <div class="card">
+                <img th:src="*{itemView.imageUrl}"/>
+                <div class="card-body text-center">
+                    <h4 th:text="*{itemView.name + ' - ' + #numbers.formatDecimal(itemView.price, 1, 2, 'COMMA') + 'лв.'}"></h4>
+                    <a class="btn btn-primary" data-bs-toggle="collapse" th:href="*{'#collapse' + itemView.id}"
+                       role="button"
+                       aria-expanded="false" aria-controls="collapseExample">
+                        Описание
+                    </a>
+                    <a th:class="*{'btn ' + T(com.dim.RestaurantManager.utils.OrdersStatusConverter).toBootstrapClass(orderStatus)}"
+                       th:text="*{T(com.dim.RestaurantManager.utils.OrdersStatusConverter).toString(orderStatus)}"></a>
+                    <div class="collapse" th:id="*{'collapse' + itemView.id}">
+                        <div th:text="*{itemView.description}"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 
 </body>
 </html>

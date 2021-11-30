@@ -5,12 +5,11 @@ import com.dim.RestaurantManager.service.MenuService;
 import com.dim.RestaurantManager.service.OrderService;
 import com.dim.RestaurantManager.service.exceptions.EntityNotFoundException;
 import com.dim.RestaurantManager.service.impl.RestaurantUser;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class MenuController {
@@ -23,17 +22,20 @@ public class MenuController {
     }
 
     @ModelAttribute(name = "menu")
-    public MenuView menuView(){ return menuService.getMenuView(); }
+    public MenuView menuView() {
+        return menuService.getMenuView();
+    }
 
     @GetMapping("/menu")
-    public String getMenuPage(){
+    public String getMenuPage() {
         return "menu";
     }
 
     @PostMapping("/menu/order")
-    public String foodOrder(@ModelAttribute(name = "itemId") Long itemId,
+    public String foodOrder(@ModelAttribute(name = "itemId") String itemId,
+                            @ModelAttribute(name = "notes") String notes,
                             @AuthenticationPrincipal RestaurantUser restaurantUser) throws EntityNotFoundException {
-        orderService.order(itemId, restaurantUser);
+        orderService.order(Long.valueOf(itemId), notes, restaurantUser);
         return "redirect:/menu";
     }
 

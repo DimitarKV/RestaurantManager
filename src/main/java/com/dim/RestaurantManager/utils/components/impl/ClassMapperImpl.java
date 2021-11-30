@@ -88,7 +88,7 @@ public class ClassMapperImpl implements ClassMapper {
                 new CookOrderView()
                         .setId(o.getId())
                         .setName(o.getItem().getName())
-                        .setDescription(o.getItem().getDescription())
+                        .setDescription(o.getNotes())
                         .setImageUrl(o.getItem().getImageUrl()))
                 .collect(Collectors.toList());
     }
