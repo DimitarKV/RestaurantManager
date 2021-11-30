@@ -174,9 +174,9 @@ public class UserServiceImpl implements UserService {
             user.setAge(updateProfileServiceModel.getAge());
             if(updateProfileServiceModel.getPassword() != null){
                 user.setPassword(passwordEncoder.encode(updateProfileServiceModel.getPassword()));
-                updatePrincipal();
             }
             userRepository.saveAndFlush(user);
+            updatePrincipal();
         }
     }
 
