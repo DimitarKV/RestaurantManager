@@ -12,4 +12,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("SELECT o FROM Order o WHERE o.status.name = com.dim.RestaurantManager.model.entity.enums.OrderStatusEnum.PENDING")
     List<Order> getPendingOrders();
+
+    @Query("SELECT o FROM Order o " +
+            "WHERE o.status.name = com.dim.RestaurantManager.model.entity.enums.OrderStatusEnum.COOKING AND o.executor.id = :id")
+    List<Order> findCurrentCookOrders(Long id);
 }

@@ -120,4 +120,12 @@ public class OrderServiceImpl implements OrderService {
             billRepository.saveAndFlush(bill);
         }
     }
+
+    @Override
+    public List<CookOrderView> getCurrentCookOrders(RestaurantUser restaurantUser) {
+        User user = userRepository.findByUsername(restaurantUser.getUsername())
+                .orElseThrow(() -> new EntityNotFoundException("User with username: " + restaurantUser.getUsername() + " not found!"));
+
+        return classMapper.toCookOrderView(orderRepository.findCurrentCookOrders(user.getId()));
+    }
 }

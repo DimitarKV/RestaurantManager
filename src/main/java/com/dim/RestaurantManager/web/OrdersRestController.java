@@ -30,10 +30,23 @@ public class OrdersRestController {
     }
 
     @PreAuthorize("isPersonnel()")
+    @GetMapping("/cooks/current/orders")
+    public ResponseEntity<List<CookOrderView>> getCurrentCookOrders(@AuthenticationPrincipal RestaurantUser restaurantUser) {
+        return ResponseEntity.ok(orderService.getCurrentCookOrders(restaurantUser));
+    }
+
+    @PreAuthorize("isPersonnel()")
     @GetMapping("/cooks/order/{orderId}/accept")
     public ResponseEntity acceptOrder(@PathVariable(name = "orderId") String orderId,
             @AuthenticationPrincipal RestaurantUser user) {
         userService.acceptOrder(user, Long.parseLong(orderId));
+        return ResponseEntity.ok().build();
+    }
+
+    @PreAuthorize("isPersonnel()")
+    @GetMapping("/cooks/order/{orderId}/ready")
+    public ResponseEntity readyOrder(@PathVariable(name = "orderId") String orderId) {
+        userService.readyOrder(Long.parseLong(orderId));
         return ResponseEntity.ok().build();
     }
 }

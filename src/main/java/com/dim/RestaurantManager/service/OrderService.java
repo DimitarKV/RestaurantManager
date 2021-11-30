@@ -12,4 +12,6 @@ public interface OrderService {
     List<CookOrderView> getPendingOrders();
 
     void init();
+
+    List<CookOrderView> getCurrentCookOrders(RestaurantUser restaurantUser);
 }

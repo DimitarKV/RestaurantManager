@@ -188,10 +188,23 @@ public class UserServiceImpl implements UserService {
         Order order = orderRepository
                 .findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException("Order with id: " + orderId + " not found!"));
+        if(order.getStatus().getName() != OrderStatusEnum.PENDING)
+            return;
         order.setExecutor(user);
         order.setStatus(orderStatusRepository.findByName(OrderStatusEnum.COOKING).get());
         orderRepository.saveAndFlush(order);
         userRepository.saveAndFlush(user);
+    }
+
+    @Override
+    public void readyOrder(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new EntityNotFoundException("Order with id: " + orderId + " not found!"));
+        if(order.getStatus().getName() != OrderStatusEnum.COOKING)
+            return;
+        order
+                .setStatus(orderStatusRepository.findByName(OrderStatusEnum.READY).get());
+        orderRepository.saveAndFlush(order);
     }
 
     private void initRoles() {

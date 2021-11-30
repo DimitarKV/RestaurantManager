@@ -5,7 +5,24 @@
 <nav th:replace="fragments/fragments::navbar"></nav>
 <script type="module" src="/js/cookConsole.js"></script>
 <div class="container text-center">
-    <div class="row px-3" id="renderingContainer">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4 bg-dark rounded-back mt-5">
+            <h3 class="text-light">Поети поръчки</h3>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+    <div class="row px-3" id="currentCookContainer">
+
+    </div>
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4 bg-dark rounded-back mt-5">
+            <h3 class="text-light">Изчакващи поръчки</h3>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+    <div class="row px-3" id="waitingContainer">
 
     </div>
 </div>

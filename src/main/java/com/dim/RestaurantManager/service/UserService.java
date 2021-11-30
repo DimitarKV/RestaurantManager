@@ -39,4 +39,6 @@ public interface UserService {
     void updateUserProfile(String username, UpdateProfileServiceModel updateProfileServiceModel);
 
     void acceptOrder(RestaurantUser user, Long orderId);
+
+    void readyOrder(Long orderId);
 }
