@@ -29,10 +29,10 @@ spring:
         format_sql: true
     #defer-datasource-initialization: true
   #Cloudinary Properties
-cloudinary:
-  api-key: 339616528418163
-  api-secret: ${CLOUDINARY_API_SECRET}
-  cloud-name: dwqf9zolg
+#cloudinary:
+#  api-key: 339616528418163
+#  api-secret: ${CLOUDINARY_API_SECRET}
+#  cloud-name: dwqf9zolg
 #server:
 #  ssl:
 #    key-store: classpath:springboot.p12

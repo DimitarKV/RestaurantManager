@@ -7,7 +7,7 @@ let card = (orderId, imageUrl, name, description, price, status, statusName, can
         <div class="card rounded-back bg-dark pt-4">
             <img src=${imageUrl}/>
             <div class="card-body text-center text-light">
-                <h5>${name}</h5>
+                <h5 class="mt-3 item-name">${name}</h5>
 
                 <a class="btn mb-3 ${classMap(status)}">${statusName}</a>
 
@@ -22,7 +22,7 @@ let card = (orderId, imageUrl, name, description, price, status, statusName, can
                     <div>${description}</div>
                 </div>
 
-                <h5>${price}</h5>
+                <h5 class="mt-3">${price} лв.</h5>
 
                 <div id="orderId" hidden>${orderId}</div>
 

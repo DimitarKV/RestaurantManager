@@ -5,7 +5,7 @@ import com.dim.RestaurantManager.model.entity.enums.OrderStatusEnum;
 import com.dim.RestaurantManager.model.view.CookOrderView;
 import com.dim.RestaurantManager.repository.*;
 import com.dim.RestaurantManager.service.OrderService;
-import com.dim.RestaurantManager.service.exceptions.EntityNotFoundException;
+import com.dim.RestaurantManager.service.exceptions.common.CommonErrorMessages;
 import com.dim.RestaurantManager.utils.components.ClassMapper;
 import org.springframework.stereotype.Service;
 
@@ -33,9 +33,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Long order(Long itemId, String notes, RestaurantUser restaurantUser) throws EntityNotFoundException {
-        User user = userRepository.findByUsername(restaurantUser.getUsername()).orElseThrow(() -> new EntityNotFoundException("User not found!"));
-        Item item = itemRepository.findById(itemId).orElseThrow(() -> new EntityNotFoundException("Item not found!"));
+    public Long order(Long itemId, String notes, RestaurantUser restaurantUser) {
+        User user = userRepository.findByUsername(restaurantUser.getUsername())
+                .orElseThrow(() -> CommonErrorMessages.username(restaurantUser.getUsername()));
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> CommonErrorMessages.item(itemId));
         Order order =
                 new Order()
                         .setItem(item)
@@ -43,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
                         .setStatus(
                                 orderStatusRepository
                                         .findByName(OrderStatusEnum.PENDING)
-                                        .orElseThrow(() -> new EntityNotFoundException("Order status not found!"))
+                                        .get()
                         )
                         .setNotes(notes)
                         .setPlaced(LocalDateTime.now());
@@ -58,8 +60,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void init() {
-        if(orderRepository.count() == 0){
-            User user = userRepository.findByUsername("mitko").orElseThrow(() -> new EntityNotFoundException("User not found!"));
+        if (orderRepository.count() == 0) {
+            User user = userRepository.findByUsername("mitko").get();
 
             FoodTable table = tableRepository.findByNumber(1).get();
 
@@ -74,7 +76,7 @@ public class OrderServiceImpl implements OrderService {
             user.setBill(bill);
             user = userRepository.saveAndFlush(user);
 
-            Item item1 = itemRepository.findById(1L).orElseThrow(() -> new EntityNotFoundException("Item not found!"));
+            Item item1 = itemRepository.findById(1L).get();
             Order order1 =
                     new Order()
                             .setItem(item1)
@@ -82,11 +84,11 @@ public class OrderServiceImpl implements OrderService {
                             .setStatus(
                                     orderStatusRepository
                                             .findByName(OrderStatusEnum.PENDING)
-                                            .orElseThrow(() -> new EntityNotFoundException("Order status not found!"))
+                                            .get()
                             )
                             .setNotes("С почвече чедър!")
                             .setPlaced(LocalDateTime.now());
-            Item item2 = itemRepository.findById(2L).orElseThrow(() -> new EntityNotFoundException("Item not found!"));
+            Item item2 = itemRepository.findById(2L).get();
             Order order2 =
                     new Order()
                             .setItem(item2)
@@ -94,11 +96,11 @@ public class OrderServiceImpl implements OrderService {
                             .setStatus(
                                     orderStatusRepository
                                             .findByName(OrderStatusEnum.PENDING)
-                                            .orElseThrow(() -> new EntityNotFoundException("Order status not found!"))
+                                            .get()
                             )
                             .setNotes("Без лук!")
                             .setPlaced(LocalDateTime.now());
-            Item item3 = itemRepository.findById(3L).orElseThrow(() -> new EntityNotFoundException("Item not found!"));
+            Item item3 = itemRepository.findById(3L).get();
             Order order3 =
                     new Order()
                             .setItem(item3)
@@ -106,7 +108,7 @@ public class OrderServiceImpl implements OrderService {
                             .setStatus(
                                     orderStatusRepository
                                             .findByName(OrderStatusEnum.PENDING)
-                                            .orElseThrow(() -> new EntityNotFoundException("Order status not found!"))
+                                            .get()
                             )
                             .setNotes("Без кисели краставички!")
                             .setPlaced(LocalDateTime.now());
@@ -124,7 +126,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<CookOrderView> getCurrentCookOrders(RestaurantUser restaurantUser) {
         User user = userRepository.findByUsername(restaurantUser.getUsername())
-                .orElseThrow(() -> new EntityNotFoundException("User with username: " + restaurantUser.getUsername() + " not found!"));
+                .orElseThrow(() -> CommonErrorMessages.username(restaurantUser.getUsername()));
 
         return classMapper.toCookOrderView(orderRepository.findCurrentCookOrders(user.getId()));
     }
@@ -132,9 +134,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public boolean isOwner(Long orderId, RestaurantUser restaurantUser) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new EntityNotFoundException("Order with id: " + orderId + " not found!"));
+                .orElseThrow(() -> CommonErrorMessages.order(orderId));
         User user = userRepository.findByUsername(restaurantUser.getUsername())
-                .orElseThrow(() -> new EntityNotFoundException("User with username: " + restaurantUser.getUsername() + " not found!"));
+                .orElseThrow(() -> CommonErrorMessages.username(restaurantUser.getUsername()));
         return user.getBill().getId().equals(order.getBill().getId());
     }
 }

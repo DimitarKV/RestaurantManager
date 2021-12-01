@@ -15,7 +15,7 @@ import com.dim.RestaurantManager.repository.OrderStatusRepository;
 import com.dim.RestaurantManager.repository.RoleRepository;
 import com.dim.RestaurantManager.repository.UserRepository;
 import com.dim.RestaurantManager.service.UserService;
-import com.dim.RestaurantManager.service.exceptions.EntityNotFoundException;
+import com.dim.RestaurantManager.service.exceptions.common.CommonErrorMessages;
 import com.dim.RestaurantManager.utils.components.ClassMapper;
 import com.dim.RestaurantManager.model.binding.ModifyUserRolesBindingModel;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,7 +23,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -96,7 +95,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Integer findTableNumberByUsername(String username) {
-        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User with username: " + username + " not found!")).getBill().getTable().getNumber();
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> CommonErrorMessages.username(username))
+                .getBill().getTable().getNumber();
     }
 
     @Override
@@ -114,9 +115,7 @@ public class UserServiceImpl implements UserService {
     public List<OrderView> getOrders(RestaurantUser restaurantUser) {
         User user = userRepository
                 .findByUsername(restaurantUser.getUsername())
-                .orElseThrow(() ->
-                        new EntityNotFoundException(
-                                "User with username " + restaurantUser.getUsername() + " not found!"));
+                .orElseThrow(() -> CommonErrorMessages.username(restaurantUser.getUsername()));
         if (user.getBill() == null)
             return null;
         return classMapper.toListOrderView(user.getBill().getOrders());
@@ -135,7 +134,7 @@ public class UserServiceImpl implements UserService {
     public void modifyUserRoles(ModifyUserRolesBindingModel bindingModel) {
         User user = this.userRepository
                 .findById(bindingModel.getId())
-                .orElseThrow(() -> new EntityNotFoundException("User with id: " + bindingModel.getId() + " not found!"))
+                .orElseThrow(() -> CommonErrorMessages.userId(bindingModel.getId()))
                 .setRoles(bindingModel
                         .getRoles()
                         .stream()
@@ -150,7 +149,7 @@ public class UserServiceImpl implements UserService {
     public boolean isAdmin(String username) {
         return userRepository
                 .findByUsername(username)
-                .orElseThrow(() -> new EntityNotFoundException("User with username: " + username + " not found"))
+                .orElseThrow(() -> CommonErrorMessages.username(username))
                 .getRoles().stream().anyMatch(r -> r.getRole() == RoleEnum.BOSS);
     }
 
@@ -158,8 +157,7 @@ public class UserServiceImpl implements UserService {
     public UpdateProfileBindingModel getUserProfile(RestaurantUser user) {
         return classMapper.toUpdateProfileBindingModel(userRepository
                 .findByUsername(user.getUsername())
-                .orElseThrow(() ->
-                        new EntityNotFoundException("User with username: " + user.getUsername() + " not found!")));
+                .orElseThrow(() -> CommonErrorMessages.username(user.getUsername())));
     }
 
     @Override
@@ -167,7 +165,7 @@ public class UserServiceImpl implements UserService {
         if(username != null){
             User user = userRepository
                     .findByUsername(username)
-                    .orElseThrow(() -> new EntityNotFoundException("User with username: " + username + " not found!"));
+                    .orElseThrow(() -> CommonErrorMessages.username(username));
             user.setUsername(updateProfileServiceModel.getUsername());
             user.setFirstName(updateProfileServiceModel.getFirstName());
             user.setLastName(updateProfileServiceModel.getLastName());
@@ -184,10 +182,10 @@ public class UserServiceImpl implements UserService {
     public void acceptOrder(RestaurantUser restaurantUser, Long orderId) {
         User user = userRepository
                 .findByUsername(restaurantUser.getUsername())
-                .orElseThrow(() -> new EntityNotFoundException("User with username: " + restaurantUser.getUsername() + " not found!"));
+                .orElseThrow(() -> CommonErrorMessages.username(restaurantUser.getUsername()));
         Order order = orderRepository
                 .findById(orderId)
-                .orElseThrow(() -> new EntityNotFoundException("Order with id: " + orderId + " not found!"));
+                .orElseThrow(() -> CommonErrorMessages.order(orderId));
         if(order.getStatus().getName() != OrderStatusEnum.PENDING)
             return;
         order.setExecutor(user);
@@ -199,7 +197,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void cancelCookOrder(Long orderId) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new EntityNotFoundException("Order with id: " + orderId + " not found!"));
+                .orElseThrow(() -> CommonErrorMessages.order(orderId));
         if(order.getStatus().getName() != OrderStatusEnum.COOKING)
             return;
         order.setStatus(orderStatusRepository.findByName(OrderStatusEnum.PENDING).get());
@@ -209,7 +207,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void cancelUserOrder(Long orderId) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new EntityNotFoundException("Order with id: " + orderId + " not found!"));
+                .orElseThrow(() -> CommonErrorMessages.order(orderId));
         if(order.getStatus().getName() != OrderStatusEnum.PENDING)
             return;
         orderRepository.delete(order);
@@ -218,7 +216,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void readyOrder(Long orderId) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new EntityNotFoundException("Order with id: " + orderId + " not found!"));
+                .orElseThrow(() -> CommonErrorMessages.order(orderId));
         if(order.getStatus().getName() != OrderStatusEnum.COOKING)
             return;
         order

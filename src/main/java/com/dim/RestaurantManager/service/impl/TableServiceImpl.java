@@ -9,9 +9,9 @@ import com.dim.RestaurantManager.repository.TableRepository;
 import com.dim.RestaurantManager.repository.UserRepository;
 import com.dim.RestaurantManager.service.TableService;
 import com.dim.RestaurantManager.service.UserService;
+import com.dim.RestaurantManager.service.exceptions.common.CommonErrorMessages;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,8 +69,10 @@ public class TableServiceImpl implements TableService {
 
     @Override
     public void occupy(Integer number, RestaurantUser restaurantUser) {
-        FoodTable table = tableRepository.findByNumber(number).orElseThrow(EntityNotFoundException::new);
-        User user = userRepository.findByUsername(restaurantUser.getUsername()).orElseThrow(EntityNotFoundException::new);
+        FoodTable table = tableRepository.findByNumber(number)
+                .orElseThrow(() -> CommonErrorMessages.table(number));
+        User user = userRepository.findByUsername(restaurantUser.getUsername())
+                .orElseThrow(() -> CommonErrorMessages.username(restaurantUser.getUsername()));
         Bill bill = new Bill().setTable(table);
         bill.getUsers().add(user);
         bill = billRepository.saveAndFlush(bill);

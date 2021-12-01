@@ -1,4 +1,4 @@
-package com.dim.RestaurantManager.web;
+package com.dim.RestaurantManager.web.rest;
 
 import com.dim.RestaurantManager.model.view.CookOrderView;
 import com.dim.RestaurantManager.service.OrderService;
