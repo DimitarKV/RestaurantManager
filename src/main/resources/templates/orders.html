@@ -20,7 +20,7 @@
                         <div th:text="*{itemView.description}"></div>
                     </div>
 
-                    <h5 th:text="*{#numbers.formatDecimal(itemView.price, 1, 2, 'COMMA') + 'лв.'}"></h5>
+                    <h5 class="mt-3" th:text="*{#numbers.formatDecimal(itemView.price, 1, 2, 'COMMA') + 'лв.'}"></h5>
 
                     <h5>Статус:</h5>
                     <a th:class="*{'btn ' + T(com.dim.RestaurantManager.utils.OrdersStatusConverter).toBootstrapClass(orderStatus)}"

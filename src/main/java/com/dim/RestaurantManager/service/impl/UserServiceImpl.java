@@ -207,6 +207,17 @@ public class UserServiceImpl implements UserService {
         orderRepository.saveAndFlush(order);
     }
 
+    @Override
+    public void cancelOrder(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new EntityNotFoundException("Order with id: " + orderId + " not found!"));
+        if(order.getStatus().getName() != OrderStatusEnum.COOKING)
+            return;
+        order
+                .setStatus(orderStatusRepository.findByName(OrderStatusEnum.PENDING).get());
+        orderRepository.saveAndFlush(order);
+    }
+
     private void initRoles() {
         List<Role> roles =
                 List.of(

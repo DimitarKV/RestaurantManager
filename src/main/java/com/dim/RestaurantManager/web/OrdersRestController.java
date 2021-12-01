@@ -49,5 +49,12 @@ public class OrdersRestController {
         userService.readyOrder(Long.parseLong(orderId));
         return ResponseEntity.ok().build();
     }
+
+    @PreAuthorize("isPersonnel()")
+    @GetMapping("/cooks/order/{orderId}/cancel")
+    public ResponseEntity cancelOrder(@PathVariable(name = "orderId") String orderId) {
+        userService.cancelOrder(Long.parseLong(orderId));
+        return ResponseEntity.ok().build();
+    }
 }
 

@@ -68,7 +68,7 @@
                             <div th:text="*{description}"></div>
                         </div>
 
-                        <h5 th:text="*{#numbers.formatDecimal(price, 1, 2, 'COMMA') + 'лв.'}"></h5>
+                        <h5 class="mt-3" th:text="*{#numbers.formatDecimal(price, 1, 2, 'COMMA') + 'лв.'}"></h5>
                         <form class="order-form" th:if="${#authentication.principal.tableView != null}">
                             <input name="itemId" type="text" th:value="*{id}" hidden>
                             <input class="btn btn-primary" type="submit" value="Поръчай">

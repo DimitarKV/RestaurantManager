@@ -41,4 +41,6 @@ public interface UserService {
     void acceptOrder(RestaurantUser user, Long orderId);
 
     void readyOrder(Long orderId);
+
+    void cancelOrder(Long orderId);
 }
