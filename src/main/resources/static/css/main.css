@@ -34,6 +34,10 @@ form.main-form, .rounded-back {
     -webkit-overflow-scrolling: touch;
 }
 
+.half-row {
+    height: 50%;
+}
+
 ::-webkit-scrollbar {
     position: absolute;
     width: 5px;

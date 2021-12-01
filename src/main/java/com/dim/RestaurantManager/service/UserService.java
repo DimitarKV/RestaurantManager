@@ -45,4 +45,6 @@ public interface UserService {
     void cancelCookOrder(Long orderId);
 
     void cancelUserOrder(Long orderId);
+
+    boolean hasNotOccupied(String username);
 }

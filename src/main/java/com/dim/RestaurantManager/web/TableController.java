@@ -7,6 +7,7 @@ import com.dim.RestaurantManager.service.BillService;
 import com.dim.RestaurantManager.service.TableService;
 import com.dim.RestaurantManager.service.UserService;
 import com.dim.RestaurantManager.service.impl.RestaurantUser;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -51,6 +52,7 @@ public class TableController {
         return "table";
     }
 
+    @PreAuthorize("hasNotOccupied(#user.username)")
     @PostMapping("/table/occupy")
     public String occupyTable(@Valid OccupyTableBindingModel occupyBindingModel,
                               BindingResult bindingResult,

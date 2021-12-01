@@ -214,6 +214,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean hasNotOccupied(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> CommonErrorMessages.username(username));
+        return user.getBill() == null;
+    }
+
+    @Override
     public void readyOrder(Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> CommonErrorMessages.order(orderId));

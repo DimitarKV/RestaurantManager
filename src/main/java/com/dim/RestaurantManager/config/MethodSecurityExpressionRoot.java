@@ -46,6 +46,10 @@ public class MethodSecurityExpressionRoot extends SecurityExpressionRoot
         return false;
     }
 
+    public boolean hasNotOccupied(String username) {
+        return userService.hasNotOccupied(username);
+    }
+
     private RestaurantUser currentUser(){
         Authentication authentication = getAuthentication();
         if(authentication.getPrincipal() instanceof UserDetails)
