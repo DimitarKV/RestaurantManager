@@ -53,7 +53,7 @@ public class OrdersRestController {
     @PreAuthorize("isPersonnel()")
     @GetMapping("/cooks/order/{orderId}/cancel")
     public ResponseEntity cancelOrder(@PathVariable(name = "orderId") String orderId) {
-        userService.cancelOrder(Long.parseLong(orderId));
+        userService.cancelCookOrder(Long.parseLong(orderId));
         return ResponseEntity.ok().build();
     }
 }

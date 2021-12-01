@@ -42,5 +42,7 @@ public interface UserService {
 
     void readyOrder(Long orderId);
 
-    void cancelOrder(Long orderId);
+    void cancelCookOrder(Long orderId);
+
+    void cancelUserOrder(Long orderId);
 }

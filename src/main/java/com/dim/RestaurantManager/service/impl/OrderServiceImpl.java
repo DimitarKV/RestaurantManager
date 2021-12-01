@@ -128,4 +128,13 @@ public class OrderServiceImpl implements OrderService {
 
         return classMapper.toCookOrderView(orderRepository.findCurrentCookOrders(user.getId()));
     }
+
+    @Override
+    public boolean isOwner(Long orderId, RestaurantUser restaurantUser) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new EntityNotFoundException("Order with id: " + orderId + " not found!"));
+        User user = userRepository.findByUsername(restaurantUser.getUsername())
+                .orElseThrow(() -> new EntityNotFoundException("User with username: " + restaurantUser.getUsername() + " not found!"));
+        return user.getBill().getId().equals(order.getBill().getId());
+    }
 }

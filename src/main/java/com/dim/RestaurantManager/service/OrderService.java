@@ -14,4 +14,6 @@ public interface OrderService {
     void init();
 
     List<CookOrderView> getCurrentCookOrders(RestaurantUser restaurantUser);
+
+    boolean isOwner(Long orderId, RestaurantUser restaurantUser);
 }

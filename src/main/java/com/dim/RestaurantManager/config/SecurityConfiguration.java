@@ -1,5 +1,6 @@
 package com.dim.RestaurantManager.config;
 
+import com.dim.RestaurantManager.service.OrderService;
 import com.dim.RestaurantManager.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,15 +15,13 @@ public class SecurityConfiguration extends GlobalMethodSecurityConfiguration {
     @Autowired
     private RestaurantMethodSecurityExpressionHandler expressionHandler;
 
-
-
     @Override
     protected MethodSecurityExpressionHandler createExpressionHandler() {
         return expressionHandler;
     }
 
     @Bean
-    public RestaurantMethodSecurityExpressionHandler expressionHandlerResolver(UserService userService){
-        return new RestaurantMethodSecurityExpressionHandler(userService);
+    public RestaurantMethodSecurityExpressionHandler expressionHandlerResolver(UserService userService, OrderService orderService){
+        return new RestaurantMethodSecurityExpressionHandler(userService, orderService);
     }
 }

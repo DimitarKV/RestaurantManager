@@ -3,31 +3,11 @@
 <head th:replace="fragments/fragments::head"></head>
 <body>
 <nav th:replace="fragments/fragments::navbar"></nav>
+<script type="module" src="/js/userOrdersConsole.js"></script>
 
 <div class="container">
-    <div class="row px-3">
-        <div th:each="order : ${orders}" th:object="${order}" class="col-lg-3 mt-3">
-            <div class="card rounded-back bg-dark pt-4">
-                <img th:src="*{itemView.imageUrl}"/>
-                <div class="card-body text-center text-light">
-                    <a class="btn btn-primary" data-bs-toggle="collapse" th:href="*{'#collapse' + itemView.id}"
-                       role="button"
-                       aria-expanded="false" aria-controls="collapseExample">
-                        Описание
-                    </a>
+    <div id="container" class="row px-3">
 
-                    <div class="collapse" th:id="*{'collapse' + itemView.id}">
-                        <div th:text="*{itemView.description}"></div>
-                    </div>
-
-                    <h5 class="mt-3" th:text="*{#numbers.formatDecimal(itemView.price, 1, 2, 'COMMA') + 'лв.'}"></h5>
-
-                    <h5>Статус:</h5>
-                    <a th:class="*{'btn ' + T(com.dim.RestaurantManager.utils.OrdersStatusConverter).toBootstrapClass(orderStatus)}"
-                       th:text="*{T(com.dim.RestaurantManager.utils.OrdersStatusConverter).toString(orderStatus)}"></a>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 

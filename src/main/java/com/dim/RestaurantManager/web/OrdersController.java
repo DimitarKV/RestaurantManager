@@ -3,15 +3,15 @@ package com.dim.RestaurantManager.web;
 import com.dim.RestaurantManager.model.view.OrderView;
 import com.dim.RestaurantManager.service.UserService;
 import com.dim.RestaurantManager.service.impl.RestaurantUser;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.transaction.Transactional;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class OrdersController {
@@ -21,16 +21,22 @@ public class OrdersController {
         this.userService = userService;
     }
 
-    @Transactional
-    @ModelAttribute("orders")
-    public List<OrderView> ordersList(@AuthenticationPrincipal RestaurantUser restaurantUser) {
-        return userService.getOrders(restaurantUser);
-    }
-
     @GetMapping("/orders")
     public String getOrders() {
         return "orders";
     }
 
+    @Transactional
+    @GetMapping("/user/orders")
+    public ResponseEntity<List<OrderView>> getUserOrders(@AuthenticationPrincipal RestaurantUser restaurantUser){
+        return ResponseEntity.ok(userService.getOrders(restaurantUser));
+    }
+
+    @PreAuthorize("isOwner(#orderId)")
+    @GetMapping("/users/order/{orderId}/cancel")
+    public ResponseEntity cancelUserOrder(@PathVariable(name = "orderId") Long orderId){
+        userService.cancelUserOrder(orderId);
+        return ResponseEntity.ok().build();
+    }
 
 }

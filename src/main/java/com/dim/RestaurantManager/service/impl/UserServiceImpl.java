@@ -197,6 +197,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void cancelCookOrder(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new EntityNotFoundException("Order with id: " + orderId + " not found!"));
+        if(order.getStatus().getName() != OrderStatusEnum.COOKING)
+            return;
+        order.setStatus(orderStatusRepository.findByName(OrderStatusEnum.PENDING).get());
+        orderRepository.saveAndFlush(order);
+    }
+
+    @Override
+    public void cancelUserOrder(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new EntityNotFoundException("Order with id: " + orderId + " not found!"));
+        if(order.getStatus().getName() != OrderStatusEnum.PENDING)
+            return;
+        orderRepository.delete(order);
+    }
+
+    @Override
     public void readyOrder(Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException("Order with id: " + orderId + " not found!"));
@@ -204,17 +223,6 @@ public class UserServiceImpl implements UserService {
             return;
         order
                 .setStatus(orderStatusRepository.findByName(OrderStatusEnum.READY).get());
-        orderRepository.saveAndFlush(order);
-    }
-
-    @Override
-    public void cancelOrder(Long orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new EntityNotFoundException("Order with id: " + orderId + " not found!"));
-        if(order.getStatus().getName() != OrderStatusEnum.COOKING)
-            return;
-        order
-                .setStatus(orderStatusRepository.findByName(OrderStatusEnum.PENDING).get());
         orderRepository.saveAndFlush(order);
     }
 

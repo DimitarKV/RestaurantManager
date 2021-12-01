@@ -1,6 +1,7 @@
 package com.dim.RestaurantManager.config;
 
 import com.dim.RestaurantManager.model.entity.enums.RoleEnum;
+import com.dim.RestaurantManager.service.OrderService;
 import com.dim.RestaurantManager.service.UserService;
 import com.dim.RestaurantManager.service.impl.RestaurantUser;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
@@ -12,6 +13,7 @@ public class MethodSecurityExpressionRoot extends SecurityExpressionRoot
         implements MethodSecurityExpressionOperations {
     private Object filterObject, returnObject;
     private UserService userService;
+    private OrderService orderService;
 
     public boolean isAdmin(){
         RestaurantUser user = currentUser();
@@ -32,6 +34,14 @@ public class MethodSecurityExpressionRoot extends SecurityExpressionRoot
         RestaurantUser user = currentUser();
         if(user != null){
             return user.getAuthorities().stream().anyMatch(r -> !r.getAuthority().equals(RoleEnum.CUSTOMER.name()));
+        }
+        return false;
+    }
+
+    public boolean isOwner(Long orderId){
+        RestaurantUser user = currentUser();
+        if(user != null){
+            return orderService.isOwner(orderId, user);
         }
         return false;
     }
@@ -79,6 +89,11 @@ public class MethodSecurityExpressionRoot extends SecurityExpressionRoot
 
     public MethodSecurityExpressionRoot setUserService(UserService userService) {
         this.userService = userService;
+        return this;
+    }
+
+    public MethodSecurityExpressionRoot setOrderService(OrderService orderService) {
+        this.orderService = orderService;
         return this;
     }
 }

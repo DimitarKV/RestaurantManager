@@ -63,7 +63,7 @@ public class ClassMapperImpl implements ClassMapper {
     public OrderView toOrderView(Order order) {
         return new OrderView()
                 .setItemView(new ItemView()
-                        .setId(order.getItem().getId())
+                        .setId(order.getId())
                         .setName(order.getItem().getName())
                         .setDescription(order.getItem().getDescription())
                         .setImageUrl(order.getItem().getImageUrl())
