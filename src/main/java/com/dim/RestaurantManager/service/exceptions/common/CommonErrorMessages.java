@@ -19,4 +19,8 @@ public class CommonErrorMessages {
     public static EntityNotFoundException table(Integer tableNumber){
         return new EntityNotFoundException("Table with number: " + tableNumber + " not found!");
     }
+
+    public static RuntimeException notLogged() {
+        return new RuntimeException("You are not logged in!");
+    }
 }

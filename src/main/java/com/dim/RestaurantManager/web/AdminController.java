@@ -38,7 +38,7 @@ public class AdminController {
 
 
     @PreAuthorize("isAdmin()")
-    @GetMapping("/users/admin")
+    @GetMapping("/personnel/admin")
     public String getAdminPage(Model model) {
         model.addAttribute("pageNumber", 1);
         model.addAttribute("users", userService.getUsers(PAGE_SIZE, 0));
@@ -46,7 +46,7 @@ public class AdminController {
     }
 
     @PreAuthorize("isAdmin()")
-    @GetMapping("/users/{pageNumber}/admin")
+    @GetMapping("/personnel/{pageNumber}/admin")
     public String getAdminNthPage(@PathVariable("pageNumber") Integer pageNumber,
                                   Model model) {
         model.addAttribute("pageNumber", pageNumber);
@@ -55,12 +55,12 @@ public class AdminController {
     }
 
     @PreAuthorize("isAdmin()")
-    @PatchMapping("/users/patch-roles")
+    @PatchMapping("/personnel/patch-roles")
     public String patchUser(ModifyUserRolesBindingModel bindingModel,
                             @RequestParam(name = "role", required = false) List<RoleEnum> roles) {
         if (roles != null)
             bindingModel.setRoles(roles);
         userService.modifyUserRoles(bindingModel);
-        return "redirect:/users/admin";
+        return "redirect:/personnel/admin";
     }
 }

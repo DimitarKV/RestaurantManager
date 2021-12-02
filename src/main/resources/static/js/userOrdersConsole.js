@@ -47,7 +47,7 @@ let statusClassMap = {
 }
 
 async function display() {
-    let http = await fetch("http://91.139.199.150/user/orders");
+    let http = await fetch("http://91.139.199.150/user/orders-rest");
     let json = await http.json();
     let templates = [];
     for (const order of json) {
@@ -68,7 +68,7 @@ async function display() {
 
 function cancelHandler(e) {
     let orderId = e.target.parentNode.querySelector("#orderId").textContent.trim();
-    fetch("http://91.139.199.150/users/order/" + orderId + "/cancel")
+    fetch("http://91.139.199.150/user/order/" + orderId + "/cancel")
         .then(() => display());
 }
 

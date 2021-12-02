@@ -30,7 +30,7 @@
                 </li>
                 <li sec:authorize="isAuthenticated() && hasRole('CUSTOMER')" th:if="${#authentication.principal.tableView != null}"
                     class="nav-item">
-                    <a class="nav-link" th:href="@{/orders}"
+                    <a class="nav-link" th:href="@{/user/orders}"
                        th:text="${'Маса №' + #authentication.principal.tableView.number  + ' ' + #authentication.principal.tableView.description}"></a>
                 </li>
                 <li class="nav-item" sec:authorize="isAuthenticated()">
@@ -42,11 +42,14 @@
                 <li class="nav-item float-end" sec:authorize="isAuthenticated()">
                     <a class="nav-link" th:href="@{/users/profile}">Профил</a>
                 </li>
+                <li class="nav-item float-end" sec:authorize="isAuthenticated() && hasRole('WAITER')">
+                    <a class="nav-link" th:href="@{/personnel/waiter}">Готови поръчки</a>
+                </li>
                 <li class="nav-item float-end" sec:authorize="isAuthenticated() && hasRole('COOK')">
-                    <a class="nav-link" th:href="@{/cooks/orders-page}">За изпълнение</a>
+                    <a class="nav-link" th:href="@{/personnel/cook}">За изпълнение</a>
                 </li>
                 <li class="nav-item float-end" sec:authorize="isAuthenticated() && hasRole('BOSS')">
-                    <a class="nav-link" th:href="@{/users/admin}">Администратор</a>
+                    <a class="nav-link" th:href="@{/personnel/admin}">Администратор</a>
                 </li>
                 <li sec:authorize="isAuthenticated()" class="nav-item">
                     <form th:action="@{/users/logout}" th:method="post">

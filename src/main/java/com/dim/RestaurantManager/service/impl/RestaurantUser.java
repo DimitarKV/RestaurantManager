@@ -19,6 +19,10 @@ public class RestaurantUser extends User {
         this.tableView = tableView;
     }
 
+    public boolean canOrder(){
+        return tableView != null;
+    }
+
     public FoodTableView getTableView() {
         return tableView;
     }

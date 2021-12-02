@@ -4,7 +4,6 @@ let myModal = new bootstrap.Modal(document.getElementById("myModal"));
 let itemId = document.getElementById("itemId");
 let itemName = document.getElementById("productName");
 let notesField = document.getElementById("notes");
-let placeOrderButton = document.getElementById("placeOrderButton");
 
 document.addEventListener("submit", orderHandler);
 

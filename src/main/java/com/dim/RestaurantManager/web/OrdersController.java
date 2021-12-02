@@ -9,6 +9,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -21,19 +22,20 @@ public class OrdersController {
         this.userService = userService;
     }
 
-    @GetMapping("/orders")
+    @GetMapping("/user/orders")
     public String getOrders() {
         return "orders";
     }
 
     @Transactional
-    @GetMapping("/user/orders")
+    @GetMapping("/user/orders-rest")
+    @ResponseBody
     public ResponseEntity<List<OrderView>> getUserOrders(@AuthenticationPrincipal RestaurantUser restaurantUser){
         return ResponseEntity.ok(userService.getOrders(restaurantUser));
     }
 
     @PreAuthorize("isOwner(#orderId)")
-    @GetMapping("/users/order/{orderId}/cancel")
+    @GetMapping("/user/order/{orderId}/cancel")
     public ResponseEntity cancelUserOrder(@PathVariable(name = "orderId") Long orderId){
         userService.cancelUserOrder(orderId);
         return ResponseEntity.ok().build();

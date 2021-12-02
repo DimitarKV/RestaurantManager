@@ -52,7 +52,7 @@ public class TableController {
         return "table";
     }
 
-    @PreAuthorize("hasNotOccupied(#user.username)")
+    @PreAuthorize("!canOrder()")
     @PostMapping("/table/occupy")
     public String occupyTable(@Valid OccupyTableBindingModel occupyBindingModel,
                               BindingResult bindingResult,
@@ -68,6 +68,7 @@ public class TableController {
         return "redirect:/menu";
     }
 
+    // TODO
     @PostMapping("/table/join")
     public String joinTable(@Valid JoinTableBindingModel joinBindingModel,
                             BindingResult bindingResult,

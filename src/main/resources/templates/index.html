@@ -4,7 +4,7 @@
 <head th:replace="fragments/fragments::head"></head>
 <body>
 <nav th:replace="fragments/fragments::navbar"></nav>
-
+<script type="module" src="/js/appWeatherConsole.js"></script>
 <div class="container text-center">
     <div class="row">
         <div class="col-sm-4"></div>
@@ -42,32 +42,36 @@
                 </div>
             </div>
         </div>
-        <div sec:authorize="isAuthenticated() && hasRole('CUSTOMER')"
-             th:if="${#authentication.principal.tableView == null}" class="col-sm-4 align-self-center">
+        <div sec:authorize="!isAuthenticated() || (hasRole('CUSTOMER') && !#authentication.getPrincipal().canOrder())" class="col-sm-4 align-self-center">
             <a th:href="@{/table/register}" class="btn rounded-back bg-dark text-light m-3">
                 <p class="lead">
                     Можете да разгледате разположенията на нашите маси и да изберете тази, която най-добре подхожда на
                     вашия вкус!
                 </p>
             </a>
-            <a th:href="@{/table/register}" class="btn rounded-back bg-dark text-light m-3">
+            <a th:href="@{/table/join}" class="btn rounded-back bg-dark text-light m-3">
                 <p class="lead">
                     Също така можете и да се присъедините към масата на приятел, а ние ще подсигурим Вашето забавление!
                 </p>
             </a>
         </div>
-        <div sec:authorize="!isAuthenticated()" class="col-sm-4 align-self-center">
-            <a th:href="@{/table/register}" class="btn rounded-back bg-dark text-light m-3">
+
+        <div sec:authorize="isAuthenticated() && hasRole('CUSTOMER') && #authentication.getPrincipal().canOrder()" class="col-sm-4 align-self-center">
+            <div id="appWeatherDiv" class="rounded-back bg-dark text-light m-3">
+                <p class="lead">Времето навън</p>
+                <p class="lead" id="weatherTown"></p>
+                <img id="weatherImage"/>
+                <span id="weatherTemp"></span>
+                &deg;
                 <p class="lead">
-                    Можете да разгледате разположенията на нашите маси и да изберете тази, която най-добре подхожда на
-                    вашия вкус!
+                    <span id="weatherMaxTemp"></span>
+                    &deg;
+                    /
+                    <span id="weatherMinTemp"></span>
+                    &deg;
                 </p>
-            </a>
-            <a th:href="@{/table/register}" class="btn rounded-back bg-dark text-light m-3">
-                <p class="lead">
-                    Също така можете и да се присъедините към масата на приятел, а ние ще подсигурим Вашето забавление!
-                </p>
-            </a>
+                <p class="lead" id="weatherDescription"></p>
+            </div>
         </div>
     </div>
     <div class="row">

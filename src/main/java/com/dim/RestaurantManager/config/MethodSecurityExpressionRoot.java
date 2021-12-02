@@ -1,8 +1,10 @@
 package com.dim.RestaurantManager.config;
 
+import com.dim.RestaurantManager.model.entity.User;
 import com.dim.RestaurantManager.model.entity.enums.RoleEnum;
 import com.dim.RestaurantManager.service.OrderService;
 import com.dim.RestaurantManager.service.UserService;
+import com.dim.RestaurantManager.service.exceptions.common.CommonErrorMessages;
 import com.dim.RestaurantManager.service.impl.RestaurantUser;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
@@ -44,6 +46,15 @@ public class MethodSecurityExpressionRoot extends SecurityExpressionRoot
             return orderService.isOwner(orderId, user);
         }
         return false;
+    }
+
+    public boolean canOrder() {
+        RestaurantUser restaurantUser = currentUser();
+        if(restaurantUser == null)
+            throw CommonErrorMessages.notLogged();
+        User user = userService.getByUsername(restaurantUser.getUsername())
+                .orElseThrow(() -> CommonErrorMessages.username(restaurantUser.getUsername()));
+        return user.getBill() != null && user.getBill().getTable() != null;
     }
 
     public boolean hasNotOccupied(String username) {

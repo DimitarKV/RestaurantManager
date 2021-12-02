@@ -31,10 +31,11 @@ public class MenuController {
         return "menu";
     }
 
+    @PreAuthorize("canOrder()")
     @PostMapping("/menu/order")
     public String foodOrder(@ModelAttribute(name = "itemId") String itemId,
                             @ModelAttribute(name = "notes") String notes,
-                            @AuthenticationPrincipal RestaurantUser restaurantUser) throws EntityNotFoundException {
+                            @AuthenticationPrincipal RestaurantUser restaurantUser) {
         orderService.order(Long.valueOf(itemId), notes, restaurantUser);
         return "redirect:/menu";
     }

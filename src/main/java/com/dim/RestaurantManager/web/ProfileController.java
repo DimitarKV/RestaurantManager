@@ -43,13 +43,13 @@ public class ProfileController {
     }
 
 
-    @GetMapping("/users/profile")
+    @GetMapping("/user/profile")
     public String getProfilePage() {
         return "profile";
     }
 
 
-    @PatchMapping("/users/profile")
+    @PatchMapping("/user/profile")
     public String updateProfile(@AuthenticationPrincipal RestaurantUser user,
                                 @Valid UpdateProfileBindingModel bindingModel,
                                 BindingResult bindingResult,
@@ -76,13 +76,13 @@ public class ProfileController {
             }
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.bindingModel", bindingResult);
             redirectAttributes.addFlashAttribute("bindingModel", bindingModel);
-            return "redirect:/users/profile";
+            return "redirect:/user/profile";
         }
 
         UpdateProfileServiceModel updateProfileServiceModel = classMapper.toUpdateProfileServiceModel(bindingModel);
 
         userService.updateUserProfile(user.getUsername(), updateProfileServiceModel);
 
-        return "redirect:/users/profile";
+        return "redirect:/user/profile";
     }
 }

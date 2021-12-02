@@ -29,7 +29,7 @@ let waitingContainer = document.getElementById("waitingContainer");
 let currentCookContainer = document.getElementById("currentCookContainer");
 
 async function display() {
-    let http = await fetch("http://91.139.199.150/cooks/orders");
+    let http = await fetch("http://91.139.199.150/personnel/cook/orders");
     let json = await http.json();
     let templates = [];
     for (const order of json) {
@@ -37,7 +37,7 @@ async function display() {
     }
     render(templates, waitingContainer);
 
-    http = await fetch("http://91.139.199.150/cooks/current/orders");
+    http = await fetch("http://91.139.199.150/personnel/cook/current/orders");
     json = await http.json();
     templates = [];
     for (const order of json) {
@@ -48,17 +48,17 @@ async function display() {
 
 function acceptHandler(e) {
     let orderId = e.target.parentNode.querySelector("#orderId").textContent.trim();
-    fetch("http://91.139.199.150/cooks/order/" + orderId + "/accept");
+    fetch("http://91.139.199.150/personnel/cook/order/" + orderId + "/accept");
 }
 
 function orderReadyHandler(e) {
     let orderId = e.target.parentNode.querySelector("#orderId").textContent.trim();
-    fetch("http://91.139.199.150/cooks/order/" + orderId + "/ready");
+    fetch("http://91.139.199.150/personnel/cook/order/" + orderId + "/ready");
 }
 
 function  cancelOrderHandler(e){
     let orderId = e.target.parentNode.querySelector("#orderId").textContent.trim();
-    fetch("http://91.139.199.150/cooks/order/" + orderId + "/cancel");
+    fetch("http://91.139.199.150/personnel/cook/order/" + orderId + "/cancel");
 }
 
 display();
