@@ -47,4 +47,8 @@ public interface UserService {
     void cancelUserOrder(Long orderId);
 
     boolean hasNotOccupied(String username);
+
+    List<UserView> getUsers(Integer pageSize, Integer offset);
+
+    Integer getUsersPageCount(Integer pageSize);
 }

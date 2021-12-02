@@ -141,7 +141,7 @@ public class UserServiceImpl implements UserService {
                         .map(classMapper::toRole)
                         .collect(Collectors.toList()));
         user = userRepository.saveAndFlush(user);
-        if(user.getUsername().equals(SecurityContextHolder.getContext().getAuthentication().getName()))
+        if (user.getUsername().equals(SecurityContextHolder.getContext().getAuthentication().getName()))
             updatePrincipal();
     }
 
@@ -162,7 +162,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserProfile(String username, UpdateProfileServiceModel updateProfileServiceModel) {
-        if(username != null){
+        if (username != null) {
             User user = userRepository
                     .findByUsername(username)
                     .orElseThrow(() -> CommonErrorMessages.username(username));
@@ -170,7 +170,7 @@ public class UserServiceImpl implements UserService {
             user.setFirstName(updateProfileServiceModel.getFirstName());
             user.setLastName(updateProfileServiceModel.getLastName());
             user.setAge(updateProfileServiceModel.getAge());
-            if(updateProfileServiceModel.getPassword() != null){
+            if (updateProfileServiceModel.getPassword() != null) {
                 user.setPassword(passwordEncoder.encode(updateProfileServiceModel.getPassword()));
             }
             userRepository.saveAndFlush(user);
@@ -186,7 +186,7 @@ public class UserServiceImpl implements UserService {
         Order order = orderRepository
                 .findById(orderId)
                 .orElseThrow(() -> CommonErrorMessages.order(orderId));
-        if(order.getStatus().getName() != OrderStatusEnum.PENDING)
+        if (order.getStatus().getName() != OrderStatusEnum.PENDING)
             return;
         order.setExecutor(user);
         order.setStatus(orderStatusRepository.findByName(OrderStatusEnum.COOKING).get());
@@ -198,7 +198,7 @@ public class UserServiceImpl implements UserService {
     public void cancelCookOrder(Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> CommonErrorMessages.order(orderId));
-        if(order.getStatus().getName() != OrderStatusEnum.COOKING)
+        if (order.getStatus().getName() != OrderStatusEnum.COOKING)
             return;
         order.setStatus(orderStatusRepository.findByName(OrderStatusEnum.PENDING).get());
         orderRepository.saveAndFlush(order);
@@ -208,7 +208,7 @@ public class UserServiceImpl implements UserService {
     public void cancelUserOrder(Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> CommonErrorMessages.order(orderId));
-        if(order.getStatus().getName() != OrderStatusEnum.PENDING)
+        if (order.getStatus().getName() != OrderStatusEnum.PENDING)
             return;
         orderRepository.delete(order);
     }
@@ -221,10 +221,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserView> getUsers(Integer pageSize, Integer offset) {
+        return userRepository.findPage(pageSize, offset).stream().map(classMapper::toUserView).collect(Collectors.toList());
+    }
+
+    @Override
+    public Integer getUsersPageCount(Integer pageSize) {
+        return (int)Math.ceil((double) userRepository.count() / pageSize);
+    }
+
+    @Override
     public void readyOrder(Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> CommonErrorMessages.order(orderId));
-        if(order.getStatus().getName() != OrderStatusEnum.COOKING)
+        if (order.getStatus().getName() != OrderStatusEnum.COOKING)
             return;
         order
                 .setStatus(orderStatusRepository.findByName(OrderStatusEnum.READY).get());

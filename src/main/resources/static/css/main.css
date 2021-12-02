@@ -27,7 +27,6 @@ form.main-form, .rounded-back {
 }
 
 .list-group {
-    height: 90vh;
     margin-bottom: 0;
     overflow: scroll;
     overflow-x: hidden;

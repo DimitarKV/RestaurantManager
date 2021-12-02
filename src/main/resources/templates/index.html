@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="fragments/fragments::head"></head>
 <body>
 <nav th:replace="fragments/fragments::navbar"></nav>
@@ -42,7 +42,21 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-4 align-self-center">
+        <div sec:authorize="isAuthenticated() && hasRole('CUSTOMER')"
+             th:if="${#authentication.principal.tableView == null}" class="col-sm-4 align-self-center">
+            <a th:href="@{/table/register}" class="btn rounded-back bg-dark text-light m-3">
+                <p class="lead">
+                    Можете да разгледате разположенията на нашите маси и да изберете тази, която най-добре подхожда на
+                    вашия вкус!
+                </p>
+            </a>
+            <a th:href="@{/table/register}" class="btn rounded-back bg-dark text-light m-3">
+                <p class="lead">
+                    Също така можете и да се присъедините към масата на приятел, а ние ще подсигурим Вашето забавление!
+                </p>
+            </a>
+        </div>
+        <div sec:authorize="!isAuthenticated()" class="col-sm-4 align-self-center">
             <a th:href="@{/table/register}" class="btn rounded-back bg-dark text-light m-3">
                 <p class="lead">
                     Можете да разгледате разположенията на нашите маси и да изберете тази, която най-добре подхожда на
@@ -65,16 +79,5 @@
         </div>
     </div>
 </div>
-
-Welcome message
-
-Info about the restaurant
-
-Today's best meal
-
-Best offers
-
-GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
-
 </body>
 </html>
