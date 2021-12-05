@@ -36,6 +36,7 @@ let statusNames = {
     'PENDING': 'Изчакване',
     'COOKING': 'Готви се',
     'READY': 'Готова',
+    'TRAVELING': 'Носи се',
     'FINISHED': 'Завършена'
 }
 
@@ -43,6 +44,7 @@ let statusClassMap = {
     'PENDING': {'btn-secondary': true},
     'COOKING': {'btn-warning': true},
     'READY': {'btn-primary': true},
+    'TRAVELING': {'btn-info': true},
     'FINISHED': {'btn-success': true}
 }
 

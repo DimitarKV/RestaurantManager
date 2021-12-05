@@ -21,7 +21,9 @@ public class Order extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime placed;
     @ManyToOne
-    private User executor;
+    private User cook;
+    @ManyToOne
+    private User waiter;
     private String notes;
 
     public Item getItem() {
@@ -60,12 +62,12 @@ public class Order extends BaseEntity {
         return this;
     }
 
-    public User getExecutor() {
-        return executor;
+    public User getCook() {
+        return cook;
     }
 
-    public Order setExecutor(User executor) {
-        this.executor = executor;
+    public Order setCook(User cook) {
+        this.cook = cook;
         return this;
     }
 
@@ -75,6 +77,15 @@ public class Order extends BaseEntity {
 
     public Order setNotes(String notes) {
         this.notes = notes;
+        return this;
+    }
+
+    public User getWaiter() {
+        return waiter;
+    }
+
+    public Order setWaiter(User waiter) {
+        this.waiter = waiter;
         return this;
     }
 }

@@ -6,10 +6,7 @@ import com.dim.RestaurantManager.model.entity.Role;
 import com.dim.RestaurantManager.model.entity.User;
 import com.dim.RestaurantManager.model.entity.enums.RoleEnum;
 import com.dim.RestaurantManager.model.service.UpdateProfileServiceModel;
-import com.dim.RestaurantManager.model.view.CookOrderView;
-import com.dim.RestaurantManager.model.view.ItemView;
-import com.dim.RestaurantManager.model.view.OrderView;
-import com.dim.RestaurantManager.model.view.UserView;
+import com.dim.RestaurantManager.model.view.*;
 import com.dim.RestaurantManager.repository.RoleRepository;
 import com.dim.RestaurantManager.service.exceptions.EntityNotFoundException;
 import com.dim.RestaurantManager.utils.components.ClassMapper;
@@ -90,6 +87,21 @@ public class ClassMapperImpl implements ClassMapper {
                         .setName(o.getItem().getName())
                         .setDescription(o.getNotes())
                         .setImageUrl(o.getItem().getImageUrl()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<WaiterOrderView> toWaiterOrderView(List<Order> orders) {
+        return orders.stream().map(o ->
+                new WaiterOrderView()
+                .setId(o.getId())
+                .setName(o.getItem().getName())
+                .setDescription(o.getNotes())
+                .setImageUrl(o.getItem().getImageUrl())
+                .setTableView(
+                        new FoodTableView()
+                                .setNumber(o.getBill().getTable().getNumber())
+                                .setDescription(o.getBill().getTable().getDescription())))
                 .collect(Collectors.toList());
     }
 }

@@ -9,6 +9,7 @@ import com.dim.RestaurantManager.model.service.UpdateProfileServiceModel;
 import com.dim.RestaurantManager.model.view.CookOrderView;
 import com.dim.RestaurantManager.model.view.OrderView;
 import com.dim.RestaurantManager.model.view.UserView;
+import com.dim.RestaurantManager.model.view.WaiterOrderView;
 
 import java.util.List;
 
@@ -26,4 +27,6 @@ public interface ClassMapper {
     UpdateProfileServiceModel toUpdateProfileServiceModel(UpdateProfileBindingModel bindingModel);
 
     List<CookOrderView> toCookOrderView(List<Order> pendingOrders);
+
+    List<WaiterOrderView> toWaiterOrderView(List<Order> order);
 }

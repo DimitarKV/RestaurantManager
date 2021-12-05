@@ -38,27 +38,33 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
 
                 .authorizeRequests()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                .antMatchers("/", "/users/register", "/users/login", "/users/register/check/{\\d+}").permitAll()
+                .antMatchers(
+                        "/",
+                        "/user/register",
+                        "/user/login",
+                        "/user/register/check/{\\d+}",
+                        "/menu")
+                .permitAll()
                 .antMatchers("/**").authenticated()
 
                 .and()
                 .sessionManagement()
                 .maximumSessions(9)
                 .sessionRegistry(sessionRegistry)
-                .expiredUrl("/users/login")
+                .expiredUrl("/user/login")
                 .and()
 
                 .and()
                 .formLogin()
-                .loginPage("/users/login")
+                .loginPage("/user/login")
                 .usernameParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY)
                 .passwordParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_PASSWORD_KEY)
                 .defaultSuccessUrl("/")
-                .failureForwardUrl("/users/login-error")
+                .failureForwardUrl("/user/login-error")
 
                 .and()
                 .logout()
-                .logoutUrl("/users/logout")
+                .logoutUrl("/user/logout")
                 .logoutSuccessUrl("/")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID");

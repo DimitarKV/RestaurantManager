@@ -1,6 +1,8 @@
 package com.dim.RestaurantManager.service;
 
 import com.dim.RestaurantManager.model.view.CookOrderView;
+import com.dim.RestaurantManager.model.view.OrderView;
+import com.dim.RestaurantManager.model.view.WaiterOrderView;
 import com.dim.RestaurantManager.service.exceptions.EntityNotFoundException;
 import com.dim.RestaurantManager.service.impl.RestaurantUser;
 
@@ -16,4 +18,8 @@ public interface OrderService {
     List<CookOrderView> getCurrentCookOrders(RestaurantUser restaurantUser);
 
     boolean isOwner(Long orderId, RestaurantUser restaurantUser);
+
+    List<WaiterOrderView> getReadyOrders();
+
+    List<WaiterOrderView> getCurrentWaiterOrders(RestaurantUser restaurantUser);
 }

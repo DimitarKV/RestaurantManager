@@ -14,43 +14,43 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-public class OrdersRestController {
+public class CookOrdersRestController {
     private final OrderService orderService;
     private final UserService userService;
 
-    public OrdersRestController(OrderService orderService, UserService userService) {
+    public CookOrdersRestController(OrderService orderService, UserService userService) {
         this.orderService = orderService;
         this.userService = userService;
     }
 
-    @PreAuthorize("isPersonnel()")
+    @PreAuthorize("isCook()")
     @GetMapping("/personnel/cook/orders")
     public ResponseEntity<List<CookOrderView>> getOrders() {
         return ResponseEntity.ok(orderService.getPendingOrders());
     }
 
-    @PreAuthorize("isPersonnel()")
+    @PreAuthorize("isCook()")
     @GetMapping("/personnel/cook/current/orders")
     public ResponseEntity<List<CookOrderView>> getCurrentCookOrders(@AuthenticationPrincipal RestaurantUser restaurantUser) {
         return ResponseEntity.ok(orderService.getCurrentCookOrders(restaurantUser));
     }
 
-    @PreAuthorize("isPersonnel()")
+    @PreAuthorize("isCook()")
     @GetMapping("/personnel/cook/order/{orderId}/accept")
     public ResponseEntity acceptOrder(@PathVariable(name = "orderId") String orderId,
             @AuthenticationPrincipal RestaurantUser user) {
-        userService.acceptOrder(user, Long.parseLong(orderId));
+        userService.acceptCookOrder(user, Long.parseLong(orderId));
         return ResponseEntity.ok().build();
     }
 
-    @PreAuthorize("isPersonnel()")
+    @PreAuthorize("isCook()")
     @GetMapping("/personnel/cook/order/{orderId}/ready")
     public ResponseEntity readyOrder(@PathVariable(name = "orderId") String orderId) {
-        userService.readyOrder(Long.parseLong(orderId));
+        userService.readyCookOrder(Long.parseLong(orderId));
         return ResponseEntity.ok().build();
     }
 
-    @PreAuthorize("isPersonnel()")
+    @PreAuthorize("isCook()")
     @GetMapping("/personnel/cook/order/{orderId}/cancel")
     public ResponseEntity cancelOrder(@PathVariable(name = "orderId") String orderId) {
         userService.cancelCookOrder(Long.parseLong(orderId));

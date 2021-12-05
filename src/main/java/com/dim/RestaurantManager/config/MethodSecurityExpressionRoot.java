@@ -25,19 +25,27 @@ public class MethodSecurityExpressionRoot extends SecurityExpressionRoot
         return false;
     }
 
+    public boolean isCook(){
+        RestaurantUser user = currentUser();
+        if(user != null){
+            return userService.isCook(user.getUsername());
+        }
+        return false;
+    }
+
+    public boolean isWaiter(){
+        RestaurantUser user = currentUser();
+        if(user != null){
+            return userService.isWaiter(user.getUsername());
+        }
+        return false;
+    }
+
     public boolean isOwner(String username){
         RestaurantUser user = currentUser();
         if(user == null)
             return false;
         return user.getUsername().equals(username);
-    }
-
-    public boolean isPersonnel(){
-        RestaurantUser user = currentUser();
-        if(user != null){
-            return user.getAuthorities().stream().anyMatch(r -> !r.getAuthority().equals(RoleEnum.CUSTOMER.name()));
-        }
-        return false;
     }
 
     public boolean isOwner(Long orderId){

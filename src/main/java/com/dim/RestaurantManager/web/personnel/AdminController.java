@@ -1,4 +1,4 @@
-package com.dim.RestaurantManager.web;
+package com.dim.RestaurantManager.web.personnel;
 
 import com.dim.RestaurantManager.model.binding.ModifyUserRolesBindingModel;
 import com.dim.RestaurantManager.model.entity.enums.RoleEnum;

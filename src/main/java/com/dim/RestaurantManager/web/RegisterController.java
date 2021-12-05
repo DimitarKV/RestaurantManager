@@ -36,12 +36,12 @@ public class RegisterController {
     }
 
 
-    @GetMapping("/users/register")
+    @GetMapping("/user/register")
     public String getRegisterPage() {
         return "auth/register";
     }
 
-    @PostMapping("/users/register")
+    @PostMapping("/user/register")
     public String register(@Valid RegisterBindingModel bindingModel,
                            BindingResult bindingResult,
                            RedirectAttributes redirectAttributes) {
@@ -56,27 +56,16 @@ public class RegisterController {
             }
             redirectAttributes.addFlashAttribute("bindingModel", bindingModel);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.bindingModel", bindingResult);
-            return "redirect:/users/register";
+            return "redirect:/user/register";
         }
 
         RegisterServiceModel serviceModel = new RegisterServiceModel()
                 .setUsername(bindingModel.getUsername())
                 .setPassword(bindingModel.getPassword());
         if (!this.userService.registerAndLoginUser(serviceModel)) {
-            return "redirect:/users/register";
+            return "redirect:/user/register";
         }
 
         return "redirect:/";
-    }
-
-    // NOTE: This feature is for demonstration purposes only.
-    // In a production app without additional security this is considered to be a security breach.
-    @GetMapping("/users/register/check/{username}")
-    @ResponseBody
-    public ResponseEntity usernameAvailable(@PathVariable(name = "username") String username) throws InterruptedException {
-        Thread.sleep(1000);
-        if (this.userService.usernameExists(username))
-            return ResponseEntity.ok(new UsernameAvailabilityResponse().setAvailable(false));
-        return ResponseEntity.ok(new UsernameAvailabilityResponse().setAvailable(true));
     }
 }

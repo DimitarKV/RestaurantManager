@@ -26,10 +26,10 @@ let card = (orderId, imageUrl, name, description, handler, cooking = true, handl
 `;
 
 let waitingContainer = document.getElementById("waitingContainer");
-let currentCookContainer = document.getElementById("currentCookContainer");
+let currentWaiterContainer = document.getElementById("currentWaiterContainer");
 
 async function display() {
-    let http = await fetch("http://91.139.199.150/personnel/cook/orders");
+    let http = await fetch("http://91.139.199.150/personnel/waiter/orders");
     let json = await http.json();
     let templates = [];
     for (const order of json) {
@@ -37,28 +37,29 @@ async function display() {
     }
     render(templates, waitingContainer);
 
-    http = await fetch("http://91.139.199.150/personnel/cook/current/orders");
+    http = await fetch("http://91.139.199.150/personnel/waiter/current/orders");
     json = await http.json();
+
     templates = [];
     for (const order of json) {
         templates.push(card(order.id, order.imageUrl, order.name, order.description, orderReadyHandler, true, cancelOrderHandler));
     }
-    render(templates, currentCookContainer);
+    render(templates, currentWaiterContainer);
 }
 
 function acceptHandler(e) {
     let orderId = e.target.parentNode.querySelector("#orderId").textContent.trim();
-    fetch("http://91.139.199.150/personnel/cook/order/" + orderId + "/accept");
+    fetch("http://91.139.199.150/personnel/waiter/order/" + orderId + "/accept");
 }
 
 function orderReadyHandler(e) {
     let orderId = e.target.parentNode.querySelector("#orderId").textContent.trim();
-    fetch("http://91.139.199.150/personnel/cook/order/" + orderId + "/ready");
+    fetch("http://91.139.199.150/personnel/waiter/order/" + orderId + "/ready");
 }
 
 function  cancelOrderHandler(e){
     let orderId = e.target.parentNode.querySelector("#orderId").textContent.trim();
-    fetch("http://91.139.199.150/personnel/cook/order/" + orderId + "/cancel");
+    fetch("http://91.139.199.150/personnel/waiter/order/" + orderId + "/cancel");
 }
 
 display();

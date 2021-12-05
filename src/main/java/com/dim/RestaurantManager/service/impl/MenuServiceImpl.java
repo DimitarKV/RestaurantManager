@@ -29,7 +29,7 @@ public class MenuServiceImpl implements MenuService {
         menuRepository.saveAndFlush(new MenuItem().setItem(itemRepository.findByName("STREET DOGZ САНДВИЧ").get()).setCategory(categoryRepository.findByName("Бургери").get()));
         menuRepository.saveAndFlush(new MenuItem().setItem(itemRepository.findByName("PULLED PORK САНДВИЧ").get()).setCategory(categoryRepository.findByName("Бургери").get()));
         menuRepository.saveAndFlush(new MenuItem().setItem(itemRepository.findByName("БУРГЕР БОКС МЕНЮ").get()).setCategory(categoryRepository.findByName("Бургери").get()));
-        menuRepository.saveAndFlush(new MenuItem().setItem(itemRepository.findByName("САЛАТА “КАЛИНА“  320гр.").get()).setCategory(categoryRepository.findByName("Салати").get()));
+        menuRepository.saveAndFlush(new MenuItem().setItem(itemRepository.findByName("САЛАТА “КАЛИНА“").get()).setCategory(categoryRepository.findByName("Салати").get()));
     }
 
     @Override

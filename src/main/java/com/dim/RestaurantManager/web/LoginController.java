@@ -19,17 +19,17 @@ public class LoginController {
         return false;
     }
 
-    @GetMapping("/users/login")
+    @GetMapping("/user/login")
     public String getLoginPage() {
         return "auth/login";
     }
 
-    @PostMapping("/users/login-error")
+    @PostMapping("/user/login-error")
     public String getLoginErrorPage(LoginBindingModel bindingModel,
                                     RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("bindingModel", bindingModel);
         redirectAttributes.addFlashAttribute("error", true);
-        return "redirect:/users/login";
+        return "redirect:/user/login";
     }
 
 }

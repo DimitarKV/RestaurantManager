@@ -3,6 +3,8 @@ package com.dim.RestaurantManager.service.impl;
 import com.dim.RestaurantManager.model.entity.*;
 import com.dim.RestaurantManager.model.entity.enums.OrderStatusEnum;
 import com.dim.RestaurantManager.model.view.CookOrderView;
+import com.dim.RestaurantManager.model.view.OrderView;
+import com.dim.RestaurantManager.model.view.WaiterOrderView;
 import com.dim.RestaurantManager.repository.*;
 import com.dim.RestaurantManager.service.OrderService;
 import com.dim.RestaurantManager.service.exceptions.common.CommonErrorMessages;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -58,10 +61,41 @@ public class OrderServiceImpl implements OrderService {
         return classMapper.toCookOrderView(orderRepository.getPendingOrders());
     }
 
+
+    @Override
+    public List<CookOrderView> getCurrentCookOrders(RestaurantUser restaurantUser) {
+        User user = userRepository.findByUsername(restaurantUser.getUsername())
+                .orElseThrow(() -> CommonErrorMessages.username(restaurantUser.getUsername()));
+
+        return classMapper.toCookOrderView(orderRepository.findCurrentCookOrders(user.getId()));
+    }
+
+    @Override
+    public boolean isOwner(Long orderId, RestaurantUser restaurantUser) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> CommonErrorMessages.order(orderId));
+        User user = userRepository.findByUsername(restaurantUser.getUsername())
+                .orElseThrow(() -> CommonErrorMessages.username(restaurantUser.getUsername()));
+        return user.getBill().getId().equals(order.getBill().getId());
+    }
+
+    @Override
+    public List<WaiterOrderView> getReadyOrders() {
+        return classMapper.toWaiterOrderView(orderRepository.findReadyOrders());
+    }
+
+    @Override
+    public List<WaiterOrderView> getCurrentWaiterOrders(RestaurantUser restaurantUser) {
+        User user = userRepository.findByUsername(restaurantUser.getUsername())
+                .orElseThrow(() -> CommonErrorMessages.username(restaurantUser.getUsername()));
+
+        return classMapper.toWaiterOrderView(orderRepository.findCurrentWaiterOrders(user.getId()));
+    }
+
     @Override
     public void init() {
         if (orderRepository.count() == 0) {
-            User user = userRepository.findByUsername("mitko").get();
+            User user = userRepository.findByUsername("customer").get();
 
             FoodTable table = tableRepository.findByNumber(1).get();
 
@@ -121,22 +155,5 @@ public class OrderServiceImpl implements OrderService {
             ));
             billRepository.saveAndFlush(bill);
         }
-    }
-
-    @Override
-    public List<CookOrderView> getCurrentCookOrders(RestaurantUser restaurantUser) {
-        User user = userRepository.findByUsername(restaurantUser.getUsername())
-                .orElseThrow(() -> CommonErrorMessages.username(restaurantUser.getUsername()));
-
-        return classMapper.toCookOrderView(orderRepository.findCurrentCookOrders(user.getId()));
-    }
-
-    @Override
-    public boolean isOwner(Long orderId, RestaurantUser restaurantUser) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> CommonErrorMessages.order(orderId));
-        User user = userRepository.findByUsername(restaurantUser.getUsername())
-                .orElseThrow(() -> CommonErrorMessages.username(restaurantUser.getUsername()));
-        return user.getBill().getId().equals(order.getBill().getId());
     }
 }

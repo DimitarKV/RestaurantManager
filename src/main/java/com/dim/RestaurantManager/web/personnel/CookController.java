@@ -1,4 +1,4 @@
-package com.dim.RestaurantManager.web;
+package com.dim.RestaurantManager.web.personnel;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

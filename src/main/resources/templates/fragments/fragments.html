@@ -33,14 +33,14 @@
                     <a class="nav-link" th:href="@{/user/orders}"
                        th:text="${'Маса №' + #authentication.principal.tableView.number  + ' ' + #authentication.principal.tableView.description}"></a>
                 </li>
-                <li class="nav-item" sec:authorize="isAuthenticated()">
+                <li class="nav-item">
                     <a class="nav-link" th:href="@{/menu}">Меню</a>
                 </li>
 
             </ul>
             <ul class="navbar-nav mr-auto col-6 justify-content-end">
                 <li class="nav-item float-end" sec:authorize="isAuthenticated()">
-                    <a class="nav-link" th:href="@{/users/profile}">Профил</a>
+                    <a class="nav-link" th:href="@{/user/profile}">Профил</a>
                 </li>
                 <li class="nav-item float-end" sec:authorize="isAuthenticated() && hasRole('WAITER')">
                     <a class="nav-link" th:href="@{/personnel/waiter}">Готови поръчки</a>
@@ -52,15 +52,15 @@
                     <a class="nav-link" th:href="@{/personnel/admin}">Администратор</a>
                 </li>
                 <li sec:authorize="isAuthenticated()" class="nav-item">
-                    <form th:action="@{/users/logout}" th:method="post">
+                    <form th:action="@{/user/logout}" th:method="post">
                         <input class="nav-link btn" type="submit" value="Изход">
                     </form>
                 </li>
                 <li class="nav-item float-end" sec:authorize="!isAuthenticated()">
-                    <a class="nav-link" th:href="@{/users/login}">Влез</a>
+                    <a class="nav-link" th:href="@{/user/login}">Влез</a>
                 </li>
                 <li class="nav-item float-end" sec:authorize="!isAuthenticated()">
-                    <a class="nav-link" th:href="@{/users/register}">Регистрация</a>
+                    <a class="nav-link" th:href="@{/user/register}">Регистрация</a>
                 </li>
             </ul>
         </div>

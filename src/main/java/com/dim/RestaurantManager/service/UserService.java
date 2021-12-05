@@ -32,17 +32,21 @@ public interface UserService {
 
     void modifyUserRoles(ModifyUserRolesBindingModel bindingModel);
 
-    boolean isAdmin(String username);
-
     UpdateProfileBindingModel getUserProfile(RestaurantUser user);
 
     void updateUserProfile(String username, UpdateProfileServiceModel updateProfileServiceModel);
 
-    void acceptOrder(RestaurantUser user, Long orderId);
+    void acceptCookOrder(RestaurantUser user, Long orderId);
 
-    void readyOrder(Long orderId);
+    void readyCookOrder(Long orderId);
 
     void cancelCookOrder(Long orderId);
+
+    void acceptWaiterOrder(RestaurantUser user, Long orderId);
+
+    void finishWaiterOrder(Long orderId);
+
+    void cancelWaiterOrder(Long orderId);
 
     void cancelUserOrder(Long orderId);
 
@@ -51,4 +55,10 @@ public interface UserService {
     List<UserView> getUsers(Integer pageSize, Integer offset);
 
     Integer getUsersPageCount(Integer pageSize);
+
+    boolean isAdmin(String username);
+
+    boolean isCook(String username);
+
+    boolean isWaiter(String username);
 }
