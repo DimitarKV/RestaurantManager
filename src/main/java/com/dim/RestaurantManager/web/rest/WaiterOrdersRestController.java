@@ -16,11 +16,9 @@ import java.util.List;
 @RestController
 public class WaiterOrdersRestController {
     private final OrderService orderService;
-    private final UserService userService;
 
-    public WaiterOrdersRestController(OrderService orderService, UserService userService) {
+    public WaiterOrdersRestController(OrderService orderService) {
         this.orderService = orderService;
-        this.userService = userService;
     }
 
     @PreAuthorize("isWaiter()")
@@ -39,21 +37,21 @@ public class WaiterOrdersRestController {
     @GetMapping("/personnel/waiter/order/{orderId}/accept")
     public ResponseEntity acceptOrder(@PathVariable(name = "orderId") String orderId,
                                       @AuthenticationPrincipal RestaurantUser user) {
-        userService.acceptWaiterOrder(user, Long.parseLong(orderId));
+        orderService.acceptWaiterOrder(user, Long.parseLong(orderId));
         return ResponseEntity.ok().build();
     }
 
     @PreAuthorize("isWaiter()")
     @GetMapping("/personnel/waiter/order/{orderId}/ready")
     public ResponseEntity readyOrder(@PathVariable(name = "orderId") String orderId) {
-        userService.finishWaiterOrder(Long.parseLong(orderId));
+        orderService.finishWaiterOrder(Long.parseLong(orderId));
         return ResponseEntity.ok().build();
     }
 
     @PreAuthorize("isWaiter()")
     @GetMapping("/personnel/waiter/order/{orderId}/cancel")
     public ResponseEntity cancelOrder(@PathVariable(name = "orderId") String orderId) {
-        userService.cancelWaiterOrder(Long.parseLong(orderId));
+        orderService.cancelWaiterOrder(Long.parseLong(orderId));
         return ResponseEntity.ok().build();
     }
 }

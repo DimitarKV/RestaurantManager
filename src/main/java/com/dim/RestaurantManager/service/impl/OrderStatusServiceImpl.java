@@ -19,13 +19,14 @@ public class OrderStatusServiceImpl implements OrderStatusService {
     @Override
     public void init() {
         if(orderStatusRepository.count() == 0){
-            //PENDING, COOKING, READY, TRAVELING, FINISHED
+            //PENDING, COOKING, READY, TRAVELING, FINISHED, PAYED
             this.orderStatusRepository.saveAllAndFlush(List.of(
                     new OrderStatus().setName(OrderStatusEnum.PENDING),
                     new OrderStatus().setName(OrderStatusEnum.COOKING),
                     new OrderStatus().setName(OrderStatusEnum.READY),
                     new OrderStatus().setName(OrderStatusEnum.FINISHED),
-                    new OrderStatus().setName(OrderStatusEnum.TRAVELING)
+                    new OrderStatus().setName(OrderStatusEnum.TRAVELING),
+                    new OrderStatus().setName(OrderStatusEnum.PAYED)
             ));
         }
 

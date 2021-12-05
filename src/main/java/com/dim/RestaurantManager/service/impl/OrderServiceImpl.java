@@ -93,6 +93,90 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public void cancelWaiterOrder(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> CommonErrorMessages.order(orderId));
+        if (order.getStatus().getName() != OrderStatusEnum.TRAVELING)
+            return;
+        order.setStatus(orderStatusRepository.findByName(OrderStatusEnum.READY).get());
+        orderRepository.saveAndFlush(order);
+    }
+
+    @Override
+    public void acceptCookOrder(RestaurantUser restaurantUser, Long orderId) {
+        User user = userRepository
+                .findByUsername(restaurantUser.getUsername())
+                .orElseThrow(() -> CommonErrorMessages.username(restaurantUser.getUsername()));
+        Order order = orderRepository
+                .findById(orderId)
+                .orElseThrow(() -> CommonErrorMessages.order(orderId));
+        if (order.getStatus().getName() != OrderStatusEnum.PENDING)
+            return;
+        order.setCook(user);
+        order.setStatus(orderStatusRepository.findByName(OrderStatusEnum.COOKING).get());
+        orderRepository.saveAndFlush(order);
+        userRepository.saveAndFlush(user);
+    }
+
+    @Override
+    public void readyCookOrder(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> CommonErrorMessages.order(orderId));
+        if (order.getStatus().getName() != OrderStatusEnum.COOKING)
+            return;
+        order
+                .setStatus(orderStatusRepository.findByName(OrderStatusEnum.READY).get());
+        orderRepository.saveAndFlush(order);
+    }
+
+    @Override
+    public void cancelCookOrder(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> CommonErrorMessages.order(orderId));
+        if (order.getStatus().getName() != OrderStatusEnum.COOKING)
+            return;
+        order.setStatus(orderStatusRepository.findByName(OrderStatusEnum.PENDING).get());
+        orderRepository.saveAndFlush(order);
+    }
+
+    @Override
+    public void acceptWaiterOrder(RestaurantUser restaurantUser, Long orderId) {
+        User user = userRepository
+                .findByUsername(restaurantUser.getUsername())
+                .orElseThrow(() -> CommonErrorMessages.username(restaurantUser.getUsername()));
+        Order order = orderRepository
+                .findById(orderId)
+                .orElseThrow(() -> CommonErrorMessages.order(orderId));
+
+        if (order.getStatus().getName() != OrderStatusEnum.READY)
+            return;
+        order.setWaiter(user);
+        order.setStatus(orderStatusRepository.findByName(OrderStatusEnum.TRAVELING).get());
+        orderRepository.saveAndFlush(order);
+        userRepository.saveAndFlush(user);
+    }
+
+    @Override
+    public void finishWaiterOrder(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> CommonErrorMessages.order(orderId));
+        if (order.getStatus().getName() != OrderStatusEnum.TRAVELING)
+            return;
+        order
+                .setStatus(orderStatusRepository.findByName(OrderStatusEnum.FINISHED).get());
+        orderRepository.saveAndFlush(order);
+    }
+
+    @Override
+    public void cancelUserOrder(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> CommonErrorMessages.order(orderId));
+        if (order.getStatus().getName() != OrderStatusEnum.PENDING)
+            return;
+        orderRepository.delete(order);
+    }
+
+    @Override
     public void init() {
         if (orderRepository.count() == 0) {
             User user = userRepository.findByUsername("customer").get();
@@ -101,7 +185,8 @@ public class OrderServiceImpl implements OrderService {
 
             Bill bill = new Bill()
                     .setUsers(List.of(user))
-                    .setTable(table);
+                    .setTable(table)
+                    .setCreationDate(LocalDateTime.now());
             bill = billRepository.saveAndFlush(bill);
 
             table.setBill(bill);
@@ -155,5 +240,15 @@ public class OrderServiceImpl implements OrderService {
             ));
             billRepository.saveAndFlush(bill);
         }
+    }
+
+    @Override
+    public List<OrderView> getOrders(RestaurantUser restaurantUser) {
+        User user = userRepository
+                .findByUsername(restaurantUser.getUsername())
+                .orElseThrow(() -> CommonErrorMessages.username(restaurantUser.getUsername()));
+        if (user.getBill() == null)
+            return null;
+        return classMapper.toListOrderView(user.getBill().getOrders());
     }
 }

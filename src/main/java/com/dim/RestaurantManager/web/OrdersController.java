@@ -1,7 +1,7 @@
 package com.dim.RestaurantManager.web;
 
 import com.dim.RestaurantManager.model.view.OrderView;
-import com.dim.RestaurantManager.service.UserService;
+import com.dim.RestaurantManager.service.OrderService;
 import com.dim.RestaurantManager.service.impl.RestaurantUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,10 +16,10 @@ import java.util.List;
 
 @Controller
 public class OrdersController {
-    private final UserService userService;
+    private final OrderService orderService;
 
-    public OrdersController(UserService userService) {
-        this.userService = userService;
+    public OrdersController(OrderService orderService) {
+        this.orderService = orderService;
     }
 
     @GetMapping("/user/orders")
@@ -31,13 +31,13 @@ public class OrdersController {
     @GetMapping("/user/orders-rest")
     @ResponseBody
     public ResponseEntity<List<OrderView>> getUserOrders(@AuthenticationPrincipal RestaurantUser restaurantUser){
-        return ResponseEntity.ok(userService.getOrders(restaurantUser));
+        return ResponseEntity.ok(orderService.getOrders(restaurantUser));
     }
 
     @PreAuthorize("isOwner(#orderId)")
     @GetMapping("/user/order/{orderId}/cancel")
     public ResponseEntity cancelUserOrder(@PathVariable(name = "orderId") Long orderId){
-        userService.cancelUserOrder(orderId);
+        orderService.cancelUserOrder(orderId);
         return ResponseEntity.ok().build();
     }
 

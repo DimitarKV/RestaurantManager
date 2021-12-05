@@ -37,15 +37,17 @@ let statusNames = {
     'COOKING': 'Готви се',
     'READY': 'Готова',
     'TRAVELING': 'Носи се',
-    'FINISHED': 'Завършена'
+    'FINISHED': 'Завършена',
+    'PAYED': 'Платена'
 }
 
 let statusClassMap = {
     'PENDING': {'btn-secondary': true},
     'COOKING': {'btn-warning': true},
-    'READY': {'btn-primary': true},
+    'READY': {'btn-danger': true},
     'TRAVELING': {'btn-info': true},
-    'FINISHED': {'btn-success': true}
+    'FINISHED': {'btn-success': true},
+    'PAYED': {'btn-primary': true},
 }
 
 async function display() {

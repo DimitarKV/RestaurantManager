@@ -3,6 +3,7 @@ package com.dim.RestaurantManager.model.entity;
 import com.dim.RestaurantManager.model.entity.base.BaseEntity;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,8 @@ public class Bill extends BaseEntity {
     private Double totalPrice;
     @OneToOne
     private FoodTable table;
+    @Column(nullable = false)
+    private LocalDateTime creationDate;
 
     public Bill() {
         users = new ArrayList<>();
@@ -56,6 +59,15 @@ public class Bill extends BaseEntity {
 
     public Bill setTable(FoodTable table) {
         this.table = table;
+        return this;
+    }
+
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+
+    public Bill setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
         return this;
     }
 }

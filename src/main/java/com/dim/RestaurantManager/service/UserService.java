@@ -22,33 +22,13 @@ public interface UserService {
 
     boolean usernameExists(String username);
 
-    Integer findTableNumberByUsername(String username);
-
     void updatePrincipal();
-
-    List<OrderView> getOrders(RestaurantUser restaurantUser);
-
-    List<UserView> getAllUsers();
 
     void modifyUserRoles(ModifyUserRolesBindingModel bindingModel);
 
     UpdateProfileBindingModel getUserProfile(RestaurantUser user);
 
     void updateUserProfile(String username, UpdateProfileServiceModel updateProfileServiceModel);
-
-    void acceptCookOrder(RestaurantUser user, Long orderId);
-
-    void readyCookOrder(Long orderId);
-
-    void cancelCookOrder(Long orderId);
-
-    void acceptWaiterOrder(RestaurantUser user, Long orderId);
-
-    void finishWaiterOrder(Long orderId);
-
-    void cancelWaiterOrder(Long orderId);
-
-    void cancelUserOrder(Long orderId);
 
     boolean hasNotOccupied(String username);
 

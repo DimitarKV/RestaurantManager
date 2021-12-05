@@ -94,13 +94,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Integer findTableNumberByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> CommonErrorMessages.username(username))
-                .getBill().getTable().getNumber();
-    }
-
-    @Override
     public void updatePrincipal() {
         UserDetails user = userDetailsService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         Authentication authentication = new UsernamePasswordAuthenticationToken(
@@ -109,25 +102,6 @@ public class UserServiceImpl implements UserService {
                 user.getAuthorities()
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
-
-    @Override
-    public List<OrderView> getOrders(RestaurantUser restaurantUser) {
-        User user = userRepository
-                .findByUsername(restaurantUser.getUsername())
-                .orElseThrow(() -> CommonErrorMessages.username(restaurantUser.getUsername()));
-        if (user.getBill() == null)
-            return null;
-        return classMapper.toListOrderView(user.getBill().getOrders());
-    }
-
-    @Override
-    public List<UserView> getAllUsers() {
-        return userRepository
-                .findAll()
-                .stream()
-                .map(classMapper::toUserView)
-                .collect(Collectors.toList());
     }
 
     @Override
@@ -194,78 +168,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Override
-    public void acceptCookOrder(RestaurantUser restaurantUser, Long orderId) {
-        User user = userRepository
-                .findByUsername(restaurantUser.getUsername())
-                .orElseThrow(() -> CommonErrorMessages.username(restaurantUser.getUsername()));
-        Order order = orderRepository
-                .findById(orderId)
-                .orElseThrow(() -> CommonErrorMessages.order(orderId));
-        if (order.getStatus().getName() != OrderStatusEnum.PENDING)
-            return;
-        order.setCook(user);
-        order.setStatus(orderStatusRepository.findByName(OrderStatusEnum.COOKING).get());
-        orderRepository.saveAndFlush(order);
-        userRepository.saveAndFlush(user);
-    }
 
-    @Override
-    public void cancelCookOrder(Long orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> CommonErrorMessages.order(orderId));
-        if (order.getStatus().getName() != OrderStatusEnum.COOKING)
-            return;
-        order.setStatus(orderStatusRepository.findByName(OrderStatusEnum.PENDING).get());
-        orderRepository.saveAndFlush(order);
-    }
-
-    @Override
-    public void acceptWaiterOrder(RestaurantUser restaurantUser, Long orderId) {
-        User user = userRepository
-                .findByUsername(restaurantUser.getUsername())
-                .orElseThrow(() -> CommonErrorMessages.username(restaurantUser.getUsername()));
-        Order order = orderRepository
-                .findById(orderId)
-                .orElseThrow(() -> CommonErrorMessages.order(orderId));
-
-        if (order.getStatus().getName() != OrderStatusEnum.READY)
-            return;
-        order.setWaiter(user);
-        order.setStatus(orderStatusRepository.findByName(OrderStatusEnum.TRAVELING).get());
-        orderRepository.saveAndFlush(order);
-        userRepository.saveAndFlush(user);
-    }
-
-    @Override
-    public void finishWaiterOrder(Long orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> CommonErrorMessages.order(orderId));
-        if (order.getStatus().getName() != OrderStatusEnum.TRAVELING)
-            return;
-        order
-                .setStatus(orderStatusRepository.findByName(OrderStatusEnum.FINISHED).get());
-        orderRepository.saveAndFlush(order);
-    }
-
-    @Override
-    public void cancelWaiterOrder(Long orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> CommonErrorMessages.order(orderId));
-        if (order.getStatus().getName() != OrderStatusEnum.TRAVELING)
-            return;
-        order.setStatus(orderStatusRepository.findByName(OrderStatusEnum.READY).get());
-        orderRepository.saveAndFlush(order);
-    }
-
-    @Override
-    public void cancelUserOrder(Long orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> CommonErrorMessages.order(orderId));
-        if (order.getStatus().getName() != OrderStatusEnum.PENDING)
-            return;
-        orderRepository.delete(order);
-    }
 
     @Override
     public boolean hasNotOccupied(String username) {
@@ -282,17 +185,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public Integer getUsersPageCount(Integer pageSize) {
         return (int)Math.ceil((double) userRepository.count() / pageSize);
-    }
-
-    @Override
-    public void readyCookOrder(Long orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> CommonErrorMessages.order(orderId));
-        if (order.getStatus().getName() != OrderStatusEnum.COOKING)
-            return;
-        order
-                .setStatus(orderStatusRepository.findByName(OrderStatusEnum.READY).get());
-        orderRepository.saveAndFlush(order);
     }
 
     private void initRoles() {
@@ -319,7 +211,7 @@ public class UserServiceImpl implements UserService {
 
         User customer = new User()
                 .setUsername("customer")
-                .setPassword(passwordEncoder.encode("customer"))
+                .setPassword("0cf433220d1903e32e80d3579ffdcdb21d639f80caa2a79e82ab5a4154871d4d60d1b533c5da76a0")
                 .setRoles(List.of(customerRole));
 
         User ginka = new User()
@@ -329,17 +221,17 @@ public class UserServiceImpl implements UserService {
 
         User waiter = new User()
                 .setUsername("waiter")
-                .setPassword(passwordEncoder.encode("waiter"))
+                .setPassword("7fb88cc7d8cc4e4317ed43d6aa6b67ab4186468de634cefbabd75424a8ed859572e90c516fbcb534")
                 .setRoles(List.of(waiterRole));
 
         User cook = new User()
                 .setUsername("cook")
-                .setPassword(passwordEncoder.encode("cook"))
+                .setPassword("e5960fa0cd401a8b7745e09f83461c4274cb90b09d6d8111ac500ff604d345f512ba18bb53c74ba2")
                 .setRoles(List.of(cookRole));
 
         User manager = new User()
                 .setUsername("manager")
-                .setPassword(passwordEncoder.encode("manager"))
+                .setPassword("4c352add46da74eb06c9ab6e3f5a74a50f4a70bb44904499746b2714cf37df6621a681d894949e05")
                 .setRoles(List.of(managerRole));
 
         User boss = new User()
