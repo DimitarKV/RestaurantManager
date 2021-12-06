@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="fragments/fragments::head"></head>
+<body>
+<nav th:replace="fragments/fragments::navbar"></nav>
+<div class="container text-center">
+
+    <div th:each="table : ${occupiedTables}" class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8">
+            <div class="card mb-3 bg-dark rounded-back mt-3 text-light">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img th:src="${table.imageUrl}" class="img-fluid rounded-start">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${table.title}">Card title</h5>
+                            <p class="card-text" th:text="${table.description}">This is a wider card with supporting
+                                text below as a natural lead-in to additional content. This content is a little bit
+                                longer.</p>
+                            <form
+                                    th:action="@{/table/join}"
+                                    th:method="post">
+                                <p class="card-text">
+                                    <small class="text-muted">Маса №: </small>
+                                    <span th:text="${table.number}"></span>
+                                    <input type="text" name="number" th:value="${table.number}" hidden>
+                                </p>
+                                <input type="submit" class="btn btn-success" value="Присъединете се">
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2"></div>
+    </div>
+
+</div>
+</body>
+</html>

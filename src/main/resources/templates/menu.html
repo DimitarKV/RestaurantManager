@@ -38,7 +38,7 @@
     <div class="row mt-3" sec:authorize="!isAuthenticated() || (hasRole('CUSTOMER') && !#authentication.getPrincipal().canOrder())">
         <div class="col-md-4"></div>
         <div class="col-md-4">
-            <a class="btn btn-dark rounded-back" th:href="@{/table/register}">
+            <a class="btn btn-dark rounded-back" th:href="@{/}">
                 <h1 class="text-danger">Внимание! Трябва да изберете маса, за да можете да поръчвате!</h1>
             </a>
         </div>

@@ -52,6 +52,11 @@ public class TableController {
         return "table-free";
     }
 
+    @GetMapping("/table/join")
+    public String getTableJoinPage() {
+        return "table-occupied";
+    }
+
     @PreAuthorize("!canOrder()")
     @PostMapping("/table/occupy")
     public String occupyTable(@Valid OccupyTableBindingModel occupyBindingModel,
@@ -79,7 +84,7 @@ public class TableController {
 
             return "redirect:/table/register";
         }
-
+        System.out.println();
         return "redirect:/menu";
     }
 }
