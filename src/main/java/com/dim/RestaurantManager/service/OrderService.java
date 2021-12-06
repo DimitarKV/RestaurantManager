@@ -5,6 +5,8 @@ import com.dim.RestaurantManager.model.view.OrderView;
 import com.dim.RestaurantManager.model.view.WaiterOrderView;
 import com.dim.RestaurantManager.service.exceptions.EntityNotFoundException;
 import com.dim.RestaurantManager.service.impl.RestaurantUser;
+import com.dim.RestaurantManager.model.view.CheckoutOrderView;
+import com.dim.RestaurantManager.web.rest.binding.CheckedOrdersBindingModel;
 
 import java.util.List;
 
@@ -38,4 +40,8 @@ public interface OrderService {
     void cancelCookOrder(Long orderId);
 
     void cancelUserOrder(Long orderId);
+
+    List<CheckoutOrderView> getFinishedOrders(String username);
+
+    void handleOrdersByUser(RestaurantUser restaurantUser, CheckedOrdersBindingModel bindingModel);
 }

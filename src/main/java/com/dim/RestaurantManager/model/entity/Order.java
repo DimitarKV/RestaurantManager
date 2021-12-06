@@ -25,6 +25,8 @@ public class Order extends BaseEntity {
     @ManyToOne
     private User waiter;
     private String notes;
+    @ManyToOne
+    private User payer;
 
     public Item getItem() {
         return item;
@@ -86,6 +88,15 @@ public class Order extends BaseEntity {
 
     public Order setWaiter(User waiter) {
         this.waiter = waiter;
+        return this;
+    }
+
+    public User getPayer() {
+        return payer;
+    }
+
+    public Order setPayer(User payer) {
+        this.payer = payer;
         return this;
     }
 }

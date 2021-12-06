@@ -143,6 +143,8 @@ public class UserServiceImpl implements UserService {
                 .getRoles().stream().anyMatch(r -> r.getRole() == RoleEnum.WAITER);
     }
 
+
+
     @Override
     public UpdateProfileBindingModel getUserProfile(RestaurantUser user) {
         return classMapper.toUpdateProfileBindingModel(userRepository
@@ -167,8 +169,6 @@ public class UserServiceImpl implements UserService {
             updatePrincipal();
         }
     }
-
-
 
     @Override
     public boolean hasNotOccupied(String username) {
@@ -200,7 +200,6 @@ public class UserServiceImpl implements UserService {
         this.roleRepository.saveAllAndFlush(roles);
     }
 
-    // CUSTOMER, HYGIENIST, WAITER, COOK, MANAGER, BOSS
     private void initUsers() {
         Role customerRole = classMapper.toRole(RoleEnum.CUSTOMER);
         Role hygienistRole = classMapper.toRole(RoleEnum.HYGIENIST);

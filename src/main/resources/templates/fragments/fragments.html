@@ -24,19 +24,21 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mr-auto col-6 justify-content-start">
-                <li class="nav-item" sec:authorize="isAuthenticated() && hasRole('CUSTOMER')"
-                    th:if="${#authentication.principal.tableView == null}">
+                <li class="nav-item" sec:authorize="isAuthenticated() && hasRole('CUSTOMER') && !principal.canOrder()">
                     <a class="nav-link" th:href="@{/table/register}">Маса</a>
                 </li>
-                <li sec:authorize="isAuthenticated() && hasRole('CUSTOMER')" th:if="${#authentication.principal.tableView != null}"
+                <li sec:authorize="isAuthenticated() && hasRole('CUSTOMER') && principal.canOrder()"
                     class="nav-item">
                     <a class="nav-link" th:href="@{/user/orders}"
-                       th:text="${'Маса №' + #authentication.principal.tableView.number  + ' ' + #authentication.principal.tableView.description}"></a>
+                       th:text="${'Маса №' + #authentication.principal.getTableNumber()  + ' ' + #authentication.principal.getTableDescription()}"></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/menu}">Меню</a>
                 </li>
-
+                <li sec:authorize="isAuthenticated() && hasRole('CUSTOMER') && principal.owesMoney()"
+                    class="nav-item">
+                    <a class="nav-link" th:href="@{/user/checkout}">Плати</a>
+                </li>
             </ul>
             <ul class="navbar-nav mr-auto col-6 justify-content-end">
                 <li class="nav-item float-end" sec:authorize="isAuthenticated()">

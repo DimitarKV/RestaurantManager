@@ -9,6 +9,9 @@ import com.dim.RestaurantManager.repository.*;
 import com.dim.RestaurantManager.service.OrderService;
 import com.dim.RestaurantManager.service.exceptions.common.CommonErrorMessages;
 import com.dim.RestaurantManager.utils.components.ClassMapper;
+import com.dim.RestaurantManager.model.view.CheckoutOrderView;
+import com.dim.RestaurantManager.web.rest.binding.CheckedOrdersBindingModel;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -41,6 +44,7 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> CommonErrorMessages.username(restaurantUser.getUsername()));
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> CommonErrorMessages.item(itemId));
+
         Order order =
                 new Order()
                         .setItem(item)
@@ -53,6 +57,9 @@ public class OrderServiceImpl implements OrderService {
                         .setNotes(notes)
                         .setPlaced(LocalDateTime.now());
         order = orderRepository.saveAndFlush(order);
+        Bill bill = order.getBill();
+        bill.setTotalPrice(bill.getTotalPrice() + order.getItem().getPrice());
+        billRepository.saveAndFlush(bill);
         return order.getId();
     }
 
@@ -173,7 +180,25 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> CommonErrorMessages.order(orderId));
         if (order.getStatus().getName() != OrderStatusEnum.PENDING)
             return;
+        Bill bill = order.getBill();
+        bill.setTotalPrice(bill.getTotalPrice());
         orderRepository.delete(order);
+    }
+
+    @Override
+    public List<CheckoutOrderView> getFinishedOrders(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> CommonErrorMessages.username(username));
+        Bill bill = user.getBill();
+        return orderRepository
+                .findOrdersByBillId(bill.getId())
+                .stream()
+                .map(classMapper::toCheckoutOrderView).collect(Collectors.toList());
+    }
+
+    @Override
+    public void handleOrdersByUser(RestaurantUser restaurantUser, CheckedOrdersBindingModel bindingModel) {
+
     }
 
     @Override
@@ -195,50 +220,9 @@ public class OrderServiceImpl implements OrderService {
             user.setBill(bill);
             user = userRepository.saveAndFlush(user);
 
-            Item item1 = itemRepository.findById(1L).get();
-            Order order1 =
-                    new Order()
-                            .setItem(item1)
-                            .setBill(bill)
-                            .setStatus(
-                                    orderStatusRepository
-                                            .findByName(OrderStatusEnum.PENDING)
-                                            .get()
-                            )
-                            .setNotes("С почвече чедър!")
-                            .setPlaced(LocalDateTime.now());
-            Item item2 = itemRepository.findById(2L).get();
-            Order order2 =
-                    new Order()
-                            .setItem(item2)
-                            .setBill(bill)
-                            .setStatus(
-                                    orderStatusRepository
-                                            .findByName(OrderStatusEnum.PENDING)
-                                            .get()
-                            )
-                            .setNotes("Без лук!")
-                            .setPlaced(LocalDateTime.now());
-            Item item3 = itemRepository.findById(3L).get();
-            Order order3 =
-                    new Order()
-                            .setItem(item3)
-                            .setBill(bill)
-                            .setStatus(
-                                    orderStatusRepository
-                                            .findByName(OrderStatusEnum.PENDING)
-                                            .get()
-                            )
-                            .setNotes("Без кисели краставички!")
-                            .setPlaced(LocalDateTime.now());
-            orderRepository.saveAllAndFlush(List.of(order1, order2, order3));
-
-            bill.setOrders(List.of(
-                    orderRepository.findById(1L).get(),
-                    orderRepository.findById(2L).get(),
-                    orderRepository.findById(3L).get()
-            ));
-            billRepository.saveAndFlush(bill);
+            order(1L, "", new RestaurantUser("customer", "",  List.of(new SimpleGrantedAuthority("ROLE_CUSTOMER")), null));
+            order(2L, "", new RestaurantUser("customer", "",  List.of(new SimpleGrantedAuthority("ROLE_CUSTOMER")), null));
+            order(3L, "", new RestaurantUser("customer", "",  List.of(new SimpleGrantedAuthority("ROLE_CUSTOMER")), null));
         }
     }
 
@@ -249,6 +233,6 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> CommonErrorMessages.username(restaurantUser.getUsername()));
         if (user.getBill() == null)
             return null;
-        return classMapper.toListOrderView(user.getBill().getOrders());
+        return classMapper.toListOrderView(orderRepository.getOrdersByBillId(user.getBill().getId()));
     }
 }

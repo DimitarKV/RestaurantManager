@@ -10,6 +10,8 @@ import com.dim.RestaurantManager.model.view.*;
 import com.dim.RestaurantManager.repository.RoleRepository;
 import com.dim.RestaurantManager.service.exceptions.EntityNotFoundException;
 import com.dim.RestaurantManager.utils.components.ClassMapper;
+import com.dim.RestaurantManager.model.view.CheckoutOrderView;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -82,26 +84,47 @@ public class ClassMapperImpl implements ClassMapper {
     @Override
     public List<CookOrderView> toCookOrderView(List<Order> pendingOrders) {
         return pendingOrders.stream().map(o ->
-                new CookOrderView()
-                        .setId(o.getId())
-                        .setName(o.getItem().getName())
-                        .setDescription(o.getNotes())
-                        .setImageUrl(o.getItem().getImageUrl()))
+                        new CookOrderView()
+                                .setId(o.getId())
+                                .setName(o.getItem().getName())
+                                .setDescription(o.getNotes())
+                                .setImageUrl(o.getItem().getImageUrl()))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<WaiterOrderView> toWaiterOrderView(List<Order> orders) {
         return orders.stream().map(o ->
-                new WaiterOrderView()
-                .setId(o.getId())
-                .setName(o.getItem().getName())
-                .setDescription(o.getNotes())
-                .setImageUrl(o.getItem().getImageUrl())
-                .setTableView(
-                        new FoodTableView()
-                                .setNumber(o.getBill().getTable().getNumber())
-                                .setDescription(o.getBill().getTable().getDescription())))
+                        new WaiterOrderView()
+                                .setId(o.getId())
+                                .setName(o.getItem().getName())
+                                .setDescription(o.getNotes())
+                                .setImageUrl(o.getItem().getImageUrl())
+                                .setTableView(
+                                        new FoodTableView()
+                                                .setNumber(o.getBill().getTable().getNumber())
+                                                .setDescription(o.getBill().getTable().getDescription())))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public CheckoutOrderView toCheckoutOrderView(Order order) {
+        return new CheckoutOrderView()
+                .setOrderId(order.getId())
+                .setName(order.getItem().getName())
+                .setPrice(order.getItem().getPrice())
+                .setImageUrl(order.getItem().getImageUrl())
+                .setCheckDisabled(
+                        order.getPayer() != null &&
+                                !order.getPayer()
+                                        .getUsername()
+                                        .equals(
+                                                SecurityContextHolder
+                                                        .getContext()
+                                                        .getAuthentication()
+                                                        .getName()
+                                        )
+                )
+                .setPayer(order.getPayer() == null ? null : order.getPayer().getUsername());
     }
 }

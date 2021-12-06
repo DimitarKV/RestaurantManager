@@ -10,6 +10,7 @@ import com.dim.RestaurantManager.model.view.CookOrderView;
 import com.dim.RestaurantManager.model.view.OrderView;
 import com.dim.RestaurantManager.model.view.UserView;
 import com.dim.RestaurantManager.model.view.WaiterOrderView;
+import com.dim.RestaurantManager.model.view.CheckoutOrderView;
 
 import java.util.List;
 
@@ -29,4 +30,6 @@ public interface ClassMapper {
     List<CookOrderView> toCookOrderView(List<Order> pendingOrders);
 
     List<WaiterOrderView> toWaiterOrderView(List<Order> order);
+
+    CheckoutOrderView toCheckoutOrderView(Order order);
 }

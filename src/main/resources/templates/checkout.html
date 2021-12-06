@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="fragments/fragments::head"></head>
+<body>
+<nav th:replace="fragments/fragments::navbar"></nav>
+<script type="module" src="/js/checkoutConsole.js"></script>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6 bg-dark rounded-back mt-5">
+            <table class="table table-dark table-hover align-middle">
+                <thead>
+                <th></th>
+                <th scope="col">Image</th>
+                <th scope="col">Name</th>
+                <th scope="col">Payer</th>
+                <th scope="col">Price</th>
+                </thead>
+                <tbody id="checkout-container">
+
+                </tbody>
+
+            </table>
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+
+</div>
+</body>
+</html>

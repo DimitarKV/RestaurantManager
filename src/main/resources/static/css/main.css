@@ -37,6 +37,10 @@ form.main-form, .rounded-back {
     height: 50%;
 }
 
+.payment-item-image {
+    height: 5vh;
+}
+
 ::-webkit-scrollbar {
     position: absolute;
     width: 5px;

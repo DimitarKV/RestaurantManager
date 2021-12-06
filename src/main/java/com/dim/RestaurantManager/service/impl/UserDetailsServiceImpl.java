@@ -1,8 +1,8 @@
 package com.dim.RestaurantManager.service.impl;
 
 import com.dim.RestaurantManager.model.entity.User;
-import com.dim.RestaurantManager.model.view.FoodTableView;
 import com.dim.RestaurantManager.repository.UserRepository;
+import com.dim.RestaurantManager.service.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,11 +25,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     private UserDetails toUserDetails(User user) {
-        FoodTableView tableView = null;
-        if(user.getBill() != null)
-            tableView = new FoodTableView()
-                    .setNumber(user.getBill().getTable().getNumber())
-                    .setDescription(user.getBill().getTable().getDescription());
-        return new RestaurantUser(user.getUsername(), user.getPassword(), tableView, user.getRoles());
+        return new RestaurantUser(user.getUsername(), user.getPassword(), user.getRoles(), userRepository);
     }
 }
