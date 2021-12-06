@@ -33,8 +33,6 @@ public class TableServiceImpl implements TableService {
         this.classMapper = classMapper;
     }
 
-
-
     @Override
     public List<FoodTableView> getFreeTable() {
         return tableRepository
@@ -68,7 +66,19 @@ public class TableServiceImpl implements TableService {
         bill = billRepository.saveAndFlush(bill);
         user.setBill(bill);
         user = userRepository.saveAndFlush(user);
-        userService.updatePrincipal();
+    }
+
+    @Override
+    public void join(Integer number, RestaurantUser restaurantUser) {
+        FoodTable table = tableRepository.findByNumber(number)
+                .orElseThrow(() -> CommonErrorMessages.table(number));
+        User user = userRepository.findByUsername(restaurantUser.getUsername())
+                .orElseThrow(() -> CommonErrorMessages.username(restaurantUser.getUsername()));
+        Bill bill = table.getBill();
+        bill.getUsers().add(user);
+        bill = billRepository.saveAndFlush(bill);
+        user.setBill(bill);
+        userRepository.saveAndFlush(user);
     }
 
     @Override

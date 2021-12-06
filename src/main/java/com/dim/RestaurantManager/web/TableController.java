@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -73,18 +74,19 @@ public class TableController {
         return "redirect:/menu";
     }
 
-    // TODO
+    @Transactional
     @PostMapping("/table/join")
     public String joinTable(@Valid JoinTableBindingModel joinBindingModel,
                             BindingResult bindingResult,
-                            RedirectAttributes redirectAttributes) {
+                            RedirectAttributes redirectAttributes,
+                            @AuthenticationPrincipal RestaurantUser user) {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.joinBindingModel", bindingResult);
             redirectAttributes.addFlashAttribute("joinBindingModel", joinBindingModel);
 
             return "redirect:/table/register";
         }
-        System.out.println();
+        tableService.join(joinBindingModel.getNumber(), user);
         return "redirect:/menu";
     }
 }

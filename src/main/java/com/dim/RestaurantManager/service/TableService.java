@@ -13,4 +13,6 @@ public interface TableService {
     List<FoodTableView> getOccupiedTables();
 
     void occupy(Integer number, RestaurantUser user);
+
+    void join(Integer number, RestaurantUser user);
 }
