@@ -49,7 +49,7 @@ public class TableController {
 
     @GetMapping("/table/register")
     public String getTableRegisterPage() {
-        return "table";
+        return "table-free";
     }
 
     @PreAuthorize("!canOrder()")

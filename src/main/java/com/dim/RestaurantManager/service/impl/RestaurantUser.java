@@ -41,11 +41,11 @@ public class RestaurantUser extends User {
         return user.getBill().getTable().getNumber();
     }
 
-    public String getTableDescription() {
+    public String getTableTitle() {
         com.dim.RestaurantManager.model.entity.User user = userRepository.findByUsername(super.getUsername())
                 .orElseThrow(() -> CommonErrorMessages.username(super.getUsername()));
         if(user.getBill() == null)
             return null;
-        return user.getBill().getTable().getDescription();
+        return user.getBill().getTable().getTitle();
     }
 }

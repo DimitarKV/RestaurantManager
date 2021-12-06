@@ -1,6 +1,7 @@
 package com.dim.RestaurantManager.utils.components.impl;
 
 import com.dim.RestaurantManager.model.binding.UpdateProfileBindingModel;
+import com.dim.RestaurantManager.model.entity.FoodTable;
 import com.dim.RestaurantManager.model.entity.Order;
 import com.dim.RestaurantManager.model.entity.Role;
 import com.dim.RestaurantManager.model.entity.User;
@@ -100,10 +101,7 @@ public class ClassMapperImpl implements ClassMapper {
                                 .setName(o.getItem().getName())
                                 .setDescription(o.getNotes())
                                 .setImageUrl(o.getItem().getImageUrl())
-                                .setTableView(
-                                        new FoodTableView()
-                                                .setNumber(o.getBill().getTable().getNumber())
-                                                .setDescription(o.getBill().getTable().getDescription())))
+                                .setTableView(this.toFoodTableView(o.getBill().getTable())))
                 .collect(Collectors.toList());
     }
 
@@ -137,5 +135,14 @@ public class ClassMapperImpl implements ClassMapper {
                                         )
                 )
                 .setPayer(order.getPayer() == null ? null : order.getPayer().getUsername());
+    }
+
+    @Override
+    public FoodTableView toFoodTableView(FoodTable foodTable) {
+        return new FoodTableView()
+                .setTitle(foodTable.getTitle())
+                .setNumber(foodTable.getNumber())
+                .setImageUrl(foodTable.getImageUrl())
+                .setDescription(foodTable.getDescription());
     }
 }

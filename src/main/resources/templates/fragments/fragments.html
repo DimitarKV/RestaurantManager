@@ -24,13 +24,10 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mr-auto col-6 justify-content-start">
-                <li class="nav-item" sec:authorize="isAuthenticated() && hasRole('CUSTOMER') && !principal.canOrder()">
-                    <a class="nav-link" th:href="@{/table/register}">Маса</a>
-                </li>
                 <li sec:authorize="isAuthenticated() && hasRole('CUSTOMER') && principal.canOrder()"
                     class="nav-item">
                     <a class="nav-link" th:href="@{/user/orders}"
-                       th:text="${'Маса №' + #authentication.principal.getTableNumber()  + ' ' + #authentication.principal.getTableDescription()}"></a>
+                       th:text="${'Маса №' + #authentication.principal.getTableNumber()  + ' ' + #authentication.principal.getTableTitle()}"></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/menu}">Меню</a>

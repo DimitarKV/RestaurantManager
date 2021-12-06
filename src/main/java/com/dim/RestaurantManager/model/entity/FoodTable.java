@@ -9,8 +9,12 @@ import javax.persistence.*;
 public class FoodTable extends BaseEntity {
     @Column(nullable = false)
     private Integer number;
-    @Column(nullable = false, columnDefinition = "VARCHAR(50)")
+    @Column(nullable = false)
+    private String title;
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
+    @Column(nullable = false)
+    private String imageUrl;
     @OneToOne(mappedBy = "table")
     private Bill bill;
 
@@ -38,6 +42,24 @@ public class FoodTable extends BaseEntity {
 
     public FoodTable setDescription(String description) {
         this.description = description;
+        return this;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public FoodTable setTitle(String title) {
+        this.title = title;
+        return this;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public FoodTable setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
         return this;
     }
 }
