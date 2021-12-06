@@ -125,6 +125,17 @@ public class ClassMapperImpl implements ClassMapper {
                                                         .getName()
                                         )
                 )
+                .setChecked(
+                        order.getPayer() != null &&
+                                order.getPayer()
+                                        .getUsername()
+                                        .equals(
+                                                SecurityContextHolder
+                                                        .getContext()
+                                                        .getAuthentication()
+                                                        .getName()
+                                        )
+                )
                 .setPayer(order.getPayer() == null ? null : order.getPayer().getUsername());
     }
 }

@@ -198,12 +198,26 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void handleOrdersByUser(RestaurantUser restaurantUser, CheckedOrdersBindingModel bindingModel) {
-
+        User user = userRepository.findByUsername(restaurantUser.getUsername())
+                .orElseThrow(() -> CommonErrorMessages.username(restaurantUser.getUsername()));
+        Bill bill = user.getBill();
+        List<Order> orders = orderRepository.findOrdersByBillId(bill.getId());
+        for (Order order : orders) {
+            if (bindingModel.getOrders().contains(order.getId())) {
+                if(order.getPayer() == null)
+                    order.setPayer(user);
+            }
+            else if (order.getPayer() != null && order.getPayer().getId().equals(user.getId()))
+                order.setPayer(null);
+        }
+        orderRepository.saveAllAndFlush(orders);
     }
 
     @Override
     public void init() {
         if (orderRepository.count() == 0) {
+            RestaurantUser restaurantUser = new RestaurantUser("customer", "",
+                    List.of(new SimpleGrantedAuthority("ROLE_CUSTOMER")), null);
             User user = userRepository.findByUsername("customer").get();
 
             FoodTable table = tableRepository.findByNumber(1).get();
@@ -220,9 +234,9 @@ public class OrderServiceImpl implements OrderService {
             user.setBill(bill);
             user = userRepository.saveAndFlush(user);
 
-            order(1L, "", new RestaurantUser("customer", "",  List.of(new SimpleGrantedAuthority("ROLE_CUSTOMER")), null));
-            order(2L, "", new RestaurantUser("customer", "",  List.of(new SimpleGrantedAuthority("ROLE_CUSTOMER")), null));
-            order(3L, "", new RestaurantUser("customer", "",  List.of(new SimpleGrantedAuthority("ROLE_CUSTOMER")), null));
+            order(1L, "", restaurantUser);
+            order(2L, "", restaurantUser);
+            order(3L, "", restaurantUser);
         }
     }
 

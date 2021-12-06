@@ -5,7 +5,7 @@ let row = (data, handler) =>
     html`
         <tr>
             <th>
-                <input class="form-check-input align-middle" type="checkbox" @click=${handler} value="" id=${data.orderId} ?disabled=${data.checkDisabled}>
+                <input class="form-check-input align-middle" type="checkbox" ?checked=${data.checked} @click=${handler} value="" id=${data.orderId} ?disabled=${data.checkDisabled}>
             </th>
             <th>
                 <img class="payment-item-image align-middle"
@@ -19,7 +19,7 @@ let row = (data, handler) =>
 
 let container = document.getElementById("checkout-container");
 
-async function display() {
+async function doFetch(){
     let http = await fetch("http://91.139.199.150/user/checkout/orders");
     let json = await http.json();
     let templates = [];
@@ -28,6 +28,14 @@ async function display() {
         templates.push(row(order, handler));
     }
     render(templates, container);
+}
+
+let lastFetchDone = true;
+function display() {
+    if(lastFetchDone){
+        lastFetchDone = false;
+        doFetch().then(() => lastFetchDone = true);
+    }
 }
 
 function handler(e) {
@@ -48,5 +56,5 @@ function handler(e) {
 
 display();
 
-
+setInterval(display, 200);
 

@@ -6,6 +6,7 @@ public class CheckoutOrderView {
     private Double price;
     private String payer;
     private Boolean checkDisabled;
+    private Boolean checked;
     private String imageUrl;
 
     public Long getOrderId() {
@@ -59,6 +60,15 @@ public class CheckoutOrderView {
 
     public CheckoutOrderView setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+        return this;
+    }
+
+    public Boolean getChecked() {
+        return checked;
+    }
+
+    public CheckoutOrderView setChecked(Boolean checked) {
+        this.checked = checked;
         return this;
     }
 }

@@ -28,7 +28,7 @@ let card = (orderId, imageUrl, name, description, handler, cooking = true, handl
 let waitingContainer = document.getElementById("waitingContainer");
 let currentCookContainer = document.getElementById("currentCookContainer");
 
-async function display() {
+async function doFetch() {
     let http = await fetch("http://91.139.199.150/personnel/cook/orders");
     let json = await http.json();
     let templates = [];
@@ -44,6 +44,14 @@ async function display() {
         templates.push(card(order.id, order.imageUrl, order.name, order.description, orderReadyHandler, true, cancelOrderHandler));
     }
     render(templates, currentCookContainer);
+}
+
+let lastFetchDone = true;
+function display() {
+    if(lastFetchDone){
+        lastFetchDone = false;
+        doFetch().then(() => lastFetchDone = true);
+    }
 }
 
 function acceptHandler(e) {
@@ -63,4 +71,4 @@ function  cancelOrderHandler(e){
 
 display();
 
-setInterval(display, 500);
+setInterval(display, 200);

@@ -50,7 +50,7 @@ let statusClassMap = {
     'PAYED': {'btn-primary': true},
 }
 
-async function display() {
+async function doFetch() {
     let http = await fetch("http://91.139.199.150/user/orders-rest");
     let json = await http.json();
     let templates = [];
@@ -68,6 +68,14 @@ async function display() {
                 cancelHandler));
     }
     render(templates, container);
+}
+
+let lastFetchDone = true;
+async function display() {
+    if (lastFetchDone) {
+        lastFetchDone = false;
+        doFetch().then(() => lastFetchDone = true);
+    }
 }
 
 function cancelHandler(e) {

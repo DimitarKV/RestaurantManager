@@ -20,4 +20,5 @@ async function displayWeather() {
 
 }
 
-displayWeather();
+if(displayDiv)
+    displayWeather();
