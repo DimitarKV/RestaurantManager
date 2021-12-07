@@ -1,5 +1,6 @@
 import {html, render} from 'https://unpkg.com/lit-html?module';
 import {styleMap} from 'https://unpkg.com/lit-html/directives/style-map?module';
+import {address} from "/js/fetchApi.js";
 
 let row = (data, handler) =>
     html`
@@ -20,7 +21,7 @@ let row = (data, handler) =>
 let container = document.getElementById("checkout-container");
 
 async function doFetch(){
-    let http = await fetch("http://91.139.199.150/user/checkout/orders");
+    let http = await fetch(address + "/user/checkout/orders");
     let json = await http.json();
     let templates = [];
     console.log(json);
@@ -45,7 +46,7 @@ function handler(e) {
         orders
     };
     console.log(body);
-    fetch("http://91.139.199.150/user/checkout/check", {
+    fetch(address + "/user/checkout/check", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

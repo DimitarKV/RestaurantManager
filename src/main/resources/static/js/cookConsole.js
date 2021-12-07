@@ -1,5 +1,6 @@
 import {html, render} from 'https://unpkg.com/lit-html?module';
 import {styleMap} from 'https://unpkg.com/lit-html/directives/style-map?module';
+import {address} from "/js/fetchApi.js";
 
 let card = (orderId, imageUrl, name, description, handler, cooking = true, handler2) => html`
     <div class="col-lg-3 mt-3">
@@ -29,7 +30,7 @@ let waitingContainer = document.getElementById("waitingContainer");
 let currentCookContainer = document.getElementById("currentCookContainer");
 
 async function doFetch() {
-    let http = await fetch("http://91.139.199.150/personnel/cook/orders");
+    let http = await fetch(address + "/personnel/cook/orders");
     let json = await http.json();
     let templates = [];
     for (const order of json) {
@@ -37,7 +38,7 @@ async function doFetch() {
     }
     render(templates, waitingContainer);
 
-    http = await fetch("http://91.139.199.150/personnel/cook/current/orders");
+    http = await fetch(address + "/personnel/cook/current/orders");
     json = await http.json();
     templates = [];
     for (const order of json) {
@@ -56,17 +57,17 @@ function display() {
 
 function acceptHandler(e) {
     let orderId = e.target.parentNode.querySelector("#orderId").textContent.trim();
-    fetch("http://91.139.199.150/personnel/cook/order/" + orderId + "/accept");
+    fetch(address + "/personnel/cook/order/" + orderId + "/accept");
 }
 
 function orderReadyHandler(e) {
     let orderId = e.target.parentNode.querySelector("#orderId").textContent.trim();
-    fetch("http://91.139.199.150/personnel/cook/order/" + orderId + "/ready");
+    fetch(address + "/personnel/cook/order/" + orderId + "/ready");
 }
 
 function  cancelOrderHandler(e){
     let orderId = e.target.parentNode.querySelector("#orderId").textContent.trim();
-    fetch("http://91.139.199.150/personnel/cook/order/" + orderId + "/cancel");
+    fetch(address + "/personnel/cook/order/" + orderId + "/cancel");
 }
 
 display();

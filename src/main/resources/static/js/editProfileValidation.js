@@ -1,4 +1,5 @@
 import {validate, valid} from './validator.js';
+import {address} from "/js/fetchApi.js";
 
 let form = document.getElementById("editForm");
 let usernameField = document.getElementById("username");
@@ -69,7 +70,7 @@ async function usernameAvailabilityListener(e) {
     usernameTaken.style.display = 'none';
     usernameField.classList.remove("is-valid");
     let username = e.target.value;
-    let http = await fetch("http://localhost:8080/user/register/check/" + username);
+    let http = await fetch(address + "/user/register/check/" + username);
     let json = await http.json();
     if (json.available) {
         usernameTaken.style.display = 'none';

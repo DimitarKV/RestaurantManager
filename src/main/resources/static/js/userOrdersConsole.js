@@ -1,6 +1,7 @@
 import {html, render} from 'https://unpkg.com/lit-html?module';
 import {styleMap} from 'https://unpkg.com/lit-html/directives/style-map?module';
 import {classMap} from 'https://unpkg.com/lit-html/directives/class-map?module';
+import {address} from '/js/fetchApi.js';
 
 let card = (orderId, imageUrl, name, description, price, status, statusName, cancelable, handler) => html`
     <div class="col-lg-3 mt-3">
@@ -51,7 +52,7 @@ let statusClassMap = {
 }
 
 async function doFetch() {
-    let http = await fetch("http://91.139.199.150/user/orders-rest");
+    let http = await fetch(address + "/user/orders-rest");
     let json = await http.json();
     let templates = [];
     for (const order of json) {
@@ -80,7 +81,7 @@ async function display() {
 
 function cancelHandler(e) {
     let orderId = e.target.parentNode.querySelector("#orderId").textContent.trim();
-    fetch("http://91.139.199.150/user/order/" + orderId + "/cancel")
+    fetch(address + "/user/order/" + orderId + "/cancel")
         .then(() => display());
 }
 
