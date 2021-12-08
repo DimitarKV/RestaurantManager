@@ -22,14 +22,12 @@ public class TableServiceImpl implements TableService {
     private final TableRepository tableRepository;
     private final UserRepository userRepository;
     private final BillRepository billRepository;
-    private final UserService userService;
     private final ClassMapper classMapper;
 
-    public TableServiceImpl(TableRepository tableRepository, UserRepository userRepository, BillRepository billRepository, UserService userService, ClassMapper classMapper) {
+    public TableServiceImpl(TableRepository tableRepository, UserRepository userRepository, BillRepository billRepository, ClassMapper classMapper) {
         this.tableRepository = tableRepository;
         this.userRepository = userRepository;
         this.billRepository = billRepository;
-        this.userService = userService;
         this.classMapper = classMapper;
     }
 

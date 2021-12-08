@@ -6,7 +6,10 @@ let row = (data, handler) =>
     html`
         <tr>
             <th>
-                <input class="form-check-input align-middle" type="checkbox" ?checked=${data.checked} @click=${handler} value="" id=${data.orderId} ?disabled=${data.checkDisabled}>
+                <input class="form-check-input align-middle" type="checkbox" 
+                       ?checked=${data.checked} @click=${handler} value=${data.orderId}
+                       name="orders"
+                       id=${data.orderId} ?disabled=${data.checkDisabled}>
             </th>
             <th>
                 <img class="payment-item-image align-middle"

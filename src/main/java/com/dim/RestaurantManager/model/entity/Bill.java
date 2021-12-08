@@ -19,6 +19,7 @@ public class Bill extends BaseEntity {
     private FoodTable table;
     @Column(nullable = false)
     private LocalDateTime creationDate;
+    private Boolean payed = false;
 
     public Bill() {
         users = new ArrayList<>();
@@ -68,6 +69,15 @@ public class Bill extends BaseEntity {
 
     public Bill setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
+        return this;
+    }
+
+    public Boolean getPayed() {
+        return payed;
+    }
+
+    public Bill setPayed(Boolean payed) {
+        this.payed = payed;
         return this;
     }
 }

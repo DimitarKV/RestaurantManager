@@ -25,8 +25,7 @@ public class OrderStatusServiceImpl implements OrderStatusService {
                     new OrderStatus().setName(OrderStatusEnum.COOKING),
                     new OrderStatus().setName(OrderStatusEnum.READY),
                     new OrderStatus().setName(OrderStatusEnum.FINISHED),
-                    new OrderStatus().setName(OrderStatusEnum.TRAVELING),
-                    new OrderStatus().setName(OrderStatusEnum.PAYED)
+                    new OrderStatus().setName(OrderStatusEnum.TRAVELING)
             ));
         }
 

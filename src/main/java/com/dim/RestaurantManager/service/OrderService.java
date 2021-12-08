@@ -44,4 +44,6 @@ public interface OrderService {
     List<CheckoutOrderView> getFinishedOrders(String username);
 
     void handleOrdersByUser(RestaurantUser restaurantUser, CheckedOrdersBindingModel bindingModel);
+
+    void revokeItemsBill(CheckedOrdersBindingModel bindingModel, RestaurantUser restaurantUser);
 }

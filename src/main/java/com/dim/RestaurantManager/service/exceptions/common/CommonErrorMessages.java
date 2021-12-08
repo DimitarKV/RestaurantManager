@@ -23,4 +23,8 @@ public class CommonErrorMessages {
     public static RuntimeException notLogged() {
         return new RuntimeException("You are not logged in!");
     }
+
+    public static EntityNotFoundException role(String name) {
+        return new EntityNotFoundException("Role with number: " + name + " not found!");
+    }
 }

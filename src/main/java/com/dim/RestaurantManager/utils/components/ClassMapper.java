@@ -14,8 +14,6 @@ import java.util.List;
 public interface ClassMapper {
     UpdateProfileBindingModel toUpdateProfileBindingModel(User user);
 
-    Role toRole(RoleEnum roleEnum);
-
     UserView toUserView(User user);
 
     List<OrderView> toListOrderView(List<Order> orders);

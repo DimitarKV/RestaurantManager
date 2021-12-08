@@ -1,6 +1,7 @@
 package com.dim.RestaurantManager.service.impl;
 
 import com.dim.RestaurantManager.model.entity.*;
+import com.dim.RestaurantManager.model.entity.base.BaseEntity;
 import com.dim.RestaurantManager.model.entity.enums.OrderStatusEnum;
 import com.dim.RestaurantManager.model.view.CookOrderView;
 import com.dim.RestaurantManager.model.view.OrderView;
@@ -211,6 +212,55 @@ public class OrderServiceImpl implements OrderService {
                 order.setPayer(null);
         }
         orderRepository.saveAllAndFlush(orders);
+    }
+
+    @Override
+    public void revokeItemsBill(CheckedOrdersBindingModel bindingModel, RestaurantUser restaurantUser) {
+        User user = userRepository.findByUsername(restaurantUser.getUsername())
+                .orElseThrow(() -> CommonErrorMessages.username(restaurantUser.getUsername()));
+        Bill mainBill = user.getBill();
+        if(mainBill.getUsers().size() == 1)
+            bindingModel.setOrders(mainBill.getOrders().stream().map(BaseEntity::getId).collect(Collectors.toList()));
+
+        List<Order> orders =
+                mainBill
+                        .getOrders()
+                        .stream()
+                        .filter(o -> bindingModel.getOrders().contains(o.getId()) &&
+                                (o.getPayer() == null || o.getPayer().getId().equals(user.getId())))
+                        .collect(Collectors.toList());
+
+
+        Bill bill = new Bill()
+                .setUsers(List.of(user))
+                .setTable(mainBill.getTable())
+                .setCreationDate(LocalDateTime.now())
+                .setOrders(orders)
+                .setTotalPrice(orders
+                        .stream()
+                        .mapToDouble(o -> o.getItem().getPrice())
+                        .sum()
+                );
+        mainBill.setOrders(
+                mainBill
+                        .getOrders()
+                        .stream()
+                        .filter(o -> !orders.stream().anyMatch(m -> m.getId().equals(o.getId())))
+                        .collect(Collectors.toList())
+        );
+        mainBill.setTotalPrice(mainBill.getOrders().stream().mapToDouble(o -> o.getItem().getPrice()).sum());
+
+        bill = billRepository.saveAndFlush(bill);
+        for (Order order : orders) {
+            order.setBill(bill);
+        }
+        orderRepository.saveAllAndFlush(orders);
+        user.setBill(bill);
+        userRepository.saveAndFlush(user);
+        if(mainBill.getOrders().size() == 0)
+            billRepository.delete(mainBill);
+        else
+            billRepository.saveAndFlush(mainBill);
     }
 
     @Override

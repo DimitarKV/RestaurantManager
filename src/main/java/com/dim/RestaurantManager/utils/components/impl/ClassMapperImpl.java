@@ -20,11 +20,6 @@ import java.util.stream.Collectors;
 
 @Component
 public class ClassMapperImpl implements ClassMapper {
-    private final RoleRepository roleRepository;
-
-    public ClassMapperImpl(RoleRepository roleRepository) {
-        this.roleRepository = roleRepository;
-    }
 
     @Override
     public UpdateProfileBindingModel toUpdateProfileBindingModel(User user) {
@@ -33,13 +28,6 @@ public class ClassMapperImpl implements ClassMapper {
                 .setFirstName(user.getFirstName())
                 .setLastName(user.getLastName())
                 .setAge(user.getAge());
-    }
-
-    @Override
-    public Role toRole(RoleEnum roleEnum) {
-        return this.roleRepository
-                .findByRole(roleEnum)
-                .orElseThrow(() -> new EntityNotFoundException("Role with name: " + roleEnum + " not found!"));
     }
 
     @Override

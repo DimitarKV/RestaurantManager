@@ -37,23 +37,17 @@ public class UserServiceImpl implements UserService {
     private final UserDetailsServiceImpl userDetailsService;
     private final RoleRepository roleRepository;
     private final ClassMapper classMapper;
-    private final SessionRegistry sessionRegistry;
-    private final OrderRepository orderRepository;
-    private final OrderStatusRepository orderStatusRepository;
 
     public UserServiceImpl(UserRepository userRepository,
                            PasswordEncoder passwordEncoder,
                            UserDetailsServiceImpl userDetailsService,
                            RoleRepository roleRepository,
-                           ClassMapper classMapper, SessionRegistry sessionRegistry, OrderRepository orderRepository, OrderStatusRepository orderStatusRepository) {
+                           ClassMapper classMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userDetailsService = userDetailsService;
         this.roleRepository = roleRepository;
         this.classMapper = classMapper;
-        this.sessionRegistry = sessionRegistry;
-        this.orderRepository = orderRepository;
-        this.orderStatusRepository = orderStatusRepository;
     }
 
     @Override
@@ -61,7 +55,8 @@ public class UserServiceImpl implements UserService {
         User user = new User()
                 .setUsername(serviceModel.getUsername())
                 .setPassword(this.passwordEncoder.encode(serviceModel.getPassword()))
-                .setRoles(List.of(classMapper.toRole(RoleEnum.CUSTOMER)));
+                .setRoles(List.of(roleRepository.findByRole(RoleEnum.CUSTOMER).get()));
+
         user = this.userRepository.saveAndFlush(user);
         //TODO: find a better way of verifying that the username is actually unique
         if (user != null) {
@@ -112,7 +107,8 @@ public class UserServiceImpl implements UserService {
                 .setRoles(bindingModel
                         .getRoles()
                         .stream()
-                        .map(classMapper::toRole)
+                        .map(r -> roleRepository.findByRole(r)
+                                .orElseThrow(() -> CommonErrorMessages.role(r.name())))
                         .collect(Collectors.toList()));
         user = userRepository.saveAndFlush(user);
         if (user.getUsername().equals(SecurityContextHolder.getContext().getAuthentication().getName()))
@@ -201,12 +197,12 @@ public class UserServiceImpl implements UserService {
     }
 
     private void initUsers() {
-        Role customerRole = classMapper.toRole(RoleEnum.CUSTOMER);
-        Role hygienistRole = classMapper.toRole(RoleEnum.HYGIENIST);
-        Role waiterRole = classMapper.toRole(RoleEnum.WAITER);
-        Role cookRole = classMapper.toRole(RoleEnum.COOK);
-        Role managerRole = classMapper.toRole(RoleEnum.MANAGER);
-        Role bossRole = classMapper.toRole(RoleEnum.BOSS);
+        Role customerRole = roleRepository.findByRole(RoleEnum.CUSTOMER).get();
+        Role hygienistRole = roleRepository.findByRole(RoleEnum.HYGIENIST).get();
+        Role waiterRole = roleRepository.findByRole(RoleEnum.WAITER).get();
+        Role cookRole = roleRepository.findByRole(RoleEnum.COOK).get();
+        Role managerRole = roleRepository.findByRole(RoleEnum.MANAGER).get();
+        Role bossRole = roleRepository.findByRole(RoleEnum.BOSS).get();
 
         User customer = new User()
                 .setUsername("customer")
