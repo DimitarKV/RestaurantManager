@@ -209,6 +209,11 @@ public class UserServiceImpl implements UserService {
                 .setPassword("0cf433220d1903e32e80d3579ffdcdb21d639f80caa2a79e82ab5a4154871d4d60d1b533c5da76a0")
                 .setRoles(List.of(customerRole));
 
+        User customer2 = new User()
+                .setUsername("customer2")
+                .setPassword("0cf433220d1903e32e80d3579ffdcdb21d639f80caa2a79e82ab5a4154871d4d60d1b533c5da76a0")
+                .setRoles(List.of(customerRole));
+
         User ginka = new User()
                 .setUsername("ginka")
                 .setPassword("c3e8fa05cef1dc0b73548acf3d473c7b52150bbe13ce80adb9d42bace30204ab9a37dafb7287e5a5")
@@ -234,6 +239,6 @@ public class UserServiceImpl implements UserService {
                 .setPassword("a17668370eae32cf970297933fc0a6096d989e32e3e11726aa34479bc43ff63b3a28f7ea9da8ba80")
                 .setRoles(List.of(bossRole));
 
-        userRepository.saveAllAndFlush(List.of(customer, ginka, waiter, cook, manager, boss));
+        userRepository.saveAllAndFlush(List.of(customer, customer2, ginka, waiter, cook, manager, boss));
     }
 }

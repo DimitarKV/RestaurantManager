@@ -83,6 +83,6 @@ public class ProfileController {
 
         userService.updateUserProfile(user.getUsername(), updateProfileServiceModel);
 
-        return "redirect:/user/profile";
+        return "redirect:/";
     }
 }
