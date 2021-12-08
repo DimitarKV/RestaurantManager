@@ -55,6 +55,8 @@ public class TableServiceImpl implements TableService {
     public void occupy(Integer number, RestaurantUser restaurantUser) {
         FoodTable table = tableRepository.findByNumber(number)
                 .orElseThrow(() -> CommonErrorMessages.table(number));
+        if(table.getBill() != null)
+            throw new RuntimeException("Table already occupied!");
         User user = userRepository.findByUsername(restaurantUser.getUsername())
                 .orElseThrow(() -> CommonErrorMessages.username(restaurantUser.getUsername()));
         Bill bill = new Bill()
@@ -70,6 +72,8 @@ public class TableServiceImpl implements TableService {
     public void join(Integer number, RestaurantUser restaurantUser) {
         FoodTable table = tableRepository.findByNumber(number)
                 .orElseThrow(() -> CommonErrorMessages.table(number));
+        if(table.getBill() == null)
+            throw new RuntimeException("Table is not already occupied!");
         User user = userRepository.findByUsername(restaurantUser.getUsername())
                 .orElseThrow(() -> CommonErrorMessages.username(restaurantUser.getUsername()));
         Bill bill = table.getBill();

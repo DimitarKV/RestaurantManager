@@ -29,7 +29,9 @@ public class OrderServiceImpl implements OrderService {
     private final BillRepository billRepository;
     private final TableRepository tableRepository;
 
-    public OrderServiceImpl(UserRepository userRepository, ItemRepository itemRepository, OrderRepository orderRepository, OrderStatusRepository orderStatusRepository, ClassMapper classMapper, BillRepository billRepository, TableRepository tableRepository) {
+    public OrderServiceImpl(UserRepository userRepository, ItemRepository itemRepository,
+                            OrderRepository orderRepository, OrderStatusRepository orderStatusRepository,
+                            ClassMapper classMapper, BillRepository billRepository, TableRepository tableRepository) {
         this.userRepository = userRepository;
         this.itemRepository = itemRepository;
         this.orderRepository = orderRepository;
@@ -84,7 +86,7 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> CommonErrorMessages.order(orderId));
         User user = userRepository.findByUsername(restaurantUser.getUsername())
                 .orElseThrow(() -> CommonErrorMessages.username(restaurantUser.getUsername()));
-        return user.getBill().getId().equals(order.getBill().getId());
+        return user.getBill() != null && user.getBill().getId().equals(order.getBill().getId());
     }
 
     @Override
@@ -123,7 +125,6 @@ public class OrderServiceImpl implements OrderService {
         order.setCook(user);
         order.setStatus(orderStatusRepository.findByName(OrderStatusEnum.COOKING).get());
         orderRepository.saveAndFlush(order);
-        userRepository.saveAndFlush(user);
     }
 
     @Override
@@ -245,7 +246,7 @@ public class OrderServiceImpl implements OrderService {
                 mainBill
                         .getOrders()
                         .stream()
-                        .filter(o -> !orders.stream().anyMatch(m -> m.getId().equals(o.getId())))
+                        .filter(o -> orders.stream().noneMatch(m -> m.getId().equals(o.getId())))
                         .collect(Collectors.toList())
         );
         mainBill.setTotalPrice(mainBill.getOrders().stream().mapToDouble(o -> o.getItem().getPrice()).sum());
