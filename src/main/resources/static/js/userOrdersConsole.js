@@ -81,7 +81,7 @@ async function display() {
 
 function cancelHandler(e) {
     let orderId = e.target.parentNode.querySelector("#orderId").textContent.trim();
-    fetch(address + "/user/order/" + orderId + "/cancel")
+    fetch(address + "/user/order/" + orderId + "/cancel-rest")
         .then(() => display());
 }
 

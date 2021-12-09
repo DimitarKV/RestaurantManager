@@ -22,19 +22,19 @@ public class WaiterOrdersRestController {
     }
 
     @PreAuthorize("isWaiter()")
-    @GetMapping("/personnel/waiter/orders")
+    @GetMapping("/personnel/waiter/orders-rest")
     public ResponseEntity<List<WaiterOrderView>> getOrders() {
         return ResponseEntity.ok(orderService.getReadyOrders());
     }
 
     @PreAuthorize("isWaiter()")
-    @GetMapping("/personnel/waiter/current/orders")
+    @GetMapping("/personnel/waiter/current/orders-rest")
     public ResponseEntity<List<WaiterOrderView>> getCurrentCookOrders(@AuthenticationPrincipal RestaurantUser restaurantUser) {
         return ResponseEntity.ok(orderService.getCurrentWaiterOrders(restaurantUser));
     }
 
     @PreAuthorize("isWaiter()")
-    @GetMapping("/personnel/waiter/order/{orderId}/accept")
+    @GetMapping("/personnel/waiter/order/{orderId}/accept-rest")
     public ResponseEntity acceptOrder(@PathVariable(name = "orderId") String orderId,
                                       @AuthenticationPrincipal RestaurantUser user) {
         orderService.acceptWaiterOrder(user, Long.parseLong(orderId));
@@ -42,14 +42,14 @@ public class WaiterOrdersRestController {
     }
 
     @PreAuthorize("isWaiter()")
-    @GetMapping("/personnel/waiter/order/{orderId}/ready")
+    @GetMapping("/personnel/waiter/order/{orderId}/ready-rest")
     public ResponseEntity readyOrder(@PathVariable(name = "orderId") String orderId) {
         orderService.finishWaiterOrder(Long.parseLong(orderId));
         return ResponseEntity.ok().build();
     }
 
     @PreAuthorize("isWaiter()")
-    @GetMapping("/personnel/waiter/order/{orderId}/cancel")
+    @GetMapping("/personnel/waiter/order/{orderId}/cancel-rest")
     public ResponseEntity cancelOrder(@PathVariable(name = "orderId") String orderId) {
         orderService.cancelWaiterOrder(Long.parseLong(orderId));
         return ResponseEntity.ok().build();

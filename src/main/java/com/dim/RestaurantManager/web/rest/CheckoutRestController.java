@@ -21,12 +21,12 @@ public class CheckoutRestController {
         this.orderService = orderService;
     }
 
-    @GetMapping("/user/checkout/orders")
+    @GetMapping("/user/checkout/orders-rest")
     public ResponseEntity<List<CheckoutOrderView>> getOrders(@AuthenticationPrincipal RestaurantUser restaurantUser){
         return ResponseEntity.ok(orderService.getFinishedOrders(restaurantUser.getUsername()));
     }
 
-    @PostMapping("/user/checkout/check")
+    @PostMapping("/user/checkout/check-rest")
     public ResponseEntity setCheckedOrders(@AuthenticationPrincipal RestaurantUser restaurantUser,
                                            @RequestBody CheckedOrdersBindingModel bindingModel){
         orderService.handleOrdersByUser(restaurantUser, bindingModel);

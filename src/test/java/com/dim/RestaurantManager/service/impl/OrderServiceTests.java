@@ -221,5 +221,4 @@ public class OrderServiceTests {
         Assertions.assertEquals(testOrder.getItem().getName(), waiterOrderView.getName());
         Assertions.assertEquals(testOrder.getItem().getImageUrl(), waiterOrderView.getImageUrl());
     }
-
 }

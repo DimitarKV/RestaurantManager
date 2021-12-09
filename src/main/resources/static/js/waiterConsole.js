@@ -30,7 +30,7 @@ let waitingContainer = document.getElementById("waitingContainer");
 let currentWaiterContainer = document.getElementById("currentWaiterContainer");
 
 async function doFetch(){
-    let http = await fetch(address + "/personnel/waiter/orders");
+    let http = await fetch(address + "/personnel/waiter/orders-rest");
     let json = await http.json();
     let templates = [];
     for (const order of json) {
@@ -38,7 +38,7 @@ async function doFetch(){
     }
     render(templates, waitingContainer);
 
-    http = await fetch(address + "/personnel/waiter/current/orders");
+    http = await fetch(address + "/personnel/waiter/current/orders-rest");
     json = await http.json();
 
     templates = [];
@@ -58,17 +58,17 @@ async function display() {
 
 function acceptHandler(e) {
     let orderId = e.target.parentNode.querySelector("#orderId").textContent.trim();
-    fetch(address + "/personnel/waiter/order/" + orderId + "/accept");
+    fetch(address + "/personnel/waiter/order/" + orderId + "/accept-rest");
 }
 
 function orderReadyHandler(e) {
     let orderId = e.target.parentNode.querySelector("#orderId").textContent.trim();
-    fetch(address + "/personnel/waiter/order/" + orderId + "/ready");
+    fetch(address + "/personnel/waiter/order/" + orderId + "/ready-rest");
 }
 
 function  cancelOrderHandler(e){
     let orderId = e.target.parentNode.querySelector("#orderId").textContent.trim();
-    fetch(address + "/personnel/waiter/order/" + orderId + "/cancel");
+    fetch(address + "/personnel/waiter/order/" + orderId + "/cancel-rest");
 }
 
 display();

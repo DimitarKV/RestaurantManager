@@ -8,17 +8,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class UsernameAvailabilityController {
+public class UsernameAvailabilityRestController {
 
     private final UserService userService;
 
-    public UsernameAvailabilityController(UserService userService) {
+    public UsernameAvailabilityRestController(UserService userService) {
         this.userService = userService;
     }
 
     // NOTE: This feature is for demonstration purposes only.
     // In a production app without additional security this is considered to be a security breach.
-    @GetMapping("/user/register/check/{username}")
+    @GetMapping("/user/register/check-rest/{username}")
     public ResponseEntity<UsernameAvailabilityResponse> usernameAvailable(@PathVariable(name = "username") String username) throws InterruptedException {
         Thread.sleep(1000);
         if (this.userService.usernameExists(username))

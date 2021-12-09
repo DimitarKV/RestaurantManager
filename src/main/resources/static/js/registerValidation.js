@@ -48,7 +48,7 @@ async function usernameAvailabilityListener(e) {
     usernameTaken.style.display = 'none';
     usernameField.classList.remove("is-valid");
     let username = e.target.value;
-    let http = await fetch(address + "/user/register/check/" + username);
+    let http = await fetch(address + "/user/register/check-rest/" + username);
     let json = await http.json();
     if (json.available) {
         usernameTaken.style.display = 'none';

@@ -24,7 +24,7 @@ let row = (data, handler) =>
 let container = document.getElementById("checkout-container");
 
 async function doFetch(){
-    let http = await fetch(address + "/user/checkout/orders");
+    let http = await fetch(address + "/user/checkout/orders-rest");
     let json = await http.json();
     let templates = [];
     console.log(json);
@@ -49,7 +49,7 @@ function handler(e) {
         orders
     };
     console.log(body);
-    fetch(address + "/user/checkout/check", {
+    fetch(address + "/user/checkout/check-rest", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
