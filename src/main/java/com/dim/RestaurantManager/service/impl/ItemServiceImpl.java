@@ -1,5 +1,6 @@
 package com.dim.RestaurantManager.service.impl;
 
+import com.dim.RestaurantManager.model.binding.ManagerEditItemBindingModel;
 import com.dim.RestaurantManager.model.entity.Item;
 import com.dim.RestaurantManager.model.entity.MenuItem;
 import com.dim.RestaurantManager.model.service.ManagerAddItemServiceModel;
@@ -24,22 +25,6 @@ public class ItemServiceImpl implements ItemService {
         this.menuRepository = menuRepository;
     }
 
-
-    @Override
-    public void addItem(ManagerAddItemServiceModel serviceModel) {
-        Item item = new Item()
-                .setName(serviceModel.getItemName())
-                .setPrice(serviceModel.getItemPrice())
-                .setDescription(serviceModel.getItemDescription())
-                .setImageUrl(serviceModel.getImageUrl());
-        item = itemRepository.saveAndFlush(item);
-        MenuItem menuItem = new MenuItem()
-                .setItem(item)
-                .setCategory(categoryRepository.findById(serviceModel.getCategoryId())
-                        .orElseThrow(() -> CommonErrorMessages.category(serviceModel.getCategoryId())));
-        menuRepository.saveAndFlush(menuItem);
-    }
-
     @Override
     public void init() {
         if (this.itemRepository.count() == 0) {
@@ -60,14 +45,5 @@ public class ItemServiceImpl implements ItemService {
             ));
         }
 
-    }
-
-    @Override
-    public void deleteItem(Long itemId) {
-        MenuItem menuItem = itemRepository.findById(itemId)
-                .orElseThrow(() -> CommonErrorMessages.item(itemId))
-                .getMenuItem();
-        menuRepository.deleteById(menuItem.getId());
-        itemRepository.deleteById(itemId);
     }
 }

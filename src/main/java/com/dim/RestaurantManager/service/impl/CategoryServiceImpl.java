@@ -42,4 +42,9 @@ public class CategoryServiceImpl implements CategoryService {
     public boolean hasCategory(Long value) {
         return categoryRepository.findById(value).isPresent();
     }
+
+    @Override
+    public List<Category> findAll() {
+        return categoryRepository.findAll();
+    }
 }

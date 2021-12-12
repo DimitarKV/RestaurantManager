@@ -1,10 +1,12 @@
 package com.dim.RestaurantManager.utils.components;
 
 import com.dim.RestaurantManager.model.binding.ManagerAddItemBindingModel;
+import com.dim.RestaurantManager.model.binding.ManagerEditItemBindingModel;
 import com.dim.RestaurantManager.model.binding.UpdateProfileBindingModel;
 import com.dim.RestaurantManager.model.entity.*;
 import com.dim.RestaurantManager.model.entity.enums.RoleEnum;
 import com.dim.RestaurantManager.model.service.ManagerAddItemServiceModel;
+import com.dim.RestaurantManager.model.service.ManagerEditItemServiceModel;
 import com.dim.RestaurantManager.model.service.UpdateProfileServiceModel;
 import com.dim.RestaurantManager.model.view.*;
 
@@ -34,4 +36,8 @@ public interface ClassMapper {
     ItemView toItemView(MenuItem item);
 
     ManagerAddItemServiceModel toManagerAddItemServiceModel(ManagerAddItemBindingModel bindingModel);
+
+    ManagerEditItemBindingModel toManagerEditItemBindingModel(MenuItem menuItem);
+
+    ManagerEditItemServiceModel toManagerEditItemServiceModel(ManagerEditItemBindingModel bindingModel, Long id);
 }

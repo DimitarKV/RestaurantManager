@@ -5,18 +5,23 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class ManagerAddItemBindingModel {
     @CategoryExists
     private Long categoryId;
     @URL
+    @NotBlank
     private String imageUrl;
-    @Length(min = 4, max = 20)
+    @Length(min = 4, max = 30)
+    @NotBlank
     private String itemName;
     @Min(0)
+    @NotNull
     private Double itemPrice;
     @Length(min = 10)
+    @NotBlank
     private String itemDescription;
 
     public Long getCategoryId() {

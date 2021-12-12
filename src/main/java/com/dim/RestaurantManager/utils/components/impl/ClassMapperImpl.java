@@ -1,10 +1,12 @@
 package com.dim.RestaurantManager.utils.components.impl;
 
 import com.dim.RestaurantManager.model.binding.ManagerAddItemBindingModel;
+import com.dim.RestaurantManager.model.binding.ManagerEditItemBindingModel;
 import com.dim.RestaurantManager.model.binding.UpdateProfileBindingModel;
 import com.dim.RestaurantManager.model.entity.*;
 import com.dim.RestaurantManager.model.entity.enums.RoleEnum;
 import com.dim.RestaurantManager.model.service.ManagerAddItemServiceModel;
+import com.dim.RestaurantManager.model.service.ManagerEditItemServiceModel;
 import com.dim.RestaurantManager.model.service.UpdateProfileServiceModel;
 import com.dim.RestaurantManager.model.view.*;
 import com.dim.RestaurantManager.repository.RoleRepository;
@@ -175,5 +177,28 @@ public class ClassMapperImpl implements ClassMapper {
                 .setItemPrice(bindingModel.getItemPrice())
                 .setItemDescription(bindingModel.getItemDescription())
                 .setImageUrl(bindingModel.getImageUrl());
+    }
+
+    @Override
+    public ManagerEditItemBindingModel toManagerEditItemBindingModel(MenuItem menuItem) {
+        return new ManagerEditItemBindingModel()
+                .setId(menuItem.getId())
+                .setName(menuItem.getItem().getName())
+                .setDescription(menuItem.getItem().getDescription())
+                .setPrice(menuItem.getItem().getPrice())
+                .setImageUrl(menuItem.getItem().getImageUrl())
+                .setCategoryId(menuItem.getCategory().getId());
+
+    }
+
+    @Override
+    public ManagerEditItemServiceModel toManagerEditItemServiceModel(ManagerEditItemBindingModel bindingModel, Long id) {
+        return new ManagerEditItemServiceModel()
+                .setId(id)
+                .setName(bindingModel.getName())
+                .setDescription(bindingModel.getDescription())
+                .setPrice(bindingModel.getPrice())
+                .setImageUrl(bindingModel.getImageUrl())
+                .setCategoryId(bindingModel.getCategoryId());
     }
 }
