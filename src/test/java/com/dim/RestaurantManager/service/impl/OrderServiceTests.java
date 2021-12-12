@@ -34,6 +34,8 @@ public class OrderServiceTests {
     private BillRepository billRepository;
     @Mock
     private TableRepository tableRepository;
+    @Mock
+    private ArchivedBillRepository archivedBillRepository;
 
     private User testUser;
     private RestaurantUser restaurantUser;
@@ -52,8 +54,8 @@ public class OrderServiceTests {
                         orderStatusRepository,
                         new ClassMapperImpl(),
                         billRepository,
-                        tableRepository
-                );
+                        tableRepository,
+                        archivedBillRepository);
 
         testUser = new User()
                 .setUsername("mitko")

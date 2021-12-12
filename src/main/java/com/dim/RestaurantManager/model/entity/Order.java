@@ -12,8 +12,10 @@ import java.time.LocalDateTime;
 public class Order extends BaseEntity {
     @ManyToOne(optional = false)
     private Item item;
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Bill bill;
+    @ManyToOne
+    private ArchivedBill archivedBill;
     @ManyToOne(optional = false)
     private OrderStatus status;
     @Column(nullable = false)
@@ -95,6 +97,15 @@ public class Order extends BaseEntity {
 
     public Order setPayer(User payer) {
         this.payer = payer;
+        return this;
+    }
+
+    public ArchivedBill getArchivedBill() {
+        return archivedBill;
+    }
+
+    public Order setArchivedBill(ArchivedBill archivedBill) {
+        this.archivedBill = archivedBill;
         return this;
     }
 }

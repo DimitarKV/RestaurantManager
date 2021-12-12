@@ -16,6 +16,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,10 +30,12 @@ public class OrderServiceImpl implements OrderService {
     private final ClassMapper classMapper;
     private final BillRepository billRepository;
     private final TableRepository tableRepository;
+    private final ArchivedBillRepository archivedBillRepository;
 
     public OrderServiceImpl(UserRepository userRepository, ItemRepository itemRepository,
                             OrderRepository orderRepository, OrderStatusRepository orderStatusRepository,
-                            ClassMapper classMapper, BillRepository billRepository, TableRepository tableRepository) {
+                            ClassMapper classMapper, BillRepository billRepository,
+                            TableRepository tableRepository, ArchivedBillRepository archivedBillRepository) {
         this.userRepository = userRepository;
         this.itemRepository = itemRepository;
         this.orderRepository = orderRepository;
@@ -39,6 +43,7 @@ public class OrderServiceImpl implements OrderService {
         this.classMapper = classMapper;
         this.billRepository = billRepository;
         this.tableRepository = tableRepository;
+        this.archivedBillRepository = archivedBillRepository;
     }
 
     @Override
@@ -192,6 +197,8 @@ public class OrderServiceImpl implements OrderService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> CommonErrorMessages.username(username));
         Bill bill = user.getBill();
+        if(bill == null)
+            return new ArrayList<>();
         return orderRepository
                 .findOrdersByBillId(bill.getId())
                 .stream()
@@ -206,10 +213,9 @@ public class OrderServiceImpl implements OrderService {
         List<Order> orders = orderRepository.findOrdersByBillId(bill.getId());
         for (Order order : orders) {
             if (bindingModel.getOrders().contains(order.getId())) {
-                if(order.getPayer() == null)
+                if (order.getPayer() == null)
                     order.setPayer(user);
-            }
-            else if (order.getPayer() != null && order.getPayer().getId().equals(user.getId()))
+            } else if (order.getPayer() != null && order.getPayer().getId().equals(user.getId()))
                 order.setPayer(null);
         }
         orderRepository.saveAllAndFlush(orders);
@@ -220,7 +226,7 @@ public class OrderServiceImpl implements OrderService {
         User user = userRepository.findByUsername(restaurantUser.getUsername())
                 .orElseThrow(() -> CommonErrorMessages.username(restaurantUser.getUsername()));
         Bill mainBill = user.getBill();
-        if(mainBill.getUsers().size() == 1)
+        if (mainBill.getUsers().size() == 1)
             bindingModel.setOrders(mainBill.getOrders().stream().map(BaseEntity::getId).collect(Collectors.toList()));
 
         List<Order> orders =
@@ -232,17 +238,26 @@ public class OrderServiceImpl implements OrderService {
                         .collect(Collectors.toList());
 
 
-        Bill bill = new Bill()
-                .setUsers(List.of(user))
-                .setTable(mainBill.getTable())
-                .setCreationDate(LocalDateTime.now())
+        ArchivedBill archivedBill = new ArchivedBill()
+                .setArchivedOn(LocalDateTime.now())
                 .setOrders(orders)
-                .setTotalPrice(orders
-                        .stream()
-                        .mapToDouble(o -> o.getItem().getPrice())
-                        .sum()
+                .setTable(mainBill.getTable())
+                .setTotalPrice(
+                        orders
+                                .stream()
+                                .mapToDouble(o -> o.getItem().getPrice())
+                                .sum()
                 )
-                .setForPrinting(true);
+                .setUser(user)
+                .setPrinted(false);
+        archivedBill = archivedBillRepository.saveAndFlush(archivedBill);
+
+        for (Order order : orders) {
+            order.setBill(null);
+            order.setArchivedBill(archivedBill);
+        }
+        orderRepository.saveAllAndFlush(orders);
+
         mainBill.setOrders(
                 mainBill
                         .getOrders()
@@ -251,18 +266,20 @@ public class OrderServiceImpl implements OrderService {
                         .collect(Collectors.toList())
         );
         mainBill.setTotalPrice(mainBill.getOrders().stream().mapToDouble(o -> o.getItem().getPrice()).sum());
-
-        bill = billRepository.saveAndFlush(bill);
-        for (Order order : orders) {
-            order.setBill(bill);
-        }
-        orderRepository.saveAllAndFlush(orders);
-        user.setBill(bill);
+        mainBill.setUsers(mainBill.getUsers().stream().filter(u -> !u.getId().equals(user.getId())).collect(Collectors.toList()));
+        user.setBill(null);
+        user.getArchivedBills().add(archivedBill);
         userRepository.saveAndFlush(user);
-        if(mainBill.getOrders().size() == 0)
+
+        if (mainBill.getOrders().size() == 0) {
+            tableRepository.saveAndFlush(
+                    tableRepository
+                            .findByNumber(mainBill.getTable().getNumber())
+                            .orElseThrow(() -> CommonErrorMessages.table(mainBill.getTable().getNumber())));
             billRepository.delete(mainBill);
-        else
+        } else
             billRepository.saveAndFlush(mainBill);
+
     }
 
     @Override
@@ -297,8 +314,17 @@ public class OrderServiceImpl implements OrderService {
         User user = userRepository
                 .findByUsername(restaurantUser.getUsername())
                 .orElseThrow(() -> CommonErrorMessages.username(restaurantUser.getUsername()));
-        if (user.getBill() == null)
-            return null;
-        return classMapper.toListOrderView(orderRepository.getOrdersByBillId(user.getBill().getId()));
+        List<ArchivedBill> archivedBills = archivedBillRepository.findAllByUserId(user.getId());
+        List<Order> allOrders =
+                archivedBills
+                        .stream()
+                        .map(ArchivedBill::getOrders)
+                        .flatMap(Collection::stream)
+                        .collect(Collectors.toList());
+
+        if (user.getBill() != null)
+            allOrders.addAll(orderRepository.findOrdersByBillId(user.getBill().getId()));
+
+        return classMapper.toListOrderView(allOrders);
     }
 }

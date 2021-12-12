@@ -3,6 +3,7 @@ package com.dim.RestaurantManager.model.entity;
 import com.dim.RestaurantManager.model.entity.base.BaseEntity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,7 +26,7 @@ public class User extends BaseEntity {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "bill_id")
     )
-    private List<ArchivedBill> archivedBills;
+    private List<ArchivedBill> archivedBills = new ArrayList<>();
 
     public String getFirstName() {
         return firstName;

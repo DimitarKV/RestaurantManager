@@ -35,7 +35,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
     protected void configure(HttpSecurity http) throws Exception {
         http
 
-                .csrf().ignoringAntMatchers("/user/checkout/check").and()
+                .csrf().ignoringAntMatchers("/user/checkout/check-rest").and()
 
                 .authorizeRequests()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()

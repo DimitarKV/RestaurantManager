@@ -11,28 +11,28 @@ import java.util.List;
 @Entity
 @Table
 public class ArchivedBill extends BaseEntity {
-    @ManyToMany(mappedBy = "archivedBills")
-    private List<User> users;
-    @OneToMany(mappedBy = "bill")
+    @ManyToOne
+    private User user;
+    @OneToMany(mappedBy = "archivedBill")
     private List<Order> orders;
     private Double totalPrice;
     @ManyToOne(optional = false)
     private FoodTable table;
     @Column(nullable = false)
     private LocalDateTime archivedOn;
+    private Boolean printed;
 
     public ArchivedBill() {
-        users = new ArrayList<>();
         orders = new ArrayList<>();
         totalPrice = 0.0;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public User getUser() {
+        return user;
     }
 
-    public ArchivedBill setUsers(List<User> users) {
-        this.users = users;
+    public ArchivedBill setUser(User user) {
+        this.user = user;
         return this;
     }
 
@@ -69,6 +69,15 @@ public class ArchivedBill extends BaseEntity {
 
     public ArchivedBill setArchivedOn(LocalDateTime archivedOn) {
         this.archivedOn = archivedOn;
+        return this;
+    }
+
+    public Boolean getPrinted() {
+        return printed;
+    }
+
+    public ArchivedBill setPrinted(Boolean printed) {
+        this.printed = printed;
         return this;
     }
 }
