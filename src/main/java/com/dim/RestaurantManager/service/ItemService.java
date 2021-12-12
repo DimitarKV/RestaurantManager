@@ -6,4 +6,6 @@ public interface ItemService {
     void addItem(ManagerAddItemServiceModel toManagerAddItemServiceModel);
 
     void init();
+
+    void deleteItem(Long itemId);
 }

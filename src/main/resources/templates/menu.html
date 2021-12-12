@@ -80,10 +80,10 @@
                             Описание
                         </a>
                         <div sec:authorize="isAuthenticated() && hasRole('MANAGER')">
-                            <a class="btn btn-primary mt-3" th:href="@{/menu/order/{orderId}/edit(orderId = *{id})}">
+                            <a class="btn btn-primary mt-3" th:href="@{/menu/item/{itemId}/edit(itemId = *{id})}">
                                 Промяна
                             </a>
-                            <form th:action="@{/manager/order/delete}" th:method="delete">
+                            <form th:action="@{/manager/item/{id}/delete(id=*{id})}" th:method="delete">
                                 <input type="submit" class="btn btn-primary mt-3" value="Изтрий">
                             </form>
                         </div>

@@ -61,4 +61,13 @@ public class ItemServiceImpl implements ItemService {
         }
 
     }
+
+    @Override
+    public void deleteItem(Long itemId) {
+        MenuItem menuItem = itemRepository.findById(itemId)
+                .orElseThrow(() -> CommonErrorMessages.item(itemId))
+                .getMenuItem();
+        menuRepository.deleteById(menuItem.getId());
+        itemRepository.deleteById(itemId);
+    }
 }

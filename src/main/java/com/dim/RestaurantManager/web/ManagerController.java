@@ -7,9 +7,7 @@ import com.dim.RestaurantManager.utils.components.ClassMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -59,8 +57,13 @@ public class ManagerController {
 
         itemService.addItem(classMapper.toManagerAddItemServiceModel(bindingModel));
 
+        return "redirect:/menu";
+    }
 
-
+    @PreAuthorize("isManager()")
+    @DeleteMapping("/manager/item/{id}/delete")
+    public String deleteItem(@PathVariable(name = "id") Long itemId) {
+        itemService.deleteItem(itemId);
         return "redirect:/menu";
     }
 }
