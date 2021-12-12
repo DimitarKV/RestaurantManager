@@ -11,52 +11,75 @@
             <div class="card-body">
                 <form th:object="${bindingModel}" th:action="@{/manager/item/add}" th:method="post">
 
-                    <input th:value="*{categoryId}" id="categoryId" type="text" class="mt-3" hidden>
+                    <input th:field="*{categoryId}" id="categoryId" type="text" class="mt-3" hidden>
 
-                    <div class="form-floating mt-3">
-                        <input th:value="*{imageUrl}"
-                               name="imageUrl"
-                               id="imageUrl"
-                               class="form-control"
-                               placeholder="Снимка"
-                               type="url">
-                        <label for="imageUrl">Снимка</label>
+                    <div>
+                        <div class="form-floating mt-3">
+                            <input th:field="*{imageUrl}"
+                                   th:errorclass="is-invalid"
+                                   name="imageUrl"
+                                   id="imageUrl"
+                                   class="form-control"
+                                   placeholder="Снимка"
+                                   required="required">
+                            <label for="imageUrl">Снимка</label>
+                            <div class="invalid-feedback">
+                                Това трябва да е адрес на снимка!
+                            </div>
+                        </div>
+
                     </div>
 
+
                     <div class="form-floating mt-3">
-                        <input th:value="*{itemName}"
+                        <input th:field="*{itemName}"
+                               th:errorclass="is-invalid"
                                name="itemName"
                                id="itemName"
                                class="form-control"
                                type="text"
                                placeholder="Име"
+                               required="required"
                                minlength="4"
                                maxlength="20">
                         <label for="itemName">Име</label>
+                        <div class="invalid-feedback">
+                            Името трябва да е между 4 и 20 символа!
+                        </div>
                     </div>
 
                     <div class="form-floating mt-3">
-                        <input th:value="*{itemPrice}"
+                        <input th:field="*{itemPrice}"
+                               th:errorclass="is-invalid"
                                name="itemPrice"
                                id="itemPrice"
                                class="form-control"
                                type="number"
                                placeholder="Цена"
+                               required="required"
                                step=".01"
                                min="0">
                         <label for="itemPrice">Цена</label>
+                        <div class="invalid-feedback">
+                            Цената е задължителна!
+                        </div>
                     </div>
 
                     <div class="form-floating mt-3">
-                                <textarea th:value="*{itemDescription}"
+                                <textarea th:field="*{itemDescription}"
+                                          th:errorclass="is-invalid"
                                           name="itemDescription"
                                           class="form-control"
                                           placeholder="Описание"
                                           id="itemDescription"
                                           style="height: 100px"
                                           minlength="10"
+                                          required="required"
                                 ></textarea>
                         <label for="itemDescription">Описание</label>
+                        <div class="invalid-feedback">
+                            Описанието трябва да е минимум 10 знака!
+                        </div>
                     </div>
 
                     <input type="submit" class="btn btn-primary mt-3" value="Добави">

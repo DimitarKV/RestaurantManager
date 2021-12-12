@@ -1,29 +1,17 @@
-package com.dim.RestaurantManager.model.binding;
+package com.dim.RestaurantManager.model.service;
 
-import com.dim.RestaurantManager.model.validator.annotations.CategoryExists;
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.URL;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
-
-public class ManagerAddItemBindingModel {
-    @CategoryExists
+public class ManagerAddItemServiceModel {
     private Long categoryId;
-    @URL
     private String imageUrl;
-    @Length(min = 4, max = 20)
     private String itemName;
-    @Min(0)
     private Double itemPrice;
-    @Length(min = 10)
     private String itemDescription;
 
     public Long getCategoryId() {
         return categoryId;
     }
 
-    public ManagerAddItemBindingModel setCategoryId(Long categoryId) {
+    public ManagerAddItemServiceModel setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
         return this;
     }
@@ -32,7 +20,7 @@ public class ManagerAddItemBindingModel {
         return imageUrl;
     }
 
-    public ManagerAddItemBindingModel setImageUrl(String imageUrl) {
+    public ManagerAddItemServiceModel setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
         return this;
     }
@@ -41,7 +29,7 @@ public class ManagerAddItemBindingModel {
         return itemName;
     }
 
-    public ManagerAddItemBindingModel setItemName(String itemName) {
+    public ManagerAddItemServiceModel setItemName(String itemName) {
         this.itemName = itemName;
         return this;
     }
@@ -50,7 +38,7 @@ public class ManagerAddItemBindingModel {
         return itemPrice;
     }
 
-    public ManagerAddItemBindingModel setItemPrice(Double itemPrice) {
+    public ManagerAddItemServiceModel setItemPrice(Double itemPrice) {
         this.itemPrice = itemPrice;
         return this;
     }
@@ -59,7 +47,7 @@ public class ManagerAddItemBindingModel {
         return itemDescription;
     }
 
-    public ManagerAddItemBindingModel setItemDescription(String itemDescription) {
+    public ManagerAddItemServiceModel setItemDescription(String itemDescription) {
         this.itemDescription = itemDescription;
         return this;
     }

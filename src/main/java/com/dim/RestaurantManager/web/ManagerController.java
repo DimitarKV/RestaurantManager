@@ -2,6 +2,8 @@ package com.dim.RestaurantManager.web;
 
 import com.dim.RestaurantManager.model.binding.ManagerAddItemBindingModel;
 import com.dim.RestaurantManager.service.CategoryService;
+import com.dim.RestaurantManager.service.ItemService;
+import com.dim.RestaurantManager.utils.components.ClassMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -16,9 +18,13 @@ import javax.validation.Valid;
 public class ManagerController {
 
     private final CategoryService categoryService;
+    private final ItemService itemService;
+    private final ClassMapper classMapper;
 
-    public ManagerController(CategoryService categoryService) {
+    public ManagerController(CategoryService categoryService, ItemService itemService, ClassMapper classMapper) {
         this.categoryService = categoryService;
+        this.itemService = itemService;
+        this.classMapper = classMapper;
     }
 
     @PreAuthorize("isManager()")
@@ -50,6 +56,9 @@ public class ManagerController {
 
             return "redirect:/manager/item/add";
         }
+
+        itemService.addItem(classMapper.toManagerAddItemServiceModel(bindingModel));
+
 
 
         return "redirect:/menu";

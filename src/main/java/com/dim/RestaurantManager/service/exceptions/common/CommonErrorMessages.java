@@ -20,11 +20,18 @@ public class CommonErrorMessages {
         return new EntityNotFoundException("Table with number: " + tableNumber + " not found!");
     }
 
+    public static EntityNotFoundException category(Long categoryId) {
+        return new EntityNotFoundException("Category with id: " + categoryId + " not found!");
+    }
+
     public static RuntimeException notLogged() {
         return new RuntimeException("You are not logged in!");
     }
 
+
+
     public static EntityNotFoundException role(String name) {
         return new EntityNotFoundException("Role with number: " + name + " not found!");
     }
+
 }

@@ -1,8 +1,10 @@
 package com.dim.RestaurantManager.utils.components.impl;
 
+import com.dim.RestaurantManager.model.binding.ManagerAddItemBindingModel;
 import com.dim.RestaurantManager.model.binding.UpdateProfileBindingModel;
 import com.dim.RestaurantManager.model.entity.*;
 import com.dim.RestaurantManager.model.entity.enums.RoleEnum;
+import com.dim.RestaurantManager.model.service.ManagerAddItemServiceModel;
 import com.dim.RestaurantManager.model.service.UpdateProfileServiceModel;
 import com.dim.RestaurantManager.model.view.*;
 import com.dim.RestaurantManager.repository.RoleRepository;
@@ -163,5 +165,15 @@ public class ClassMapperImpl implements ClassMapper {
                 .setName(item.getItem().getName())
                 .setPrice(item.getItem().getPrice())
                 .setImageUrl(item.getItem().getImageUrl());
+    }
+
+    @Override
+    public ManagerAddItemServiceModel toManagerAddItemServiceModel(ManagerAddItemBindingModel bindingModel) {
+        return new ManagerAddItemServiceModel()
+                .setCategoryId(bindingModel.getCategoryId())
+                .setItemName(bindingModel.getItemName())
+                .setItemPrice(bindingModel.getItemPrice())
+                .setItemDescription(bindingModel.getItemDescription())
+                .setImageUrl(bindingModel.getImageUrl());
     }
 }
