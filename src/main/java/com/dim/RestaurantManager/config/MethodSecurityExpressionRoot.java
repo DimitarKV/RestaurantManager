@@ -25,6 +25,14 @@ public class MethodSecurityExpressionRoot extends SecurityExpressionRoot
         return false;
     }
 
+    public boolean isManager(){
+        RestaurantUser user = currentUser();
+        if(user != null){
+            return userService.isManager(user.getUsername());
+        }
+        return false;
+    }
+
     public boolean isCook(){
         RestaurantUser user = currentUser();
         if(user != null){

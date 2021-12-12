@@ -139,6 +139,13 @@ public class UserServiceImpl implements UserService {
                 .getRoles().stream().anyMatch(r -> r.getRole() == RoleEnum.WAITER);
     }
 
+    @Override
+    public boolean isManager(String username) {
+        return userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> CommonErrorMessages.username(username))
+                .getRoles().stream().anyMatch(r -> r.getRole() == RoleEnum.MANAGER);
+    }
 
 
     @Override

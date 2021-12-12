@@ -1,10 +1,11 @@
 package com.dim.RestaurantManager.service;
 
-import com.dim.RestaurantManager.model.view.MenuView;
-import org.springframework.stereotype.Service;
+import com.dim.RestaurantManager.model.view.CategoryView;
+
+import java.util.List;
 
 public interface MenuService {
     void init();
 
-    MenuView getMenuView();
+    List<CategoryView> getMenuView();
 }

@@ -241,7 +241,8 @@ public class OrderServiceImpl implements OrderService {
                         .stream()
                         .mapToDouble(o -> o.getItem().getPrice())
                         .sum()
-                );
+                )
+                .setForPrinting(true);
         mainBill.setOrders(
                 mainBill
                         .getOrders()

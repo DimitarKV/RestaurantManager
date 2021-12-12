@@ -1,6 +1,6 @@
 package com.dim.RestaurantManager.web;
 
-import com.dim.RestaurantManager.model.view.MenuView;
+import com.dim.RestaurantManager.model.view.CategoryView;
 import com.dim.RestaurantManager.service.MenuService;
 import com.dim.RestaurantManager.service.OrderService;
 import com.dim.RestaurantManager.service.impl.RestaurantUser;
@@ -8,6 +8,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 public class MenuController {
@@ -19,9 +21,14 @@ public class MenuController {
         this.orderService = orderService;
     }
 
-    @ModelAttribute(name = "menu")
-    public MenuView menuView() {
+    @ModelAttribute(name = "categories")
+    public List<CategoryView> menuView() {
         return menuService.getMenuView();
+    }
+
+    @ModelAttribute(name = "categoryAlreadyExists")
+    public boolean categoryAlreadyExists() {
+        return false;
     }
 
     @GetMapping("/menu")

@@ -30,6 +30,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> getOrdersByBillId(Long billId);
 
     @Query("SELECT o FROM Order o " +
-            "WHERE o.bill.id = :billId")
+            "WHERE o.bill.id = :billId AND " +
+            "o.bill.forPrinting = false ")
     List<Order> findOrdersByBillId(Long billId);
 }

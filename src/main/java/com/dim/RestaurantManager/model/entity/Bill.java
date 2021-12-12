@@ -20,6 +20,7 @@ public class Bill extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime creationDate;
     private Boolean payed = false;
+    private Boolean forPrinting = false;
 
     public Bill() {
         users = new ArrayList<>();
@@ -78,6 +79,15 @@ public class Bill extends BaseEntity {
 
     public Bill setPayed(Boolean payed) {
         this.payed = payed;
+        return this;
+    }
+
+    public Boolean getForPrinting() {
+        return forPrinting;
+    }
+
+    public Bill setForPrinting(Boolean forPrinting) {
+        this.forPrinting = forPrinting;
         return this;
     }
 }

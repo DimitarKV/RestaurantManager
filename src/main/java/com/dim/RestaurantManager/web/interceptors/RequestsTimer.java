@@ -23,13 +23,4 @@ public class RequestsTimer {
         if(calls > 5)
             logger.warn("There has been " + calls + " rest calls for the last second!");
     }
-
-    @Scheduled(fixedDelay = 1000)
-    public void checkForbiddenCallsLastSecond() {
-        Long calls = statusRepository.getForbiddenCalls();
-        statusRepository.setForbiddenCalls(0L);
-
-        if(calls > 5)
-            logger.warn("There has been " + calls + " calls to which the server responded with 403 (Forbidden) for the last second!");
-    }
 }

@@ -41,4 +41,6 @@ public interface UserService {
     boolean isCook(String username);
 
     boolean isWaiter(String username);
+
+    boolean isManager(String username);
 }

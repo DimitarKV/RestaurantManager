@@ -1,5 +1,6 @@
 package com.dim.RestaurantManager.model.validator;
 
+import com.dim.RestaurantManager.model.validator.annotations.Occupied;
 import com.dim.RestaurantManager.service.TableService;
 
 import javax.validation.ConstraintValidator;

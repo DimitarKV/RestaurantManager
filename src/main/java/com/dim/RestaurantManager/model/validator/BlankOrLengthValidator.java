@@ -1,5 +1,7 @@
 package com.dim.RestaurantManager.model.validator;
 
+import com.dim.RestaurantManager.model.validator.annotations.BlankOrLength;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 

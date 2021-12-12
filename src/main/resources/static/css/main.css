@@ -13,6 +13,11 @@ form.main-form, .rounded-back {
     border-radius: 20px;
 }
 
+.red-border {
+    border-width: 3px;
+    border-color: #a40b0b;
+}
+
 .no-underline{
     text-decoration: none !important;
 }

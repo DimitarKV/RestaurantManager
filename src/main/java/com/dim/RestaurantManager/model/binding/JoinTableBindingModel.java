@@ -1,6 +1,6 @@
 package com.dim.RestaurantManager.model.binding;
 
-import com.dim.RestaurantManager.model.validator.Occupied;
+import com.dim.RestaurantManager.model.validator.annotations.Occupied;
 
 public class JoinTableBindingModel {
     @Occupied

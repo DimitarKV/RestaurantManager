@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/fragments::head"></head>
+<body>
+<nav th:replace="fragments/fragments::navbar"></nav>
+<div class="row  px-3">
+    <div class="col-lg-4"></div>
+    <div class="col-lg-3 mt-3" sec:authorize="isAuthenticated() && hasRole('MANAGER')">
+        <div class="card rounded-back bg-dark pt-4">
+            <div class="card-body">
+                <form th:object="${bindingModel}" th:action="@{/manager/item/add}" th:method="post">
+
+                    <input th:value="*{categoryId}" id="categoryId" type="text" class="mt-3" hidden>
+
+                    <div class="form-floating mt-3">
+                        <input th:value="*{imageUrl}"
+                               name="imageUrl"
+                               id="imageUrl"
+                               class="form-control"
+                               placeholder="Снимка"
+                               type="url">
+                        <label for="imageUrl">Снимка</label>
+                    </div>
+
+                    <div class="form-floating mt-3">
+                        <input th:value="*{itemName}"
+                               name="itemName"
+                               id="itemName"
+                               class="form-control"
+                               type="text"
+                               placeholder="Име"
+                               minlength="4"
+                               maxlength="20">
+                        <label for="itemName">Име</label>
+                    </div>
+
+                    <div class="form-floating mt-3">
+                        <input th:value="*{itemPrice}"
+                               name="itemPrice"
+                               id="itemPrice"
+                               class="form-control"
+                               type="number"
+                               placeholder="Цена"
+                               step=".01"
+                               min="0">
+                        <label for="itemPrice">Цена</label>
+                    </div>
+
+                    <div class="form-floating mt-3">
+                                <textarea th:value="*{itemDescription}"
+                                          name="itemDescription"
+                                          class="form-control"
+                                          placeholder="Описание"
+                                          id="itemDescription"
+                                          style="height: 100px"
+                                          minlength="10"
+                                ></textarea>
+                        <label for="itemDescription">Описание</label>
+                    </div>
+
+                    <input type="submit" class="btn btn-primary mt-3" value="Добави">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

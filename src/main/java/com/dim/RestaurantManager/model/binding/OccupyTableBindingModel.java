@@ -1,6 +1,6 @@
 package com.dim.RestaurantManager.model.binding;
 
-import com.dim.RestaurantManager.model.validator.NotOccupied;
+import com.dim.RestaurantManager.model.validator.annotations.NotOccupied;
 
 public class OccupyTableBindingModel {
     @NotOccupied

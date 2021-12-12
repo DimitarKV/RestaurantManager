@@ -9,7 +9,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "categories")
 public class Category extends BaseEntity {
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     public String getName() {

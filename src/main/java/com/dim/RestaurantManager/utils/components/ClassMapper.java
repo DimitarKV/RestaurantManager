@@ -1,10 +1,7 @@
 package com.dim.RestaurantManager.utils.components;
 
 import com.dim.RestaurantManager.model.binding.UpdateProfileBindingModel;
-import com.dim.RestaurantManager.model.entity.FoodTable;
-import com.dim.RestaurantManager.model.entity.Order;
-import com.dim.RestaurantManager.model.entity.Role;
-import com.dim.RestaurantManager.model.entity.User;
+import com.dim.RestaurantManager.model.entity.*;
 import com.dim.RestaurantManager.model.entity.enums.RoleEnum;
 import com.dim.RestaurantManager.model.service.UpdateProfileServiceModel;
 import com.dim.RestaurantManager.model.view.*;
@@ -29,4 +26,8 @@ public interface ClassMapper {
     CheckoutOrderView toCheckoutOrderView(Order order);
 
     FoodTableView toFoodTableView(FoodTable foodTable);
+
+    List<CategoryView> toCategoryViewList(List<Category> categories, List<MenuItem> items);
+
+    ItemView toItemView(MenuItem item);
 }

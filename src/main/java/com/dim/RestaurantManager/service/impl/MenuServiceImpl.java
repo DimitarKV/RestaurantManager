@@ -1,23 +1,28 @@
 package com.dim.RestaurantManager.service.impl;
 
 import com.dim.RestaurantManager.model.entity.MenuItem;
-import com.dim.RestaurantManager.model.view.MenuView;
+import com.dim.RestaurantManager.model.view.CategoryView;
 import com.dim.RestaurantManager.repository.CategoryRepository;
 import com.dim.RestaurantManager.repository.ItemRepository;
 import com.dim.RestaurantManager.repository.MenuRepository;
 import com.dim.RestaurantManager.service.MenuService;
+import com.dim.RestaurantManager.utils.components.ClassMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class MenuServiceImpl implements MenuService {
     private final MenuRepository menuRepository;
     private final ItemRepository itemRepository;
     private final CategoryRepository categoryRepository;
+    private final ClassMapper classMapper;
 
-    public MenuServiceImpl(MenuRepository menuRepository, ItemRepository itemRepository, CategoryRepository categoryRepository) {
+    public MenuServiceImpl(MenuRepository menuRepository, ItemRepository itemRepository, CategoryRepository categoryRepository, ClassMapper classMapper) {
         this.menuRepository = menuRepository;
         this.itemRepository = itemRepository;
         this.categoryRepository = categoryRepository;
+        this.classMapper = classMapper;
     }
 
     @Override
@@ -33,10 +38,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public MenuView getMenuView() {
-        MenuView menuView = new MenuView();
-        menuRepository.findAll()
-                .forEach(menuView::putMenuItem);
-        return menuView;
+    public List<CategoryView> getMenuView() {
+        return classMapper.toCategoryViewList(categoryRepository.findAll(), menuRepository.findAll());
     }
 }

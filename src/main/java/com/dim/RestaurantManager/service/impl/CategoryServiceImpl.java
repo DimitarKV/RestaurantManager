@@ -25,4 +25,21 @@ public class CategoryServiceImpl implements CategoryService {
             ));
         }
     }
+
+    @Override
+    public boolean hasCategory(String name) {
+        return categoryRepository.findByName(name).isPresent();
+    }
+
+    @Override
+    public void addCategory(String name) {
+        Category category = new Category()
+                .setName(name);
+        categoryRepository.saveAndFlush(category);
+    }
+
+    @Override
+    public boolean hasCategory(Long value) {
+        return categoryRepository.findById(value).isPresent();
+    }
 }

@@ -1,4 +1,6 @@
-package com.dim.RestaurantManager.model.validator;
+package com.dim.RestaurantManager.model.validator.annotations;
+
+import com.dim.RestaurantManager.model.validator.OccupiedValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -9,13 +11,9 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = BlankOrLengthValidator.class)
-public @interface BlankOrLength {
-    String message() default "Field neither blank nor with the right length!";
+@Constraint(validatedBy = OccupiedValidator.class)
+public @interface Occupied {
+    String message() default "Table is not occupied!";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
-
-    int min() default 0;
-
-    int max() default Integer.MAX_VALUE;
 }

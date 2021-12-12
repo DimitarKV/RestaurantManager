@@ -1,10 +1,7 @@
 package com.dim.RestaurantManager.utils.components.impl;
 
 import com.dim.RestaurantManager.model.binding.UpdateProfileBindingModel;
-import com.dim.RestaurantManager.model.entity.FoodTable;
-import com.dim.RestaurantManager.model.entity.Order;
-import com.dim.RestaurantManager.model.entity.Role;
-import com.dim.RestaurantManager.model.entity.User;
+import com.dim.RestaurantManager.model.entity.*;
 import com.dim.RestaurantManager.model.entity.enums.RoleEnum;
 import com.dim.RestaurantManager.model.service.UpdateProfileServiceModel;
 import com.dim.RestaurantManager.model.view.*;
@@ -15,7 +12,10 @@ import com.dim.RestaurantManager.model.view.CheckoutOrderView;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ClassMapperImpl implements ClassMapper {
@@ -131,5 +131,37 @@ public class ClassMapperImpl implements ClassMapper {
                 .setNumber(foodTable.getNumber())
                 .setImageUrl(foodTable.getImageUrl())
                 .setDescription(foodTable.getDescription());
+    }
+
+    @Override
+    public List<CategoryView> toCategoryViewList(List<Category> categoriesList, List<MenuItem> items) {
+        Map<Long, CategoryView> categories = new HashMap<>();
+        for (Category category : categoriesList) {
+            categories.put(category.getId(), new CategoryView().setItems(new ArrayList<>()));
+            categories.get(category.getId()).setId(category.getId());
+            categories.get(category.getId()).setCategoryName(category.getName());
+        }
+
+        for (MenuItem i : items) {
+            if (!categories.containsKey(i.getCategory().getId())) {
+                categories.put(i.getCategory().getId(), new CategoryView());
+                categories.get(i.getCategory().getId()).setId(i.getCategory().getId());
+                categories.get(i.getCategory().getId()).setCategoryName(i.getCategory().getName());
+                categories.get(i.getCategory().getId()).setItems(new ArrayList<>());
+            }
+            categories.get(i.getCategory().getId()).getItems().add(this.toItemView(i));
+        }
+
+        return categories.values().stream().collect(Collectors.toList());
+    }
+
+    @Override
+    public ItemView toItemView(MenuItem item) {
+        return new ItemView()
+                .setId(item.getId())
+                .setDescription(item.getItem().getDescription())
+                .setName(item.getItem().getName())
+                .setPrice(item.getItem().getPrice())
+                .setImageUrl(item.getItem().getImageUrl());
     }
 }

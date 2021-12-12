@@ -1,4 +1,7 @@
-package com.dim.RestaurantManager.model.validator;
+package com.dim.RestaurantManager.model.validator.annotations;
+
+import com.dim.RestaurantManager.model.validator.BlankOrLengthValidator;
+import com.dim.RestaurantManager.model.validator.CategoryExistsValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -9,9 +12,9 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = OccupiedValidator.class)
-public @interface Occupied {
-    String message() default "Table is not occupied!";
+@Constraint(validatedBy = CategoryExistsValidator.class)
+public @interface CategoryExists {
+    String message() default "Such category doesn't exist!";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

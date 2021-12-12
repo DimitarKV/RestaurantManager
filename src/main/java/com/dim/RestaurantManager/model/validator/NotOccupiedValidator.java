@@ -1,10 +1,10 @@
 package com.dim.RestaurantManager.model.validator;
 
+import com.dim.RestaurantManager.model.validator.annotations.NotOccupied;
 import com.dim.RestaurantManager.service.TableService;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.util.stream.Collectors;
 
 
 public class NotOccupiedValidator implements ConstraintValidator<NotOccupied, Integer> {

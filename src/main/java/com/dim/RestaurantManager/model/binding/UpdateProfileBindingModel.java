@@ -1,6 +1,6 @@
 package com.dim.RestaurantManager.model.binding;
 
-import com.dim.RestaurantManager.model.validator.BlankOrLength;
+import com.dim.RestaurantManager.model.validator.annotations.BlankOrLength;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Min;
