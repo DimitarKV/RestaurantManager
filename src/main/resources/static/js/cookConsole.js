@@ -1,6 +1,7 @@
 import {html, render} from 'https://unpkg.com/lit-html?module';
 import {styleMap} from 'https://unpkg.com/lit-html/directives/style-map?module';
-import {address} from "/js/fetchApi.js";
+import {address} from "./fetchApi.js";
+import {fetchesDisabled} from "./disablePostLogoutFetches.js";
 
 let card = (orderId, imageUrl, name, description, handler, cooking = true, handler2) => html`
     <div class="col-lg-3 mt-3">
@@ -49,7 +50,7 @@ async function doFetch() {
 
 let lastFetchDone = true;
 function display() {
-    if(lastFetchDone){
+    if(lastFetchDone && !fetchesDisabled){
         lastFetchDone = false;
         doFetch().then(() => lastFetchDone = true);
     }

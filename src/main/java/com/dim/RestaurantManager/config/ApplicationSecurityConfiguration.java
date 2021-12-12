@@ -43,6 +43,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                         "/",
                         "/user/register",
                         "/user/login",
+                        "/error",
                         "/user/register/check/{\\d+}",
                         "/menu")
                 .permitAll()

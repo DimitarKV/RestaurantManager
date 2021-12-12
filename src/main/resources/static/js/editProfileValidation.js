@@ -1,5 +1,5 @@
 import {validate, valid} from './validator.js';
-import {address} from "/js/fetchApi.js";
+import {address} from "./fetchApi.js";
 
 let form = document.getElementById("editForm");
 let usernameField = document.getElementById("username");

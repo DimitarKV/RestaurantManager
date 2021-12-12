@@ -74,6 +74,7 @@ public class TableController {
         return "redirect:/menu";
     }
 
+    @PreAuthorize("!canOrder()")
     @Transactional
     @PostMapping("/table/join")
     public String joinTable(@Valid JoinTableBindingModel joinBindingModel,

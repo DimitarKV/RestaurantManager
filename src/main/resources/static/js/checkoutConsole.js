@@ -1,6 +1,7 @@
 import {html, render} from 'https://unpkg.com/lit-html?module';
 import {styleMap} from 'https://unpkg.com/lit-html/directives/style-map?module';
-import {address} from "/js/fetchApi.js";
+import {address} from "./fetchApi.js";
+import {fetchesDisabled} from "./disablePostLogoutFetches.js";
 
 let row = (data, handler) =>
     html`
@@ -36,7 +37,7 @@ async function doFetch(){
 
 let lastFetchDone = true;
 function display() {
-    if(lastFetchDone){
+    if(lastFetchDone && !fetchesDisabled){
         lastFetchDone = false;
         doFetch().then(() => lastFetchDone = true);
     }

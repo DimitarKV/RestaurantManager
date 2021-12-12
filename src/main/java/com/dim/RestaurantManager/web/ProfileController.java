@@ -56,20 +56,14 @@ public class ProfileController {
                                 RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors() ||
                 !bindingModel.getPassword().equals(bindingModel.getRepeatPassword()) ||
-                (!SecurityContextHolder
-                        .getContext()
-                        .getAuthentication()
-                        .getName()
+                (!user.getUsername()
                         .equals(bindingModel.getUsername()) &&
                         this.userService.usernameExists(bindingModel.getUsername()))
         ) {
             if (!bindingModel.getPassword().equals(bindingModel.getRepeatPassword())) {
                 redirectAttributes.addFlashAttribute("passwordsMatch", false);
             }
-            if (!SecurityContextHolder
-                    .getContext()
-                    .getAuthentication()
-                    .getName()
+            if (!user.getUsername()
                     .equals(bindingModel.getUsername()) &&
                     this.userService.usernameExists(bindingModel.getUsername())) {
                 redirectAttributes.addFlashAttribute("usernameAlreadyExists", false);
