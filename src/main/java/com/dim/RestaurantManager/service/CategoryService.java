@@ -15,4 +15,8 @@ public interface CategoryService {
     boolean hasCategory(Long value);
 
     List<Category> findAll();
+
+    void editCategoryName(String categoryName, Long categoryId);
+
+    void deleteCategory(Long categoryId);
 }

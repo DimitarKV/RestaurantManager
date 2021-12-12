@@ -31,6 +31,11 @@ public class MenuController {
         return false;
     }
 
+    @ModelAttribute(name = "categoryDoesNotExist")
+    public boolean categoryDoesNotExist() {
+        return false;
+    }
+
     @GetMapping("/menu")
     public String getMenuPage() {
         return "menu";

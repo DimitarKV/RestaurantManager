@@ -2,11 +2,9 @@ package com.dim.RestaurantManager.model.entity;
 
 
 import com.dim.RestaurantManager.model.entity.base.BaseEntity;
+import org.hibernate.annotations.Cascade;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity

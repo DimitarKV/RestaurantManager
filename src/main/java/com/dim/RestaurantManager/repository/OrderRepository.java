@@ -33,4 +33,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "WHERE o.bill.id = :billId AND " +
             "o.bill.forPrinting = false ")
     List<Order> findOrdersByBillId(Long billId);
+
+    void deleteAllByItemId(Long id);
 }

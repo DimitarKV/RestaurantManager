@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -104,6 +105,34 @@ public class ManagerController {
         }
 
         menuService.editItem(classMapper.toManagerEditItemServiceModel(bindingModel, itemId));
+
+        return "redirect:/menu";
+    }
+
+    @PreAuthorize("isManager()")
+    @PostMapping("/manager/category/{categoryId}/edit")
+    public String editCategoryName(@PathVariable(name = "categoryId") Long categoryId,
+                                   @RequestParam(name = "categoryName") String categoryName,
+                                   RedirectAttributes redirectAttributes) {
+        if (categoryService.hasCategory(categoryName)) {
+            redirectAttributes.addFlashAttribute("categoryAlreadyExists", true);
+            return "redirect:/menu";
+        }
+        categoryService.editCategoryName(categoryName, categoryId);
+        return "redirect:/menu";
+    }
+
+    @Transactional
+    @PreAuthorize("isManager()")
+    @DeleteMapping("/manager/category/{categoryId}/delete")
+    public String deleteCategory(@PathVariable(name = "categoryId") Long categoryId,
+                                 RedirectAttributes redirectAttributes) {
+        if (!categoryService.hasCategory(categoryId)) {
+            redirectAttributes.addFlashAttribute("categoryDoesNotExist", true);
+            return "redirect:/menu";
+        }
+
+        categoryService.deleteCategory(categoryId);
 
         return "redirect:/menu";
     }
